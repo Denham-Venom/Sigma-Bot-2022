@@ -119,6 +119,11 @@ public final class Constants {
 
     }
 
+    public static final class Shooter {
+        public static final int shooterMotorID = 0;
+        public static final int turretMotorID = 0;
+    }
+
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
