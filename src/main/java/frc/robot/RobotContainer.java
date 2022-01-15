@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
   /* Controllers */
   private final Joystick driver = new Joystick(0);
+  private final Joystick operator = new Joystick(1);
 
   /* Drive Controls */
   private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -32,9 +34,25 @@ public class RobotContainer {
 
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kBumperRight.value);
+  private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final POVButton intakeExtendButton = new POVButton(driver, 180);
+  private final POVButton intakeRetractButton = new POVButton(driver, 0);
+  private final JoystickButton zeroGyroButton = new JoystickButton(driver, XboxController.Button.kStart.value);
+
+  /* Operator Buttons */
+  private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton shooterActivateButton = new JoystickButton(operator, XboxController.Button.kBumperRight.value);
+  private final JoystickButton shooterDeactivateButton = new JoystickButton(operator, XboxController.Button.kBumperLeft.value);
+  private final JoystickButton operatorIntakeButton = new JoystickButton(operator, XboxController.Button.kY.value);
+  private final POVButton operatorIntakeExtendButton = new POVButton(operator, 180);
+  private final POVButton operatorIntakeRetractButton = new POVButton(operator, 0);
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
+  private final Intaker m_Intaker = new Intaker();
+  private final Shooter m_Shooter = new Shooter();
+  private final Turreter m_Turreter = new Turreter();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -56,7 +74,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
-  }
+    /* Intake */
+    intakeButton.whileHeld(new Intake(m_Intaker, 1.0));
+    operatorIntakeButton.whileHeld(new Intake(m_Intaker, 1.0));
+    outakeButton.whileHeld(new Intake(m_Intaker, -1.0));
+    
+  };
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -8,12 +8,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class Shoot extends CommandBase {
+
   /** Creates a new Shoot. */
   private Shooter m_Shooter;
   private double power;
-  public Shoot() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_Shooter);
+
+  public Shoot(Shooter m_Shooter, double power) {
+    this.m_Shooter = m_Shooter;
+    this.power = power;
   }
 
   // Called when the command is initially scheduled.

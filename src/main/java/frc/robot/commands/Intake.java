@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intaker;
 
 public class Intake extends CommandBase {
-  /** Creates a new Intake. */
-  private double power;
+
   private Intaker m_Intaker;
-  public Intake() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_Intaker);
+  private double power;
+
+  public Intake(Intaker m_Intaker, double power) {
+    this.m_Intaker = m_Intaker;
+    this.power = power;
   }
 
   // Called when the command is initially scheduled.
