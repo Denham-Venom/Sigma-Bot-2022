@@ -1,11 +1,14 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.Controllers.TalonConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
@@ -120,8 +123,34 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final int shooterMotorID = 0;
-        public static final int turretMotorID = 0;
+        public static final TalonConstants rotateShooterConstants = 
+            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+    
+        public static final TalonConstants kickerShooterConstants = 
+            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+
+        public static final double shooterGearRatio = (1/1);
+    }
+
+    public static final class Turret {
+        public static final TalonConstants turretMotor1Constants = 
+            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+    
+        public static final TalonConstants turretMotor2Constants = 
+            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+    }
+
+    public static final class Intake {
+        public static final TalonConstants intakeMotorConstants = 
+            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+    }
+
+    public static final class talonCurrentLimit {
+        public static final SupplyCurrentLimitConfiguration supplyCurLim40 = 
+            new SupplyCurrentLimitConfiguration(true, 35, 60, 0.1);
+            
+        public static final SupplyCurrentLimitConfiguration supplyCurLim30 = 
+            new SupplyCurrentLimitConfiguration(true, 25, 40, 0.1);
     }
 
     public static final class AutoConstants {

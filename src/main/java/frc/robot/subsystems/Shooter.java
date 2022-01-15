@@ -4,36 +4,35 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Controllers.LazyTalonFX;
+import frc.lib.math.Conversions;
 import frc.robot.Constants;
 
-public class Shooter extends CommandBase {
+public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  public TalonFX shooterMotor;
+  private LazyTalonFX shooterMotorParent;
+  private LazyTalonFX shooterMotorChild;
+  
   public Shooter() {
-    // Use addRequirements() here to declare subsystem dependencies.
-    shooterMotor = new TalonFX(Constants.Shooter.shooterMotorID);
+    shooterMotorParent = new LazyTalonFX(Constants.Shooter.rotateShooterConstants);
+    shooterMotorChild = new LazyTalonFX(Constants.Shooter.kickerShooterConstants);
+    shooterMotorChild.follow(shooterMotorParent);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    
+  public void setShooterRPM(double shooterRPM){
+    double falconVelocity = Conversions.RPMToFalcon(shooterRPM, Constants.Shooter.shooterGearRatio);
+    shooterMotorParent.set(ControlMode.Velocity, falconVelocity);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+  public void setPower(double power){
+    shooterMotorParent.set(ControlMode.PercentOutput, power);
+  }
 
-  // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 }
