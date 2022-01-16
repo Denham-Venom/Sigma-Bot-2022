@@ -19,7 +19,12 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.rotateShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.kickerShooterConstants);
+    shooterMotorParent.configPID(Constants.Shooter.shooterPID);
     shooterMotorChild.follow(shooterMotorParent);
+  }
+
+  public double getShooterRPM(){
+    return Conversions.falconToRPM(shooterMotorParent.getSelectedSensorVelocity(), Constants.Shooter.shooterGearRatio);
   }
 
   public void setShooterRPM(double shooterRPM){

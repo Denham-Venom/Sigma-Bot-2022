@@ -11,6 +11,11 @@ public class Intake extends CommandBase {
 
   private Intaker m_Intaker;
   private double power;
+  public Intake(double power) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.power = power;
+    addRequirements(m_Intaker);
+  }
 
   public Intake(Intaker m_Intaker, double power) {
     this.m_Intaker = m_Intaker;
