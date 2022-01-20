@@ -20,6 +20,7 @@ public class Turreter extends SubsystemBase {
   private PIDController turretController;
   private DutyCycleEncoder hoodEncoder;
   private DutyCycleEncoder turretEncoder;
+  
   public Turreter() {
     hoodMotor = new LazyTalonFX(Constants.Turret.turretMotor1Constants);
     turretMotor = new LazyTalonFX(Constants.Turret.turretMotor2Constants);
