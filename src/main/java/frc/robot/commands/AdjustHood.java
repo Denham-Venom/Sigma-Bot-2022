@@ -7,37 +7,29 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class Shoot extends CommandBase {
-
-  /** Creates a new Shoot. */
-  private Shooter m_Shooter;
-  private double power;
-  public Shoot(double power) {
+public class AdjustHood extends CommandBase {
+  /** Creates a new AdjustHood. */
+  private Shooter m_Turreter;
+  private double angle;
+  public AdjustHood(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.power = power;
-    addRequirements(m_Shooter);
-  }
-
-  public Shoot(Shooter m_Shooter, double power) {
-    this.m_Shooter = m_Shooter;
-    this.power = power;
+    this.angle = angle;
+    addRequirements(m_Turreter);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_Turreter.setHoodAngle(angle);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_Shooter.setPower(power);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_Shooter.setPower(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
