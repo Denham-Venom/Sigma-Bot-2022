@@ -9,10 +9,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import org.opencv.core.RotatedRect;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
 import frc.robot.Constants;
+import frc.robot.States;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -84,6 +86,22 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    switch(States.shooterState){
+      case disabled:
+          shooterMotorParent.set(ControlMode.PercentOutput, 0);
+          hoodMotor.set(ControlMode.PercentOutput, 0);
+          break;
+          
+      case preShoot:
+          if (Constants.Shooter.calibrationMode){
+              setShooterRPM(SmartDashboard.getNumber("Shooter RPM Calib", 0));
+              setHoodAngle(SmartDashboard.getNumber("Shooter Angle Calib", 0));
+          } else{
+              // setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
+              // setShooterAngle(angleMap.get(limelight.getDistance().getNorm()));
+          }
+          break;
+    }
     // This method will be called once per scheduler run
   }
 }

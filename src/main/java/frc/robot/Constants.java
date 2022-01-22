@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -145,6 +146,15 @@ public final class Constants {
         public static final double turretHighLimit = 0;
         public static final double turretLowLimit = 0;
 
+        public static final boolean calibrationMode = false;
+
+    }
+
+    public static final class Vision {
+        public static final double goalHeight = Units.inchesToMeters(81.0 + (17.0 / 2.0));
+
+        public static final double limelightHeight = Units.inchesToMeters(21.0);
+        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(9.0);
     }
 
     public static final class Turret {
