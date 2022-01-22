@@ -1,7 +1,7 @@
 package frc.lib.util;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Twist2d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Twist2d;
 
 public abstract class Interpolatable<T> {
     private final T value;

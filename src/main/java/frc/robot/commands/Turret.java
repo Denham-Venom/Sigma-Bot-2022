@@ -5,12 +5,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turreter;
+import frc.robot.subsystems.Shooter;
 
 public class Turret extends CommandBase {
   /** Creates a new Turreter. */
 
-  private Turreter m_Turreter;
+  private Shooter m_Turreter;
   private double angle;
   public Turret(double angle) {
 

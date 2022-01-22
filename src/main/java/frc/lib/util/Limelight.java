@@ -1,9 +1,9 @@
 package frc.lib.util;
 
+import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.MedianFilter;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 
 public class Limelight {
     private final double limelightHeight;

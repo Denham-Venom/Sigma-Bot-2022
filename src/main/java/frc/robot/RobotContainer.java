@@ -52,7 +52,7 @@ public class RobotContainer {
   private final Swerve s_Swerve = new Swerve();
   private final Intaker m_Intaker = new Intaker();
   private final Shooter m_Shooter = new Shooter();
-  private final Turreter m_Turreter = new Turreter();
+  private final Shooter m_Turreter = new Shooter();
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */

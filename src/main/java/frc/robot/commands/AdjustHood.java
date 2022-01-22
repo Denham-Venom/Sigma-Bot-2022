@@ -5,11 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Turreter;
+import frc.robot.subsystems.Shooter;
 
 public class AdjustHood extends CommandBase {
   /** Creates a new AdjustHood. */
-  private Turreter m_Turreter;
+  private Shooter m_Turreter;
   private double angle;
   public AdjustHood(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
