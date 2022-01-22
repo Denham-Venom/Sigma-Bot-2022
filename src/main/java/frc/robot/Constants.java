@@ -132,6 +132,19 @@ public final class Constants {
 
         public static final double shooterGearRatio = (1/1);
         public static final PIDGains shooterPID = new PIDGains(0.1, 0.0, 0.0, 0.046976); // might need to be changed
+
+        public static final double hoodGearRatio = 0;
+
+        public static final double turretGearRatio = 0;
+
+        //high angle = 70 degrees from straight, low angle = 10 degrees from straight up
+        public static final double hoodHighLimit = 0;
+        public static final double hoodLowLimit = 0;
+
+        //high angle = 270; low angle = 0
+        public static final double turretHighLimit = 0;
+        public static final double turretLowLimit = 0;
+
     }
 
     public static final class Turret {
