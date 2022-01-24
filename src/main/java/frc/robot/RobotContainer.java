@@ -35,6 +35,7 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+  private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kLeftBumper.value);
   private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kY.value);
   private final POVButton intakeExtendButton = new POVButton(driver, 180);
   private final POVButton intakeRetractButton = new POVButton(driver, 0);
@@ -47,12 +48,14 @@ public class RobotContainer {
   private final JoystickButton operatorIntakeButton = new JoystickButton(operator, XboxController.Button.kY.value);
   private final POVButton operatorIntakeExtendButton = new POVButton(operator, 180);
   private final POVButton operatorIntakeRetractButton = new POVButton(operator, 0);
+  
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
   private final Intaker m_Intaker = new Intaker();
-  private final Shooter m_Shooter = new Shooter();
-  private final Shooter m_Turreter = new Shooter();
+  private final Vision m_Vision = new Vision();
+  private final Shooter m_Shooter = new Shooter(m_Vision);
+  
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
