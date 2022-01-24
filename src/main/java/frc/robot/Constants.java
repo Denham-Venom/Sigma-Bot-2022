@@ -135,8 +135,10 @@ public final class Constants {
         public static final PIDGains shooterPID = new PIDGains(0.1, 0.0, 0.0, 0.046976); // might need to be changed
 
         public static final double hoodGearRatio = 0;
+        public static final PIDGains hoodPID = new PIDGains(0, 0, 0, 0); //Definetly needs to be changed
 
         public static final double turretGearRatio = 0;
+        public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed
 
         //high angle = 70 degrees from straight, low angle = 10 degrees from straight up
         public static final double hoodHighLimit = 0;
@@ -147,6 +149,13 @@ public final class Constants {
         public static final double turretLowLimit = 0;
 
         public static final boolean calibrationMode = false;
+
+        /* Shooter Tuned Constants */
+        public static final double[][] shooterMap = 
+        // {distance, shooterRPM, shooterAngle}
+        {
+            {0, 0, 0}
+        };
 
     }
 

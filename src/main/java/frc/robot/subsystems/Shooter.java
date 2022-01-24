@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
+import frc.lib.util.Interpolatable;
+import frc.lib.util.InterpolatableTreeMap;
+import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
 
@@ -20,14 +23,31 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private LazyTalonFX shooterMotorParent;
   private LazyTalonFX shooterMotorChild;
-  public LazyTalonFX hoodMotor;
-  public LazyTalonFX turretMotor;
+  private LazyTalonFX hoodMotor;
+  private LazyTalonFX turretMotor;
+  private Limelight limelight;
+
+  private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
+  private InterpolatableTreeMap<Double> angleMap = new InterpolatableTreeMap<>();
   
-  public Shooter() {
+  public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.rotateShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.kickerShooterConstants);
     shooterMotorParent.configPID(Constants.Shooter.shooterPID);
     shooterMotorChild.follow(shooterMotorParent);
+    hoodMotor.configPID(Constants.Shooter.hoodPID);
+    turretMotor.configPID(Constants.Shooter.turretPID);
+    limelight = m_Vision.getLimelight();
+
+    if (Constants.Shooter.calibrationMode){
+      SmartDashboard.getNumber("Shooter RPM Calib", 0);
+      SmartDashboard.getNumber("Shooter Angle Calib", 0);
+    }
+
+    for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
+      shooterMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][1]));
+      angleMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
+    }
   }
 
   public double getShooterRPM(){
@@ -97,8 +117,8 @@ public class Shooter extends SubsystemBase {
               setShooterRPM(SmartDashboard.getNumber("Shooter RPM Calib", 0));
               setHoodAngle(SmartDashboard.getNumber("Shooter Angle Calib", 0));
           } else{
-              // setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
-              // setShooterAngle(angleMap.get(limelight.getDistance().getNorm()));
+              setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
+              setHoodAngle(angleMap.get(limelight.getDistance().getNorm()));
           }
           break;
     }

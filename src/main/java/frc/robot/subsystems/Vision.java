@@ -13,7 +13,7 @@ import frc.robot.States;
 import frc.robot.States.ShooterStates;
 
 public class Vision extends SubsystemBase {
-  public Limelight limelight;
+  private Limelight limelight;
   /** Creates a new Vision. */
   public Vision() {
     limelight = new Limelight(
@@ -21,6 +21,10 @@ public class Vision extends SubsystemBase {
       Constants.Vision.limelightAngle,
       Constants.Vision.goalHeight
     );
+  }
+
+  public Limelight getLimelight() {
+    return this.limelight;
   }
 
   @Override
