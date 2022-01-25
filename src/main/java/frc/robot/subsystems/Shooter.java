@@ -88,7 +88,6 @@ public class Shooter extends SubsystemBase {
     if(turretAngle < 0) {
       turretAngle += 360;
     }
-
     double finalAngle = Conversions.degreesToFalcon(turretAngle, Constants.Shooter.turretGearRatio);
     if (finalAngle > Constants.Shooter.turretHighLimit){
       finalAngle = Constants.Shooter.turretHighLimit;

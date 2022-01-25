@@ -11,5 +11,10 @@ public class States {
         disabled, preShoot
     }
 
+    public static enum IntakeStates {
+        disabled, intaking, shooting
+    }
+
     public static ShooterStates shooterState = ShooterStates.disabled;
+    public static IntakeStates intakeState = IntakeStates.disabled;
 }
