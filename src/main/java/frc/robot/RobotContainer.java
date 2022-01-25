@@ -78,9 +78,9 @@ public class RobotContainer {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
     /* Intake */
-    intakeButton.whileHeld(new Intake(m_Intaker, 1.0));
-    operatorIntakeButton.whileHeld(new Intake(m_Intaker, 1.0));
-    outakeButton.whileHeld(new Intake(m_Intaker, -1.0));
+    intakeButton.whileHeld(new Intake(m_Intaker));
+    operatorIntakeButton.whileHeld(new Intake(m_Intaker));
+    outakeButton.whileHeld(new Intake(m_Intaker));
     
   };
 
