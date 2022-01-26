@@ -28,7 +28,8 @@ public class Shooter extends SubsystemBase {
   private Limelight limelight;
 
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
-  private InterpolatableTreeMap<Double> angleMap = new InterpolatableTreeMap<>();
+  private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
+  private InterpolatableTreeMap<Double> turretMap = new InterpolatableTreeMap<>();
   
   public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.rotateShooterConstants);
@@ -46,7 +47,7 @@ public class Shooter extends SubsystemBase {
 
     for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
       shooterMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][1]));
-      angleMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
+      hoodMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
     }
   }
 
@@ -109,6 +110,7 @@ public class Shooter extends SubsystemBase {
       case disabled:
           shooterMotorParent.set(ControlMode.PercentOutput, 0);
           hoodMotor.set(ControlMode.PercentOutput, 0);
+          turretMotor.set(ControlMode.PercentOutput, 0);
           break;
           
       case preShoot:
@@ -117,7 +119,8 @@ public class Shooter extends SubsystemBase {
               setHoodAngle(SmartDashboard.getNumber("Shooter Angle Calib", 0));
           } else{
               setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
-              setHoodAngle(angleMap.get(limelight.getDistance().getNorm()));
+              setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
+              setTurretAngle();
           }
           break;
     }
