@@ -81,7 +81,6 @@ public class RobotContainer {
     intakeButton.whileHeld(new Intake(m_Intaker));
     operatorIntakeButton.whileHeld(new Intake(m_Intaker));
     outakeButton.whileHeld(new Intake(m_Intaker));
-    
   };
 
   /**

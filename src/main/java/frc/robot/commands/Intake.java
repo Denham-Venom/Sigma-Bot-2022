@@ -12,6 +12,7 @@ import frc.robot.subsystems.Intaker;
 public class Intake extends CommandBase {
 
   private Intaker m_Intaker;
+
   public Intake() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_Intaker);
@@ -19,6 +20,7 @@ public class Intake extends CommandBase {
 
   public Intake(Intaker m_Intaker) {
     this.m_Intaker = m_Intaker;
+
   }
 
   // Called when the command is initially scheduled.
