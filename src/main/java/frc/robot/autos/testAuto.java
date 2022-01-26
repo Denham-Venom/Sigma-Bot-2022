@@ -1,7 +1,12 @@
 package frc.robot.autos;
 
 import frc.robot.Constants;
-import frc.robot.Constants.Shooter;
+import frc.robot.States;
+import frc.robot.States.ShooterStates;
+import frc.robot.commands.Intake;
+import frc.robot.commands.Shoot;
+import frc.robot.subsystems.Intaker;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 import java.util.List;
@@ -15,11 +20,13 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class testAuto extends SequentialCommandGroup {
-    public testAuto(Swerve s_Swerve){
+    public testAuto(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker){
         TrajectoryConfig config =
             new TrajectoryConfig(
                     Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -54,7 +61,17 @@ public class testAuto extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(() -> s_Swerve.resetOdometry(testTrajectory.getInitialPose())),
-            swerveControllerCommand
+            swerveControllerCommand,
+
+            /* Shoot from Starting Point */
+            new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
+            new WaitCommand(1.0), //Wait for 1 second to auto aim and spin up before shooting
+            new ParallelDeadlineGroup(
+                new WaitCommand(2.5),
+                new Shoot(m_Shooter, 1.0),
+                new Intake(m_Intaker, 1.0)
+            ),
+            new InstantCommand(() -> States.shooterState = ShooterStates.disabled)
 
         );
     }
