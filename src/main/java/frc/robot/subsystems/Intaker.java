@@ -50,7 +50,7 @@ public class Intaker extends SubsystemBase {
           intakeMotor2.set(ControlMode.PercentOutput, 0);
           intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         }
-      case shooting:
+      case feeding:
         intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);

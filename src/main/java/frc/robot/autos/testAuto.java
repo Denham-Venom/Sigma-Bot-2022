@@ -69,7 +69,7 @@ public class testAuto extends SequentialCommandGroup {
             new ParallelDeadlineGroup(
                 new WaitCommand(2.5),
                 new Shoot(m_Shooter, 1.0),
-                new Intake(m_Intaker, 1.0)
+                new Intake(m_Intaker)
             ),
             new InstantCommand(() -> States.shooterState = ShooterStates.disabled)
 
