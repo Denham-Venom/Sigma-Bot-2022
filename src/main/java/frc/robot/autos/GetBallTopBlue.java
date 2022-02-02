@@ -29,9 +29,9 @@ import frc.robot.subsystems.Swerve;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class GetBallTopBlue extends SequentialCommandGroup {
   /** Creates a new GetBallTopBlue. */
-  public GetBallTopBlue(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
-    // This will load the file "getBall.path" and generate it with a max velocity of 3 m/s and a max acceleration of 2 m/s^2
-    PathPlannerTrajectory getAndShootBall = PathPlanner.loadPath("getBall", 3, 2);
+  public GetBallTopBlue(Swerve s_Swerve) {
+    // This will load the file "getBallSwerve.path" and generate it with a max velocity of 3 m/s and a max acceleration of 2 m/s^2
+    PathPlannerTrajectory getAndShootBall = PathPlanner.loadPath("getBallSwerve", 3, 2);
 
     // Create a PPSwerveControllerCommand. This is almost identical to WPILib's SwerveControllerCommand, but it uses the holonomic rotation
     // from the PathPlannerTrajectory to control the robot's rotation.
@@ -65,17 +65,17 @@ public class GetBallTopBlue extends SequentialCommandGroup {
 
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(getAndShootBall.getInitialPose())),
-            swerveControllerCommand,
+            swerveControllerCommand
 
-            /* Shoot from Starting Point */
-            new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
-            new WaitCommand(1.0), //Wait for 1 second to auto aim and spin up before shooting
-            new ParallelDeadlineGroup(
-                new WaitCommand(2.5),
-                new Shoot(1.0),
-                new Intake(m_Intaker)
-            ),
-            new InstantCommand(() -> States.shooterState = ShooterStates.disabled)
+            // /* Shoot from Starting Point */
+            // new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
+            // new WaitCommand(1.0), //Wait for 1 second to auto aim and spin up before shooting
+            // new ParallelDeadlineGroup(
+            //     new WaitCommand(2.5),
+            //     new Shoot(1.0),
+            //     new Intake(m_Intaker)
+            // ),
+            // new InstantCommand(() -> States.shooterState = ShooterStates.disabled)
     );
   }
 }
