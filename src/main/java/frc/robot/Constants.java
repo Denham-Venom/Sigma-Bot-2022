@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
 import frc.lib.util.SwerveModuleConstants;
@@ -125,16 +126,16 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final TalonConstants shooterMotorParentConstants = 
+        public static final TalonConstants parentShooterConstants = 
+            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+
+        public static final TalonConstants childShooterConstants = 
+            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.FollowMaster); //might need to change invert type
+
+        public static final TalonConstants hoodConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
     
-        public static final TalonConstants shooterMotorChildConstants = 
-            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
-
-        public static final TalonConstants hoodMotorConstants = 
-            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
-
-        public static final TalonConstants turretMotorConstants = 
+        public static final TalonConstants turretConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
         public static final double shooterGearRatio = (1/1);
@@ -190,6 +191,8 @@ public final class Constants {
         public static final TalonConstants intakeMotorConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
         public static final double IntakeSpeed = 0;
+        public static final int pistonExtend = 0;
+        public static final int pistonRetract = 1;
     }
 
     public static final class talonCurrentLimit {

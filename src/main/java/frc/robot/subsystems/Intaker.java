@@ -16,8 +16,11 @@ import frc.robot.States.IntakeStates;
 public class Intaker extends SubsystemBase {
   /** Creates a new Intaker. */
   
+  // indexer 1
   private LazyTalonFX intakeMotor1;
+  // indexer 2
   private LazyTalonFX intakeMotor2;
+  // intaker
   private LazyTalonFX intakeMotor3;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
@@ -47,7 +50,7 @@ public class Intaker extends SubsystemBase {
           intakeMotor2.set(ControlMode.PercentOutput, 0);
           intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         }
-      case shooting:
+      case feeding:
         intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);

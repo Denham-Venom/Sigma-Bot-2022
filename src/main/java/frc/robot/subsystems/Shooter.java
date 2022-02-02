@@ -28,13 +28,14 @@ public class Shooter extends SubsystemBase {
   private Limelight limelight;
 
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
-  private InterpolatableTreeMap<Double> angleMap = new InterpolatableTreeMap<>();
+  private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
+  private InterpolatableTreeMap<Double> turretMap = new InterpolatableTreeMap<>();
   
   public Shooter(Vision m_Vision) {
-    shooterMotorParent = new LazyTalonFX(Constants.Shooter.shooterMotorParentConstants);
-    shooterMotorChild = new LazyTalonFX(Constants.Shooter.shooterMotorChildConstants);
-    hoodMotor = new LazyTalonFX(Constants.Shooter.hoodMotorConstants);
-    turretMotor = new LazyTalonFX(Constants.Shooter.turretMotorConstants);
+    shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
+    shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
+    hoodMotor = new LazyTalonFX(Constants.Shooter.hoodConstants);
+    turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
 
     shooterMotorParent.configPID(Constants.Shooter.shooterPID);
     shooterMotorChild.follow(shooterMotorParent);
@@ -49,7 +50,7 @@ public class Shooter extends SubsystemBase {
 
     for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
       shooterMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][1]));
-      angleMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
+      hoodMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
     }
   }
 
@@ -79,8 +80,9 @@ public class Shooter extends SubsystemBase {
     
 
   //getter and setter for the turret
-  public double getTurretAngle(){
-    return Conversions.falconToDegrees(turretMotor.getSelectedSensorPosition(), Constants.Shooter.turretGearRatio);
+  public Rotation2d getTurretAngle(){
+    final double angle = Conversions.falconToDegrees(turretMotor.getSelectedSensorPosition(), Constants.Shooter.turretGearRatio);
+    return Rotation2d.fromDegrees(angle);
   }
   
   /**
@@ -106,12 +108,21 @@ public class Shooter extends SubsystemBase {
     shooterMotorParent.set(ControlMode.PercentOutput, power);
   }
 
+  void updateTurret() {
+    //get limelight angle
+    Rotation2d ang = limelight.getTx();
+    ang = getTurretAngle().plus(ang);
+    //pass to setTurretAngle()
+    setTurretAngle(ang.getDegrees());
+  }
+
   @Override
   public void periodic() {
     switch(States.shooterState){
       case disabled:
           shooterMotorParent.set(ControlMode.PercentOutput, 0);
           hoodMotor.set(ControlMode.PercentOutput, 0);
+          turretMotor.set(ControlMode.PercentOutput, 0);
           break;
           
       case preShoot:
@@ -120,10 +131,12 @@ public class Shooter extends SubsystemBase {
               setHoodAngle(SmartDashboard.getNumber("Shooter Angle Calib", 0));
           } else{
               setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
-              setHoodAngle(angleMap.get(limelight.getDistance().getNorm()));
+              setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
           }
           break;
     }
+
+    updateTurret();
     // This method will be called once per scheduler run
   }
 }
