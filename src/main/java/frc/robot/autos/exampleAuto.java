@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -25,6 +26,9 @@ public class exampleAuto extends SequentialCommandGroup {
                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
+        // Pose2d(16.349.feet, 20.099.feet, 0.degrees),
+        //Pose2d(23.049.feet, 14.905.feet, -19.101.degrees)
+
         // An example trajectory to follow.  All units in meters.
         Trajectory exampleTrajectory =
             TrajectoryGenerator.generateTrajectory(
@@ -33,8 +37,15 @@ public class exampleAuto extends SequentialCommandGroup {
                 // Pass through these two interior waypoints, making an 's' curve path
                 List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
                 // End 3 meters straight ahead of where we started, facing forward
-                new Pose2d(3, 0, new Rotation2d(0)),
-                config);
+                new Pose2d(3, 0, new Rotation2d(Math.PI)), config);
+        
+        //new Rotation2d();
+        // Trajectory trajectory2 = 
+        //     TrajectoryGenerator.generateTrajectory(
+        //         new Pose2d(Units.feetToMeters(10.151), Units.feetToMeters(14.437), Rotation2d.fromDegrees(0)),
+        //         List.of(new Translation2d(Units.feetToMeters(14.265), Units.feetToMeters(14.437), Rotation2d.fromDegrees(90.785))), 
+        //         new Pose2d(Units.feetToMeters(23.009), Units.feetToMeters(15.068), Rotation2d.fromDegrees(-22.941)),
+        //         config);
 
         var thetaController =
             new ProfiledPIDController(
