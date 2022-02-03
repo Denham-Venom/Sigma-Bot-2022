@@ -6,6 +6,7 @@ package frc.robot.autos;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -33,35 +34,35 @@ public class GetBallTopBlue extends SequentialCommandGroup {
     // This will load the file "getBallSwerve.path" and generate it with a max velocity of 3 m/s and a max acceleration of 2 m/s^2
     PathPlannerTrajectory getAndShootBall = PathPlanner.loadPath("getBallSwerve", 3, 2);
 
+    var thetaController =
+    new ProfiledPIDController(
+        Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
     // Create a PPSwerveControllerCommand. This is almost identical to WPILib's SwerveControllerCommand, but it uses the holonomic rotation
     // from the PathPlannerTrajectory to control the robot's rotation.
     // See the WPILib SwerveControllerCommand for more info on what you need to pass to the command
-    // PPSwerveControllerCommand command = new PPSwerveControllerCommand(
-    //   getAndShootBall,
-    //   poseSupplier,
-    //   kinematics,
-    //   xController,
-    //   yController,
-    //   thetaController,
-    //   outputModuleStates,
-    //   requirements
-    // );
+    PPSwerveControllerCommand swerveControllerCommand = new PPSwerveControllerCommand(
+      getAndShootBall,
+      s_Swerve::getPose,
+      Constants.Swerve.swerveKinematics,
+      new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+      new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+      thetaController,
+      s_Swerve::setModuleStates,
+      s_Swerve
+    );
 
-    var thetaController =
-            new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand =
-    new SwerveControllerCommand(
-        getAndShootBall,
-        s_Swerve::getPose,
-        Constants.Swerve.swerveKinematics,
-        new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-        new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-        thetaController,
-        s_Swerve::setModuleStates,
-        s_Swerve);
+    // SwerveControllerCommand swerveControllerCommand =
+    // new SwerveControllerCommand(
+    //     getAndShootBall,
+    //     s_Swerve::getPose,
+    //     Constants.Swerve.swerveKinematics,
+    //     new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+    //     new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+    //     thetaController,
+    //     s_Swerve::setModuleStates,
+    //     s_Swerve);
 
     addCommands(
       new InstantCommand(() -> s_Swerve.resetOdometry(getAndShootBall.getInitialPose())),
