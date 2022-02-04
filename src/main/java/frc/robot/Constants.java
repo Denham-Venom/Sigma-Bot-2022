@@ -125,16 +125,16 @@ public final class Constants {
     }
 
     public static final class Shooter {
-        public static final TalonConstants shooterMotorParentConstants = 
+        public static final TalonConstants parentShooterConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
     
-        public static final TalonConstants shooterMotorChildConstants = 
+        public static final TalonConstants childShooterConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
-        public static final TalonConstants hoodMotorConstants = 
+        public static final TalonConstants hoodConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
-        public static final TalonConstants turretMotorConstants = 
+        public static final TalonConstants turretConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
         public static final double shooterGearRatio = (1/1);
