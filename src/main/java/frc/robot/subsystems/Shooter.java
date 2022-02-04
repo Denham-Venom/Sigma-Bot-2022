@@ -87,7 +87,7 @@ public class Shooter extends SubsystemBase {
   
   /**
    * 
-   * @param turretAngle Angle between -180 to 180
+   * @param turretAngle Angle between -180 to 180 degrees
    */
   public void setTurretAngle(double turretAngle){
     if(turretAngle < 0) {

@@ -26,8 +26,11 @@ public class exampleAuto extends SequentialCommandGroup {
                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
-        // Pose2d(16.349.feet, 20.099.feet, 0.degrees),
-        //Pose2d(23.049.feet, 14.905.feet, -19.101.degrees)
+        //Another list of waypoints
+        //wayPoints = listOf(
+        //Pose2d(17.285.feet, 19.35.feet, -27.491.degrees),
+        //Pose2d(18.367.feet, 16.776.feet, -22.997.degrees),
+        //Pose2d(23.143.feet, 14.88.feet, -21.019.degrees)),
 
         // An example trajectory to follow.  All units in meters.
         Trajectory exampleTrajectory =
@@ -39,14 +42,16 @@ public class exampleAuto extends SequentialCommandGroup {
                 // End 3 meters straight ahead of where we started, facing forward
                 new Pose2d(3, 0, new Rotation2d(Math.PI)), config);
         
-        //new Rotation2d();
-        // Trajectory trajectory2 = 
-        //     TrajectoryGenerator.generateTrajectory(
-        //         new Pose2d(Units.feetToMeters(10.151), Units.feetToMeters(14.437), Rotation2d.fromDegrees(0)),
-        //         List.of(new Translation2d(Units.feetToMeters(14.265), Units.feetToMeters(14.437), Rotation2d.fromDegrees(90.785))), 
-        //         new Pose2d(Units.feetToMeters(23.009), Units.feetToMeters(15.068), Rotation2d.fromDegrees(-22.941)),
-        //         config);
-
+        new Rotation2d();
+         Trajectory trajectory2 = 
+             TrajectoryGenerator.generateTrajectory(
+                new Pose2d(Units.feetToMeters(17.285), Units.feetToMeters(19.35), Rotation2d.fromDegrees(-27.491)),
+                List.of( 
+                    new Translation2d( Units.feetToMeters(18.367), Units.feetToMeters(16.776) )
+                    //new Translation2d( Rotation2d.fromDegrees(-22.997) )
+                ),
+                new Pose2d(Units.feetToMeters(23.143), Units.feetToMeters(14.88), Rotation2d.fromDegrees(-21.019)),
+                config);
         var thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -54,7 +59,7 @@ public class exampleAuto extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                exampleTrajectory,
+                trajectory2,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
