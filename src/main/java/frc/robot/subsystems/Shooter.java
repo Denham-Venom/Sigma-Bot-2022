@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
   private InterpolatableTreeMap<Double> turretMap = new InterpolatableTreeMap<>();
   
   public Shooter(Vision m_Vision) {
-    shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
+    shooterMotorParent = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     hoodMotor = new LazyTalonFX(Constants.Shooter.hoodConstants);
     turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
