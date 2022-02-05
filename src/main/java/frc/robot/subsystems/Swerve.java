@@ -54,6 +54,9 @@ public class Swerve extends SubsystemBase {
         yEntry = table.getEntry("robotY");
         headingEntry = table.getEntry("robotHeading");
 
+        SmartDashboard.putNumber("robotX_swerve_odo", 0);
+        SmartDashboard.putNumber("robotY_swerve_odo", 0);
+        SmartDashboard.putNumber("robotAng_swerve_odo", 0);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -122,8 +125,15 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
 
-        xEntry.setDouble(Units.metersToFeet(swerveOdometry.getPoseMeters().getX()));
-        yEntry.setDouble(Units.metersToFeet(swerveOdometry.getPoseMeters().getY()));
-        headingEntry.setDouble(swerveOdometry.getPoseMeters().getRotation().getRadians());
+        double x = Units.metersToFeet(swerveOdometry.getPoseMeters().getX());
+        double y = Units.metersToFeet(swerveOdometry.getPoseMeters().getY());
+        double ang = swerveOdometry.getPoseMeters().getRotation().getRadians();
+        xEntry.setDouble(x);
+        yEntry.setDouble(y);
+        headingEntry.setDouble(ang);
+
+        SmartDashboard.putNumber("robotX_swerve_odo", x);
+        SmartDashboard.putNumber("robotY_swerve_odo", y);
+        SmartDashboard.putNumber("robotAng_swerve_odo", ang);
     }
 }

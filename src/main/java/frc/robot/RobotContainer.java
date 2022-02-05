@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.States.IntakeStates;
+import frc.robot.States.ShooterStates;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -48,7 +50,7 @@ public class RobotContainer {
   private final JoystickButton operatorIntakeButton = new JoystickButton(operator, XboxController.Button.kY.value);
   private final POVButton operatorIntakeExtendButton = new POVButton(operator, 180);
   private final POVButton operatorIntakeRetractButton = new POVButton(operator, 0);
-  
+  private final JoystickButton feedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
   private final Swerve s_Swerve = new Swerve();
@@ -75,13 +77,58 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
     /* Intake */
-    intakeButton.whileHeld(new Intake(m_Intaker));
-    operatorIntakeButton.whileHeld(new Intake(m_Intaker));
+    intakeButton.whileHeld(new StartEndCommand(
+      () -> intake(), 
+      () -> stopIntake()
+    ));
     outakeButton.whileHeld(new Intake(m_Intaker));
+    
+    /* Shooter */
+    shootButton.toggleWhenPressed(new StartEndCommand(
+      () -> activateShooter(),
+      () -> deactivateShooter()
+    ));
+    feedButton.whileHeld(new StartEndCommand(
+      () -> feed(), 
+      () -> stopIntake()
+    ));
+    
+    /* Operator Button */
+    operatorIntakeButton.whileHeld( new StartEndCommand(
+      () -> intake(),
+      () -> stopIntake()
+    ));
   };
+
+  private void feed() {
+    States.intakeState = IntakeStates.feeding;
+  }
+
+  private void stopIntake() {
+    States.intakeState = IntakeStates.disabled;
+  }
+
+  private void activateShooter() {
+    States.shooterState = ShooterStates.preShoot;
+  }
+
+  private void deactivateShooter() {
+    States.shooterState = ShooterStates.disabled;
+  }
+
+  private void intake() {
+    if(States.intakeState != IntakeStates.feeding)
+      States.intakeState = IntakeStates.intaking;
+  }
+
+  private void outtake() {
+    States.intakeState = IntakeStates.outtaking;
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -90,6 +137,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new exampleAuto(s_Swerve);
+    return new BottomBlue4Ball(s_Swerve);
   }
 }

@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.Controllers.TalonConstants;
@@ -121,6 +122,12 @@ public final class Constants {
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
+
+        public static final TrajectoryConfig trajectoryConfig =
+            new TrajectoryConfig(
+                    Constants.AutoConstants.kMaxSpeedMetersPerSecond,
+                    Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                .setKinematics(Constants.Swerve.swerveKinematics);
 
     }
 

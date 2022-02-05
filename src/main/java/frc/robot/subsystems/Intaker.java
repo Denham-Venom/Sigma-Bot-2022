@@ -16,9 +16,9 @@ import frc.robot.States.IntakeStates;
 public class Intaker extends SubsystemBase {
   /** Creates a new Intaker. */
   
-  // indexer 1
+  // indexer 1 by intake
   private LazyTalonFX intakeMotor1;
-  // indexer 2
+  // indexer 2 by shooter
   private LazyTalonFX intakeMotor2;
   // intaker
   private LazyTalonFX intakeMotor3;
@@ -36,28 +36,37 @@ public class Intaker extends SubsystemBase {
     switch(States.intakeState) {
       case intaking:
         if(!intakeSensor.get()) {
+          if(!shooterSensor.get()) {
+            intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          } else {
+            intakeMotor2.set(ControlMode.PercentOutput, 0);
+          }
           intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
           intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         }
         else if(!shooterSensor.get()) {
-          intakeMotor1.set(ControlMode.PercentOutput, 0);
+          intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
           intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
           intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-        }
-        else {
+        } else {
           intakeMotor1.set(ControlMode.PercentOutput, 0);
           intakeMotor2.set(ControlMode.PercentOutput, 0);
-          intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          intakeMotor3.set(ControlMode.PercentOutput, 0);
         }
+        break;
+      case outtaking:
+        intakeMotor3.set(ControlMode.PercentOutput, -Constants.Intake.IntakeSpeed);
+        break;
       case feeding: 
         intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+        break;
       case disabled:
         intakeMotor1.set(ControlMode.PercentOutput, 0);
         intakeMotor2.set(ControlMode.PercentOutput, 0);
         intakeMotor3.set(ControlMode.PercentOutput, 0);
+        break;
     }
   }
 }
