@@ -30,9 +30,8 @@ public class BottomBlue4Ball extends SequentialCommandGroup {
             new Pose2d(7.501, 0.92, new Rotation2d(1.518)),
             new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
             new Pose2d(4.947, 5.905, new Rotation2d(1.659))
-        ),
-
-        Constants.Swerve.trajectoryConfig);
+            ),
+            Constants.Swerve.trajectoryConfig);
   
           var thetaController =
               new ProfiledPIDController(
