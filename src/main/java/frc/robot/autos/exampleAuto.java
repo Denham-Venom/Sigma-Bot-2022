@@ -41,17 +41,36 @@ public class exampleAuto extends SequentialCommandGroup {
                 List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
                 // End 3 meters straight ahead of where we started, facing forward
                 new Pose2d(3, 0, new Rotation2d(Math.PI)), config);
-        
+
         new Rotation2d();
          Trajectory trajectory2 = 
              TrajectoryGenerator.generateTrajectory(
-                new Pose2d(Units.feetToMeters(17.285), Units.feetToMeters(19.35), Rotation2d.fromDegrees(-27.491)),
+                new Pose2d(Units.feetToMeters(23.165), Units.feetToMeters(14.997), Rotation2d.fromDegrees(157.106)),
                 List.of( 
-                    new Translation2d( Units.feetToMeters(18.367), Units.feetToMeters(16.776) )
-                    //new Translation2d( Rotation2d.fromDegrees(-22.997) )
+                    //new Translation2d( Units.feetToMeters(19.794), Units.feetToMeters(17.525) )
                 ),
-                new Pose2d(Units.feetToMeters(23.143), Units.feetToMeters(14.88), Rotation2d.fromDegrees(-21.019)),
+                new Pose2d(Units.feetToMeters(16.454), Units.feetToMeters(20.215), Rotation2d.fromDegrees(142.0)),
                 config);
+
+        new Rotation2d();
+            Trajectory trajectory3 = 
+            TrajectoryGenerator.generateTrajectory(
+                new Pose2d(Units.feetToMeters(25.484), Units.feetToMeters(9.522), Rotation2d.fromDegrees(-110.0)),
+                List.of( 
+                    new Translation2d( Units.feetToMeters(24.922), Units.feetToMeters(1.568) )
+                ),
+                new Pose2d(Units.feetToMeters(16.543), Units.feetToMeters(6.13), Rotation2d.fromDegrees(151.0)),
+                config);
+
+        new Rotation2d();
+            Trajectory bottomBluePart1 = 
+            TrajectoryGenerator.generateTrajectory(
+                new Pose2d(Units.feetToMeters(23.406), Units.feetToMeters(15.653), Rotation2d.fromDegrees(155)),
+                List.of( 
+                ),
+                new Pose2d(Units.feetToMeters(16.187), Units.feetToMeters(20.215), Rotation2d.fromDegrees(154)),
+                config);
+
         var thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -59,7 +78,7 @@ public class exampleAuto extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                trajectory2,
+                bottomBluePart1,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -68,10 +87,22 @@ public class exampleAuto extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
+        SwerveControllerCommand swerveControllerCommand2 =
+                new SwerveControllerCommand(
+                    trajectory2,
+                    s_Swerve::getPose,
+                    Constants.Swerve.swerveKinematics,
+                    new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                    new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                    thetaController,
+                    s_Swerve::setModuleStates,
+                    s_Swerve);
+
 
         addCommands(
-            new InstantCommand(() -> s_Swerve.resetOdometry(exampleTrajectory.getInitialPose())),
+            new InstantCommand(() -> s_Swerve.resetOdometry(trajectory2.getInitialPose())),
             swerveControllerCommand
+            //swerveControllerCommand2
         );
     }
 }
