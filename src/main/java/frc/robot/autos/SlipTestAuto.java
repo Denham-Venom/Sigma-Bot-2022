@@ -21,16 +21,14 @@ import frc.robot.subsystems.Swerve;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BottomBlue5Ball extends SequentialCommandGroup {
-  /** Creates a new BottomBlue5Ball. */
-  public BottomBlue5Ball(Swerve s_Swerve) {
-    Trajectory bottomBlue5Ball = TrajectoryGenerator.generateTrajectory(
+public class SlipTestAuto extends SequentialCommandGroup {
+  /** Creates a new SlipTestAuto. */
+  public SlipTestAuto(Swerve s_Swerve) {
+    Trajectory slipTestAuto = TrajectoryGenerator.generateTrajectory(
       List.of(
-        new Pose2d(7.525, 3.017, new Rotation2d(-1.92)),
-        new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
-        new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
-        new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
-        new Pose2d(4.866, 6.033, new Rotation2d(1.659))
+        new Pose2d(5.113, 3.466, new Rotation2d(3.133)),
+        new Pose2d(3.589, 3.466, new Rotation2d(3.142)),
+        new Pose2d(4.36, 4.179, new Rotation2d(-3.119))
         ),
         Constants.Swerve.trajectoryConfig);
 
@@ -41,7 +39,7 @@ public class BottomBlue5Ball extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand = 
             new SwerveControllerCommand(
-                bottomBlue5Ball,
+                slipTestAuto,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -50,7 +48,7 @@ public class BottomBlue5Ball extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
     addCommands(
-      new InstantCommand( () -> s_Swerve.resetOdometry(bottomBlue5Ball.getInitialPose()) ),
+      new InstantCommand( () -> s_Swerve.resetOdometry(slipTestAuto.getInitialPose()) ),
       swerveControllerCommand
     );
     
