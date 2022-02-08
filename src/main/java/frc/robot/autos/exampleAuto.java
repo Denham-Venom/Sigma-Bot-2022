@@ -89,6 +89,7 @@ public class exampleAuto extends SequentialCommandGroup {
         TrajectoryGenerator.generateTrajectory(
                 new Pose2d(Units.feetToMeters(16.499), Units.feetToMeters(6.317), Rotation2d.fromDegrees(128)),
                 List.of( 
+                    
                 ),
                 new Pose2d(Units.feetToMeters(4.281), Units.feetToMeters(4.586), Rotation2d.fromDegrees(-137)),
                 config);

@@ -17,4 +17,5 @@ public class States {
 
     public static ShooterStates shooterState = ShooterStates.disabled;
     public static IntakeStates intakeState = IntakeStates.disabled;
+
 }

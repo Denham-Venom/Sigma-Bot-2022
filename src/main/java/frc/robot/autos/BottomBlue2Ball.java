@@ -22,30 +22,30 @@ import frc.robot.subsystems.Swerve;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class BottomBlue2Ball extends SequentialCommandGroup {
-  /** Creates a new BottomBlue4Ball. */
+  /** Creates a new BottomBlue2Ball. */
   public BottomBlue2Ball(Swerve s_Swerve) {
       Trajectory bottomBlue2Ball = TrajectoryGenerator.generateTrajectory(
         List.of(
-        new Pose2d(7.552, 3.003, new Rotation2d(-1.956)),
-        new Pose2d(5.042, 1.897, new Rotation2d(-2.768))
-        ),
-        Constants.Swerve.trajectoryConfig);
+          new Pose2d(7.505, 2.981, new Rotation2d(-1.932)),
+          new Pose2d(7.571, 0.514, new Rotation2d(-1.586))
+          ),
+          Constants.Swerve.trajectoryConfig);
   
           var thetaController =
               new ProfiledPIDController(
-                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+                  Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
           thetaController.enableContinuousInput(-Math.PI, Math.PI);
   
           SwerveControllerCommand swerveControllerCommand = 
-            new SwerveControllerCommand(
-                bottomBlue2Ball,
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                s_Swerve::setModuleStates,
-                s_Swerve);
+              new SwerveControllerCommand(
+                  bottomBlue2Ball,
+                  s_Swerve::getPose,
+                  Constants.Swerve.swerveKinematics,
+                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                  thetaController,
+                  s_Swerve::setModuleStates,
+                  s_Swerve);
       addCommands(
         new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue2Ball.getInitialPose())),
         swerveControllerCommand);
