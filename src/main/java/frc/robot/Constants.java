@@ -4,12 +4,14 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
 import frc.lib.util.SwerveModuleConstants;
@@ -129,6 +131,15 @@ public final class Constants {
                     Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                 .setKinematics(Constants.Swerve.swerveKinematics);
 
+        public static final ProfiledPIDController thetaController = new ProfiledPIDController(
+            AutoConstants.kPThetaController, 
+            0, 
+            0, 
+            AutoConstants.kThetaControllerConstraints
+        );
+
+        //whether "forward" for swerve is relative to front of robot (false) or to whole field (true)
+        public static final boolean fieldRelative = true;
     }
 
     public static final class Shooter {
@@ -169,6 +180,8 @@ public final class Constants {
         {
             {0, 0, 0}
         };
+
+        public static final boolean autoAim = true;
 
     }
 

@@ -24,23 +24,22 @@ public class Shooter extends SubsystemBase {
   private LazyTalonFX shooterMotorParent;
   private LazyTalonFX shooterMotorChild;
   private LazyTalonFX hoodMotor;
-  private LazyTalonFX turretMotor;
+  //private LazyTalonFX turretMotor;
   private Limelight limelight;
 
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
-  private InterpolatableTreeMap<Double> turretMap = new InterpolatableTreeMap<>();
   
   public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     hoodMotor = new LazyTalonFX(Constants.Shooter.hoodConstants);
-    turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
+    //turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
 
     shooterMotorParent.configPID(Constants.Shooter.shooterPID);
     shooterMotorChild.follow(shooterMotorParent);
     hoodMotor.configPID(Constants.Shooter.hoodPID);
-    turretMotor.configPID(Constants.Shooter.turretPID);
+    //turretMotor.configPID(Constants.Shooter.turretPID);
     limelight = m_Vision.getLimelight();
 
     if (Constants.Shooter.calibrationMode){
@@ -80,41 +79,41 @@ public class Shooter extends SubsystemBase {
     
 
   //getter and setter for the turret
-  public Rotation2d getTurretAngle(){
-    final double angle = Conversions.falconToDegrees(turretMotor.getSelectedSensorPosition(), Constants.Shooter.turretGearRatio);
-    return Rotation2d.fromDegrees(angle);
-  }
+  // public Rotation2d getTurretAngle(){
+  //   final double angle = Conversions.falconToDegrees(turretMotor.getSelectedSensorPosition(), Constants.Shooter.turretGearRatio);
+  //   return Rotation2d.fromDegrees(angle);
+  // }
   
   /**
    * 
    * @param turretAngle Angle between -180 to 180 degrees
    */
-  public void setTurretAngle(double turretAngle){
-    if(turretAngle < 0) {
-      turretAngle += 360;
-    }
-    double finalAngle = Conversions.degreesToFalcon(turretAngle, Constants.Shooter.turretGearRatio);
-    if (finalAngle > Constants.Shooter.turretHighLimit){
-      finalAngle = Constants.Shooter.turretHighLimit;
-    }
-    else if (finalAngle < Constants.Shooter.turretLowLimit){
-      finalAngle = Constants.Shooter.turretLowLimit;
-    }
-    turretMotor.set(ControlMode.Position, finalAngle);
-  }
+  // public void setTurretAngle(double turretAngle){
+  //   if(turretAngle < 0) {
+  //     turretAngle += 360;
+  //   }
+  //   double finalAngle = Conversions.degreesToFalcon(turretAngle, Constants.Shooter.turretGearRatio);
+  //   if (finalAngle > Constants.Shooter.turretHighLimit){
+  //     finalAngle = Constants.Shooter.turretHighLimit;
+  //   }
+  //   else if (finalAngle < Constants.Shooter.turretLowLimit){
+  //     finalAngle = Constants.Shooter.turretLowLimit;
+  //   }
+  //   turretMotor.set(ControlMode.Position, finalAngle);
+  // }
 
 
   public void setPower(double power){
     shooterMotorParent.set(ControlMode.PercentOutput, power);
   }
 
-  void updateTurret() {
-    //get limelight angle
-    Rotation2d ang = limelight.getTx();
-    ang = getTurretAngle().plus(ang);
-    //pass to setTurretAngle()
-    setTurretAngle(ang.getDegrees());
-  }
+  // void updateTurret() {
+  //   //get limelight angle
+  //   Rotation2d ang = limelight.getTx();
+  //   ang = getTurretAngle().plus(ang);
+  //   //pass to setTurretAngle()
+  //   setTurretAngle(ang.getDegrees());
+  // }
 
   @Override
   public void periodic() {
@@ -122,7 +121,7 @@ public class Shooter extends SubsystemBase {
       case disabled:
           shooterMotorParent.set(ControlMode.PercentOutput, 0);
           hoodMotor.set(ControlMode.PercentOutput, 0);
-          turretMotor.set(ControlMode.PercentOutput, 0);
+          //turretMotor.set(ControlMode.PercentOutput, 0);
           break;
           
       case preShoot:
@@ -136,7 +135,7 @@ public class Shooter extends SubsystemBase {
           break;
     }
 
-    updateTurret();
+    //updateTurret();
     // This method will be called once per scheduler run
   }
 }

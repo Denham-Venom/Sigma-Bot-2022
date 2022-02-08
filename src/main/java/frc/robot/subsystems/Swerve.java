@@ -3,8 +3,9 @@ package frc.robot.subsystems;
 
 import frc.robot.SwerveModule;
 import frc.lib.math.Conversions;
+import frc.lib.util.Limelight;
 import frc.robot.Constants;
-
+import frc.robot.States;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -33,11 +34,15 @@ public class Swerve extends SubsystemBase {
     public NetworkTableEntry xEntry;
     public NetworkTableEntry yEntry;
     public NetworkTableEntry headingEntry;
+    private Limelight limelight;
 
-    public Swerve() {
+    public Swerve(Vision m_Vision) {
+        Constants.Swerve.thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
+        limelight = m_Vision.getLimelight();
         
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw());
 
@@ -123,6 +128,21 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+        }
+
+        switch(States.shooterState){
+            case disabled:
+                break;
+                
+            case preShoot:
+                if (Constants.Shooter.autoAim){
+                    this.drive(
+                        new Translation2d(), 
+                        Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees()), 
+                        Constants.Swerve.fieldRelative, 
+                        false);
+                }
+                break;
         }
 
         double x = Units.metersToFeet(swerveOdometry.getPoseMeters().getX());

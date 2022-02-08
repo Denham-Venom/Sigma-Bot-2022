@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
+// THIS IS WHAT ORIGINAL EXAMPLEAUTO LOOKED LIKE
+
 public class testAuto extends SequentialCommandGroup {
     public testAuto(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker){
         TrajectoryConfig config =

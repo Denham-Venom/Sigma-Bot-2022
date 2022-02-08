@@ -53,16 +53,16 @@ public class RobotContainer {
   private final JoystickButton feedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
-  private final Swerve s_Swerve = new Swerve();
-  private final Intaker m_Intaker = new Intaker();
   private final Vision m_Vision = new Vision();
+  private final Swerve s_Swerve = new Swerve(m_Vision);
+  private final Intaker m_Intaker = new Intaker();
   private final Shooter m_Shooter = new Shooter(m_Vision);
   
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    boolean fieldRelative = true;
+    boolean fieldRelative = Constants.Swerve.fieldRelative;
     boolean openLoop = true;
     s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop));
 
