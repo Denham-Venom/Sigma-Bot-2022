@@ -6,12 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.States.IntakeExtendStates;
 import frc.robot.States.IntakeStates;
 import frc.robot.States.ShooterStates;
 import frc.robot.autos.*;
@@ -53,6 +55,12 @@ public class RobotContainer {
   private final JoystickButton feedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
+<<<<<<< Updated upstream
+=======
+  private final PneumaticHub m_pHub = new PneumaticHub();
+  private final Swerve s_Swerve = new Swerve();
+  private final Intaker m_Intaker = new Intaker(m_pHub);
+>>>>>>> Stashed changes
   private final Vision m_Vision = new Vision();
   private final Swerve s_Swerve = new Swerve(m_Vision);
   private final Intaker m_Intaker = new Intaker();
@@ -77,7 +85,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
@@ -104,6 +111,14 @@ public class RobotContainer {
       () -> stopIntake()
     ));
   };
+
+  public void deployIntake(){
+    States.intakeExtendState = IntakeExtendStates.deployIntake;
+  }
+
+  public void retractIntake(){
+    States.intakeExtendState = IntakeExtendStates.retractIntake;
+  }
 
   private void feed() {
     States.intakeState = IntakeStates.feeding;

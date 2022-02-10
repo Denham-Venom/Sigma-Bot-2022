@@ -47,10 +47,10 @@ public class SlipTestAuto extends SequentialCommandGroup {
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
-    addCommands(
-      new InstantCommand( () -> s_Swerve.resetOdometry(slipTestAuto.getInitialPose()) ),
-      swerveControllerCommand
-    );
+      addCommands(
+        new InstantCommand( () -> s_Swerve.resetOdometry(slipTestAuto.getInitialPose()) ),
+        swerveControllerCommand
+        );
     
   }
   

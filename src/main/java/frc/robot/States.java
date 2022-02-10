@@ -15,7 +15,12 @@ public class States {
         disabled, intaking, outtaking, feeding
     }
 
+    public static enum IntakeExtendStates {
+        disabled, deployIntake, retractIntake
+    }
+
     public static ShooterStates shooterState = ShooterStates.disabled;
     public static IntakeStates intakeState = IntakeStates.disabled;
+    public static IntakeExtendStates intakeExtendState = IntakeExtendStates.disabled;
 
 }
