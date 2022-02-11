@@ -93,7 +93,7 @@ public class BottomBlue4Ball extends SequentialCommandGroup {
 
         //new ParallelDeadlineGroup(
           //swerveControllerCommand,
-          //new Intake(m_Intaker)),
+          //new Command(() -> States.IntakeStates = IntakeStates.intaking),
 
         //new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
         //new WaitCommand(1.0), 

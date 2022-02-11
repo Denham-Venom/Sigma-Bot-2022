@@ -23,4 +23,37 @@ public class States {
     public static IntakeStates intakeState = IntakeStates.disabled;
     public static IntakeExtendStates intakeExtendState = IntakeExtendStates.disabled;
 
+    static void deployIntake(){
+        States.intakeExtendState = IntakeExtendStates.deployIntake;
+    }
+
+    static void retractIntake(){
+        States.intakeExtendState = IntakeExtendStates.retractIntake;
+    }
+
+    static void feed() {
+        States.intakeState = IntakeStates.feeding;
+    }
+
+    static void stopIntake() {
+        States.intakeState = IntakeStates.disabled;
+    }
+
+    static void activateShooter() {
+        States.shooterState = ShooterStates.preShoot;
+    }
+
+    static void deactivateShooter() {
+        States.shooterState = ShooterStates.disabled;
+    }
+
+    static void intake() {
+        if(States.intakeState != IntakeStates.feeding)
+            States.intakeState = IntakeStates.intaking;
+    }
+
+    static void outtake() {
+        States.intakeState = IntakeStates.outtaking;
+    }
+
 }

@@ -55,15 +55,10 @@ public class RobotContainer {
   private final JoystickButton feedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
-<<<<<<< Updated upstream
-=======
   private final PneumaticHub m_pHub = new PneumaticHub();
-  private final Swerve s_Swerve = new Swerve();
   private final Intaker m_Intaker = new Intaker(m_pHub);
->>>>>>> Stashed changes
   private final Vision m_Vision = new Vision();
   private final Swerve s_Swerve = new Swerve(m_Vision);
-  private final Intaker m_Intaker = new Intaker();
   private final Shooter m_Shooter = new Shooter(m_Vision);
   
 
@@ -90,60 +85,28 @@ public class RobotContainer {
 
     /* Intake */
     intakeButton.whileHeld(new StartEndCommand(
-      () -> intake(), 
-      () -> stopIntake()
+      () -> States.intake(), 
+      () -> States.stopIntake()
     ));
     outakeButton.whileHeld(new Intake(m_Intaker));
     
     /* Shooter */
     shootButton.toggleWhenPressed(new StartEndCommand(
-      () -> activateShooter(),
-      () -> deactivateShooter()
+      () -> States.activateShooter(),
+      () -> States.deactivateShooter()
     ));
     feedButton.whileHeld(new StartEndCommand(
-      () -> feed(), 
-      () -> stopIntake()
+      () -> States.feed(), 
+      () -> States.stopIntake()
     ));
     
     /* Operator Button */
     operatorIntakeButton.whileHeld( new StartEndCommand(
-      () -> intake(),
-      () -> stopIntake()
+      () -> States.intake(),
+      () -> States.stopIntake()
     ));
   };
-
-  public void deployIntake(){
-    States.intakeExtendState = IntakeExtendStates.deployIntake;
-  }
-
-  public void retractIntake(){
-    States.intakeExtendState = IntakeExtendStates.retractIntake;
-  }
-
-  private void feed() {
-    States.intakeState = IntakeStates.feeding;
-  }
-
-  private void stopIntake() {
-    States.intakeState = IntakeStates.disabled;
-  }
-
-  private void activateShooter() {
-    States.shooterState = ShooterStates.preShoot;
-  }
-
-  private void deactivateShooter() {
-    States.shooterState = ShooterStates.disabled;
-  }
-
-  private void intake() {
-    if(States.intakeState != IntakeStates.feeding)
-      States.intakeState = IntakeStates.intaking;
-  }
-
-  private void outtake() {
-    States.intakeState = IntakeStates.outtaking;
-  }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
