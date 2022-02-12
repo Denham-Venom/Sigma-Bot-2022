@@ -115,6 +115,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new BottomBlue5Ball(s_Swerve);
+    return new Bottom5Ball(s_Swerve, m_Shooter);
   }
 }

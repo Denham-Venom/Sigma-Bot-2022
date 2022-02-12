@@ -55,24 +55,25 @@ public class BottomBlue2Ball extends SequentialCommandGroup {
                   thetaController,
                   s_Swerve::setModuleStates,
                   s_Swerve);
-      addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue2Ball.getInitialPose())),
-        new InstantCommand(() -> States.intakeExtendState = IntakeExtendStates.deployIntake),
+      //addCommands(
+        //new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue2Ball.getInitialPose())),
+        //new InstantCommand(() -> States.deployIntake()),
         
-        new ParallelDeadlineGroup(
-          swerveControllerCommand, 
-          new Intake(m_Intaker)),
+        //new ParallelDeadlineGroup(
+          //swerveControllerCommand, 
+          //new InstantCommand(() -> States.intake,
+
+        //new InstantCommand(() -> States.disabled),
         
-        new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
-        new WaitCommand(1.0), 
+        //new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
+        //new WaitCommand(1.0), 
         
-        new ParallelDeadlineGroup(
-            new WaitCommand(2.5),
-            new Shoot(m_Shooter, 1.0),
-            new Intake(m_Intaker)
-        ),
-        new InstantCommand(() -> States.shooterState = ShooterStates.disabled)
-      );
+        //new ParallelDeadlineGroup(
+          //new WaitCommand(2.5),
+          //new InstantCommand(() -> States.intakeState = IntakeStates.feeding)),
+
+        //new InstantCommand(() -> States.shooterState = ShooterStates.disabled),
+        //new InstantCommand(() -> States.intak);
   
   }
 }

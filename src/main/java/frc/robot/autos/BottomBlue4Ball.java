@@ -22,29 +22,34 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.States.IntakeExtendStates;
+import frc.robot.States.IntakeStates;
 import frc.robot.States.ShooterStates;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class BottomBlue4Ball extends SequentialCommandGroup {
-  /** Creates a new BottomBlue4Ball. */
-  public BottomBlue4Ball(Swerve s_Swerve) {
+  /** Creates a new BottomBlue4Ball. 
+   * @param m_Shooter */
+  public BottomBlue4Ball(Swerve s_Swerve, Shooter m_Shooter) {
       Trajectory bottomBlue4BallPart1 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(4.97, 6.254, new Rotation2d(-1.948)),
             new Pose2d(5, 1.819, new Rotation2d(1.655))
             ),
             Constants.Swerve.trajectoryConfig);
+
       Trajectory bottomBlue4BallPart2 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(5, 1.819, new Rotation2d(1.655)),
             new Pose2d(7.584, 0.456, new Rotation2d(-1.62))
             ),
             Constants.Swerve.trajectoryConfig);
+
       Trajectory bottomBlue4BallPart3 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(7.584, 0.456, new Rotation2d(-1.62)),
@@ -88,39 +93,49 @@ public class BottomBlue4Ball extends SequentialCommandGroup {
                   s_Swerve::setModuleStates,
                   s_Swerve);
       addCommands(
-        //new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue4BallPart1.getInitialPose())),
-        //new InstantCommand(() -> States.IntakeExtendStates = IntakeExtendStates.deployIntake),
+        new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue4BallPart1.getInitialPose())),
+        new InstantCommand(() -> States.deployIntake()),
 
-        //new ParallelDeadlineGroup(
-          //swerveControllerCommand,
-          //new Command(() -> States.IntakeStates = IntakeStates.intaking),
+        new ParallelDeadlineGroup(
+          swerveControllerCommand,
+          new InstantCommand(() -> States.intakeState = IntakeStates.intaking)),
 
-        //new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
-        //new WaitCommand(1.0), 
-        
-        //new ParallelDeadlineGroup(
-            //new WaitCommand(2.5),
-            //new Shoot(m_Shooter, 1.0),
-            //new Intake(m_Intaker)),
-        
-        //new ParallelDeadlineGroup(
-          //swerveControllerCommand2,
-          //new Intake(m_Intaker)),
-        
-        //new ParallelDeadlineGroup(
-          //swerveControllerCommand3,
-          //new Intake(m_Intaker)),
+        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
 
-        //new ParallelDeadlineGroup(
-          //swerveControllerCommand,
-          //new Intake(m_Intaker)),
-  
-        //new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
-        //new WaitCommand(1.0)
+        new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
+        new WaitCommand(1.0), 
+
+        new InstantCommand(() -> States.shooterState = ShooterStates.disabled),
+        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
+
+        new ParallelDeadlineGroup(
+            new WaitCommand(2.5),
+            new InstantCommand(() -> States.intakeState = IntakeStates.feeding)),
+
+        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
+
+        new ParallelDeadlineGroup(
+          swerveControllerCommand2,
+          new InstantCommand(() -> States.intakeState = IntakeStates.intaking)),
+
+          new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
+
+        new ParallelDeadlineGroup(
+          swerveControllerCommand3,
+          new InstantCommand(() -> States.intakeState = IntakeStates.intaking)),
+
+        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
+
+        new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
+        new WaitCommand(1.0),
+
+        new ParallelDeadlineGroup(
+            new WaitCommand(2.5),
+            new InstantCommand(() -> States.intakeState = IntakeStates.feeding)),
+        
+        new InstantCommand(() -> States.intakeState = IntakeStates.disabled)
       );
-
-        
-      
   
   }
+
 }
