@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 
 import frc.robot.SwerveModule;
-import frc.lib.math.Conversions;
 import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
@@ -10,8 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 
-import java.time.Year;
-
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,6 +20,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -35,6 +34,7 @@ public class Swerve extends SubsystemBase {
     public NetworkTableEntry yEntry;
     public NetworkTableEntry headingEntry;
     private Limelight limelight;
+    private int currentNeutral = 0;
 
     public Swerve(Vision m_Vision) {
         Constants.Swerve.thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -102,6 +102,12 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.resetPosition(pose, getYaw());
     }
 
+    public void setNeutral(NeutralMode neutral){
+        for(var mod : mSwerveMods){
+            mod.setNeutral(neutral);
+        }
+    }
+
     public SwerveModuleState[] getStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
         for(SwerveModule mod : mSwerveMods){
@@ -144,6 +150,18 @@ public class Swerve extends SubsystemBase {
                 }
                 break;
         }
+
+        if(Constants.Swerve.coastOnDisable){
+            if (DriverStation.isEnabled() && currentNeutral == 1){
+                setNeutral(NeutralMode.Brake);
+                currentNeutral = 0;
+            }
+            else if (DriverStation.isDisabled() && currentNeutral == 0){
+                setNeutral(NeutralMode.Coast);
+                currentNeutral = 1;
+            }
+        }
+        
 
         double x = Units.metersToFeet(swerveOdometry.getPoseMeters().getX());
         double y = Units.metersToFeet(swerveOdometry.getPoseMeters().getY());
