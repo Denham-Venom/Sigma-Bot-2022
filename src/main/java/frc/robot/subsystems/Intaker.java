@@ -7,10 +7,14 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazyTalonFX;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.States.IntakeExtendStates;
 import frc.robot.States.IntakeStates;
 
 public class Intaker extends SubsystemBase {
@@ -22,12 +26,17 @@ public class Intaker extends SubsystemBase {
   private LazyTalonFX intakeMotor2;
   // intaker
   private LazyTalonFX intakeMotor3;
+  
+  private DoubleSolenoid intakeExtend;
+
+
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
-  public Intaker() {
+  public Intaker(PneumaticHub m_pHub) {
     intakeMotor1 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeMotor2 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeMotor3 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
   }
 
   @Override
@@ -66,7 +75,19 @@ public class Intaker extends SubsystemBase {
         intakeMotor1.set(ControlMode.PercentOutput, 0);
         intakeMotor2.set(ControlMode.PercentOutput, 0);
         intakeMotor3.set(ControlMode.PercentOutput, 0);
+    }
+
+    switch(States.intakeExtendState) {
+      case deployIntake:
+        intakeExtend.set(Value.kForward);
         break;
+      case retractIntake:
+        intakeExtend.set(Value.kReverse); 
+        break;
+      case disabled:
+        intakeExtend.set(Value.kOff);
+      }
+      
     }
   }
-}
+

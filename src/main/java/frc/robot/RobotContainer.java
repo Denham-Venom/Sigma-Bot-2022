@@ -6,12 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.States.IntakeExtendStates;
 import frc.robot.States.IntakeStates;
 import frc.robot.States.ShooterStates;
 import frc.robot.autos.*;
@@ -53,9 +55,10 @@ public class RobotContainer {
   private final JoystickButton feedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
+  private final PneumaticHub m_pHub = new PneumaticHub();
+  private final Intaker m_Intaker = new Intaker(m_pHub);
   private final Vision m_Vision = new Vision();
   private final Swerve s_Swerve = new Swerve(m_Vision);
-  private final Intaker m_Intaker = new Intaker();
   private final Shooter m_Shooter = new Shooter(m_Vision);
   
 
@@ -77,58 +80,33 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
     /* Intake */
     intakeButton.whileHeld(new StartEndCommand(
-      () -> intake(), 
-      () -> stopIntake()
+      () -> States.intake(), 
+      () -> States.stopIntake()
     ));
     outakeButton.whileHeld(new Intake(m_Intaker));
     
     /* Shooter */
     shootButton.toggleWhenPressed(new StartEndCommand(
-      () -> activateShooter(),
-      () -> deactivateShooter()
+      () -> States.activateShooter(),
+      () -> States.deactivateShooter()
     ));
     feedButton.whileHeld(new StartEndCommand(
-      () -> feed(), 
-      () -> stopIntake()
+      () -> States.feed(), 
+      () -> States.stopIntake()
     ));
     
     /* Operator Button */
     operatorIntakeButton.whileHeld( new StartEndCommand(
-      () -> intake(),
-      () -> stopIntake()
+      () -> States.intake(),
+      () -> States.stopIntake()
     ));
   };
-
-  private void feed() {
-    States.intakeState = IntakeStates.feeding;
-  }
-
-  private void stopIntake() {
-    States.intakeState = IntakeStates.disabled;
-  }
-
-  private void activateShooter() {
-    States.shooterState = ShooterStates.preShoot;
-  }
-
-  private void deactivateShooter() {
-    States.shooterState = ShooterStates.disabled;
-  }
-
-  private void intake() {
-    if(States.intakeState != IntakeStates.feeding)
-      States.intakeState = IntakeStates.intaking;
-  }
-
-  private void outtake() {
-    States.intakeState = IntakeStates.outtaking;
-  }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

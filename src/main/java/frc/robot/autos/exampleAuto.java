@@ -51,49 +51,6 @@ public class exampleAuto extends SequentialCommandGroup {
             new Pose2d(Units.feetToMeters(16.499), Units.feetToMeters(6.317), Rotation2d.fromDegrees(128)),
             config);
 
-        Trajectory bottomBlue4Ball = 
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(Units.feetToMeters(24.687), Units.feetToMeters(9.898), Rotation2d.fromDegrees(-110)),
-            List.of( 
-                new Translation2d( Units.feetToMeters(24.699), Units.feetToMeters(1.288) ),
-                new Translation2d( Units.feetToMeters(16.499), Units.feetToMeters(6.317) )
-            ),
-            new Pose2d(Units.feetToMeters(4.281), Units.feetToMeters(4.586), Rotation2d.fromDegrees(-137)),
-            config);
-
-        Trajectory bottomBlue5BallPart1 = 
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(Units.feetToMeters(24.687), Units.feetToMeters(9.898), Rotation2d.fromDegrees(-110)),
-            List.of( 
-            ),
-            new Pose2d(Units.feetToMeters(24.699), Units.feetToMeters(1.288), Rotation2d.fromDegrees(87)),
-            config);
-    
-        Trajectory bottomBlue5BallPart2 = 
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(Units.feetToMeters(24.699), Units.feetToMeters(1.288), Rotation2d.fromDegrees(87)),
-            List.of( 
-            ),
-            new Pose2d(Units.feetToMeters(16.499), Units.feetToMeters(6.317), Rotation2d.fromDegrees(128)),
-            config);
-            
-        Trajectory bottomBlue5BallPart3 = 
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(Units.feetToMeters(16.499), Units.feetToMeters(6.317), Rotation2d.fromDegrees(128)),
-            List.of( 
-            ),
-            new Pose2d(Units.feetToMeters(4.281), Units.feetToMeters(4.586), Rotation2d.fromDegrees(-137)),
-            config);
-
-        Trajectory bottomBlue5BallPart4 = 
-        TrajectoryGenerator.generateTrajectory(
-                new Pose2d(Units.feetToMeters(16.499), Units.feetToMeters(6.317), Rotation2d.fromDegrees(128)),
-                List.of( 
-                    
-                ),
-                new Pose2d(Units.feetToMeters(4.281), Units.feetToMeters(4.586), Rotation2d.fromDegrees(-137)),
-                config);
-
         var thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -101,7 +58,7 @@ public class exampleAuto extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand =
             new SwerveControllerCommand(
-                bottomBlue4Ball,
+                bottomBlue,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -112,7 +69,7 @@ public class exampleAuto extends SequentialCommandGroup {
 
         SwerveControllerCommand swerveControllerCommand2 =
                 new SwerveControllerCommand(
-                    bottomBlue4Ball,
+                    bottomBlue,
                     s_Swerve::getPose,
                     Constants.Swerve.swerveKinematics,
                     new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -123,7 +80,7 @@ public class exampleAuto extends SequentialCommandGroup {
 
 
         addCommands(
-            new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue4Ball.getInitialPose())),
+            new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue.getInitialPose())),
             swerveControllerCommand
             //swerveControllerCommand2
         );

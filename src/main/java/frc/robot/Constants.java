@@ -211,6 +211,10 @@ public final class Constants {
         public static final TalonConstants intakeMotorConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
         public static final double IntakeSpeed = 0;
+
+        public static final int IntakeSolenoidForwardChannel = 0;
+        public static final int IntakeSolenoidReverseChannel = 1;
+
     }
 
     public static final class talonCurrentLimit {
