@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//I think this one is good
+
 package frc.robot.autos;
 
 import java.util.List;
@@ -32,25 +34,25 @@ import frc.robot.subsystems.Swerve;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BottomBlue4Ball extends SequentialCommandGroup {
-  /** Creates a new BottomBlue4Ball. 
+public class Bottom4Ball extends SequentialCommandGroup {
+  /** Creates a new Bottom4Ball. 
    * @param m_Shooter */
-  public BottomBlue4Ball(Swerve s_Swerve, Shooter m_Shooter) {
-      Trajectory bottomBlue4BallPart1 = TrajectoryGenerator.generateTrajectory(
+  public Bottom4Ball(Swerve s_Swerve, Shooter m_Shooter) {
+      Trajectory bottom4BallPart1 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(4.97, 6.254, new Rotation2d(-1.948)),
             new Pose2d(5, 1.819, new Rotation2d(1.655))
             ),
             Constants.Swerve.trajectoryConfig);
 
-      Trajectory bottomBlue4BallPart2 = TrajectoryGenerator.generateTrajectory(
+      Trajectory bottom4BallPart2 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(5, 1.819, new Rotation2d(1.655)),
             new Pose2d(7.584, 0.456, new Rotation2d(-1.62))
             ),
             Constants.Swerve.trajectoryConfig);
 
-      Trajectory bottomBlue4BallPart3 = TrajectoryGenerator.generateTrajectory(
+      Trajectory bottom4BallPart3 = TrajectoryGenerator.generateTrajectory(
         List.of(
             new Pose2d(7.584, 0.456, new Rotation2d(-1.62)),
             new Pose2d(7.502, 3.024, new Rotation2d(1.167))
@@ -64,7 +66,7 @@ public class BottomBlue4Ball extends SequentialCommandGroup {
   
           SwerveControllerCommand swerveControllerCommand = 
               new SwerveControllerCommand(
-                  bottomBlue4BallPart1,
+                  bottom4BallPart1,
                   s_Swerve::getPose,
                   Constants.Swerve.swerveKinematics,
                   new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -72,9 +74,10 @@ public class BottomBlue4Ball extends SequentialCommandGroup {
                   thetaController,
                   s_Swerve::setModuleStates,
                   s_Swerve);
+
           SwerveControllerCommand swerveControllerCommand2 = 
               new SwerveControllerCommand(
-                  bottomBlue4BallPart2,
+                  bottom4BallPart2,
                   s_Swerve::getPose,
                   Constants.Swerve.swerveKinematics,
                   new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -82,9 +85,10 @@ public class BottomBlue4Ball extends SequentialCommandGroup {
                   thetaController,
                   s_Swerve::setModuleStates,
                   s_Swerve);
+
           SwerveControllerCommand swerveControllerCommand3 = 
               new SwerveControllerCommand(
-                  bottomBlue4BallPart3,
+                  bottom4BallPart3,
                   s_Swerve::getPose,
                   Constants.Swerve.swerveKinematics,
                   new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -92,48 +96,47 @@ public class BottomBlue4Ball extends SequentialCommandGroup {
                   thetaController,
                   s_Swerve::setModuleStates,
                   s_Swerve);
+
       addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue4BallPart1.getInitialPose())),
+        //Gets the initial pose 
+        new InstantCommand(() -> s_Swerve.resetOdometry(bottom4BallPart1.getInitialPose())),
+        //Deploys the intake
         new InstantCommand(() -> States.deployIntake()),
 
-        new ParallelDeadlineGroup(
-          swerveControllerCommand,
-          new InstantCommand(() -> States.intakeState = IntakeStates.intaking)),
+        //Does the first trajectory while intaking and picks up 1 ball
+        new InstantCommand(() -> States.intake()),
+        swerveControllerCommand,
 
-        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
+        new InstantCommand(() -> States.stopIntake()),
 
-        new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
-        new WaitCommand(1.0), 
-
-        new InstantCommand(() -> States.shooterState = ShooterStates.disabled),
-        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
-
-        new ParallelDeadlineGroup(
-            new WaitCommand(2.5),
-            new InstantCommand(() -> States.intakeState = IntakeStates.feeding)),
-
-        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
-
-        new ParallelDeadlineGroup(
-          swerveControllerCommand2,
-          new InstantCommand(() -> States.intakeState = IntakeStates.intaking)),
-
-          new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
-
-        new ParallelDeadlineGroup(
-          swerveControllerCommand3,
-          new InstantCommand(() -> States.intakeState = IntakeStates.intaking)),
-
-        new InstantCommand(() -> States.intakeState = IntakeStates.disabled),
-
-        new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
+        //Activates the shooter and shoots 2 balls 
+        new InstantCommand(() -> States.activateShooter()),
         new WaitCommand(1.0),
 
         new ParallelDeadlineGroup(
             new WaitCommand(2.5),
-            new InstantCommand(() -> States.intakeState = IntakeStates.feeding)),
+            new InstantCommand(() -> States.feed())),
         
-        new InstantCommand(() -> States.intakeState = IntakeStates.disabled)
+        new InstantCommand(() -> States.deactivateShooter()),
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Does the second and third trajectory while intaking and picks up 2 balls
+        new InstantCommand(() -> States.intake()),
+        swerveControllerCommand2,
+        swerveControllerCommand3,
+
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Activates the shooter and shoots 2 balls
+        new InstantCommand(() -> States.activateShooter()),
+        new WaitCommand(1.0),
+
+        new ParallelDeadlineGroup(
+            new WaitCommand(2.5),
+            new InstantCommand(() -> States.feed())),
+        
+        new InstantCommand(() -> States.stopIntake()),
+        new InstantCommand(() -> States.deactivateShooter())
       );
   
   }

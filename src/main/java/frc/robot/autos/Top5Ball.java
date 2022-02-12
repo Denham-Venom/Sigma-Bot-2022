@@ -21,38 +21,38 @@ import frc.robot.subsystems.Swerve;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BottomRed4Ball extends SequentialCommandGroup {
-  /** Creates a new BottomRed4Ball. */
-  public BottomRed4Ball(Swerve s_Swerve) {
-      Trajectory bottomRed4Ball = TrajectoryGenerator.generateTrajectory(
+public class Top5Ball extends SequentialCommandGroup {
+  /** Creates a new Top5Ball. */
+  public Top5Ball(Swerve s_Swerve) {
+      Trajectory top5Ball = TrajectoryGenerator.generateTrajectory(
         List.of(
-          new Pose2d(8.864, 5.249, new Rotation2d(1.303)),
-          new Pose2d(8.876, 7.731, new Rotation2d(1.526)),
-          new Pose2d(11.322, 6.276, new Rotation2d(-1.519)),
-          new Pose2d(11.458, 2.082, new Rotation2d(-1.567))
+          new Pose2d(7.152, 4.778, new Rotation2d(2.73)),
+          new Pose2d(4.921, 6.133, new Rotation2d(2.617)),
+          new Pose2d(1.37, 1.398, new Rotation2d(0.754)),
+          new Pose2d(5.042, 1.897, new Rotation2d(0.262)),
+          new Pose2d(7.598, 0.499, new Rotation2d(0))
           ),
           Constants.Swerve.trajectoryConfig);
   
           var thetaController =
               new ProfiledPIDController(
-                  Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+                Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
           thetaController.enableContinuousInput(-Math.PI, Math.PI);
   
           SwerveControllerCommand swerveControllerCommand = 
-              new SwerveControllerCommand(
-                  bottomRed4Ball,
-                  s_Swerve::getPose,
-                  Constants.Swerve.swerveKinematics,
-                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                  thetaController,
-                  s_Swerve::setModuleStates,
-                  s_Swerve);
+            new SwerveControllerCommand(
+                top5Ball,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
       addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(bottomRed4Ball.getInitialPose())),
+        new InstantCommand(() -> s_Swerve.resetOdometry(top5Ball.getInitialPose())),
         swerveControllerCommand);
       
   
   }
 }
-

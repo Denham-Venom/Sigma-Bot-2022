@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//I think this one is done
+
 package frc.robot.autos;
 
 import java.util.List;
@@ -30,10 +32,10 @@ import frc.robot.subsystems.Intaker;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BottomBlue2Ball extends SequentialCommandGroup {
-  /** Creates a new BottomBlue2Ball. */
-  public BottomBlue2Ball(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
-      Trajectory bottomBlue2Ball = TrajectoryGenerator.generateTrajectory(
+public class Bottom2Ball extends SequentialCommandGroup {
+  /** Creates a new Bottom2Ball. */
+  public Bottom2Ball(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
+      Trajectory bottom2Ball = TrajectoryGenerator.generateTrajectory(
         List.of(
           new Pose2d(7.505, 2.981, new Rotation2d(-1.932)),
           new Pose2d(7.571, 0.514, new Rotation2d(-1.586))
@@ -47,7 +49,7 @@ public class BottomBlue2Ball extends SequentialCommandGroup {
   
           SwerveControllerCommand swerveControllerCommand = 
               new SwerveControllerCommand(
-                  bottomBlue2Ball,
+                  bottom2Ball,
                   s_Swerve::getPose,
                   Constants.Swerve.swerveKinematics,
                   new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -55,25 +57,26 @@ public class BottomBlue2Ball extends SequentialCommandGroup {
                   thetaController,
                   s_Swerve::setModuleStates,
                   s_Swerve);
-      //addCommands(
-        //new InstantCommand(() -> s_Swerve.resetOdometry(bottomBlue2Ball.getInitialPose())),
-        //new InstantCommand(() -> States.deployIntake()),
-        
-        //new ParallelDeadlineGroup(
-          //swerveControllerCommand, 
-          //new InstantCommand(() -> States.intake,
 
-        //new InstantCommand(() -> States.disabled),
+      addCommands(
+        new InstantCommand(() -> s_Swerve.resetOdometry(bottom2Ball.getInitialPose())),
+        new InstantCommand(() -> States.deployIntake()),
         
-        //new InstantCommand(() -> States.shooterState = ShooterStates.preShoot),
-        //new WaitCommand(1.0), 
-        
-        //new ParallelDeadlineGroup(
-          //new WaitCommand(2.5),
-          //new InstantCommand(() -> States.intakeState = IntakeStates.feeding)),
+        new ParallelDeadlineGroup(
+          swerveControllerCommand, 
+          new InstantCommand(() -> States.intake())),
 
-        //new InstantCommand(() -> States.shooterState = ShooterStates.disabled),
-        //new InstantCommand(() -> States.intak);
+        new InstantCommand(() -> States.stopIntake()),
+        
+        new InstantCommand(() -> States.activateShooter()),
+        new WaitCommand(1.0), 
+        
+        new ParallelDeadlineGroup(
+          new WaitCommand(2.5),
+          new InstantCommand(() -> States.feed())),
+
+        new InstantCommand(() -> States.deactivateShooter()),
+        new InstantCommand(() -> States.intake()));
   
   }
 }
