@@ -36,11 +36,10 @@ public class Bottom2Ball extends SequentialCommandGroup {
   /** Creates a new Bottom2Ball. */
   public Bottom2Ball(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
       Trajectory bottom2Ball = TrajectoryGenerator.generateTrajectory(
-        List.of(
-          new Pose2d(7.505, 2.981, new Rotation2d(-1.932)),
-          new Pose2d(7.571, 0.514, new Rotation2d(-1.586))
-          ),
-          Constants.Swerve.trajectoryConfig);
+        new Pose2d(7.505, 2.981, new Rotation2d(-1.932)),
+        List.of(),
+        new Pose2d(7.571, 0.514, new Rotation2d(-1.586)),
+        Constants.Swerve.trajectoryConfig);
   
           var thetaController =
               new ProfiledPIDController(

@@ -36,32 +36,28 @@ public class Bottom5Ball extends SequentialCommandGroup {
   public Bottom5Ball(Swerve s_Swerve, Shooter m_Shooter) {
 
   Trajectory bottom5BallPart1 = TrajectoryGenerator.generateTrajectory(
-      List.of(
-        new Pose2d(7.525, 3.017, new Rotation2d(-1.92)),
-        new Pose2d(7.528, 0.393, new Rotation2d(1.518))
-        ),
-        Constants.Swerve.trajectoryConfig);
+      new Pose2d(7.525, 3.017, new Rotation2d(-1.92)),
+      List.of(),
+      new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
+      Constants.Swerve.trajectoryConfig);
         
   Trajectory bottom5BallPart2 = TrajectoryGenerator.generateTrajectory(
-      List.of(
-        new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
-        new Pose2d(5.029, 1.925, new Rotation2d(2.234))
-        ),
-        Constants.Swerve.trajectoryConfig);
+      new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
+      List.of(),
+      new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
+      Constants.Swerve.trajectoryConfig);
 
   Trajectory bottom5BallPart3 = TrajectoryGenerator.generateTrajectory(
-      List.of(
-        new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
-        new Pose2d(1.305, 1.398, new Rotation2d(-2.391))
-        ),
-        Constants.Swerve.trajectoryConfig);
+      new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
+      List.of(),
+      new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
+      Constants.Swerve.trajectoryConfig);
 
   Trajectory bottom5BallPart4 = TrajectoryGenerator.generateTrajectory(
-      List.of(
-        new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
-        new Pose2d(4.866, 6.033, new Rotation2d(1.659))
-        ),
-        Constants.Swerve.trajectoryConfig);
+      new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
+      List.of(),
+      new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
+      Constants.Swerve.trajectoryConfig);
 
         var thetaController =
             new ProfiledPIDController(

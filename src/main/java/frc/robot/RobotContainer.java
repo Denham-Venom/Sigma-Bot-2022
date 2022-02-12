@@ -39,8 +39,8 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kLeftBumper.value);
-  private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kX.value);
+  private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final POVButton intakeExtendButton = new POVButton(driver, 180);
   private final POVButton intakeRetractButton = new POVButton(driver, 0);
   private final JoystickButton zeroGyroButton = new JoystickButton(driver, XboxController.Button.kStart.value);

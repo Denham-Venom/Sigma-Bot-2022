@@ -4,11 +4,11 @@
 
 //I think this one is good
 
+//This one starts against the hub to the left of the tarmac
+
 package frc.robot.autos;
 
 import java.util.List;
-
-import com.fasterxml.jackson.databind.node.IntNode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -39,25 +39,22 @@ public class Bottom4Ball extends SequentialCommandGroup {
    * @param m_Shooter */
   public Bottom4Ball(Swerve s_Swerve, Shooter m_Shooter) {
       Trajectory bottom4BallPart1 = TrajectoryGenerator.generateTrajectory(
-        List.of(
-            new Pose2d(4.97, 6.254, new Rotation2d(-1.948)),
-            new Pose2d(5, 1.819, new Rotation2d(1.655))
-            ),
-            Constants.Swerve.trajectoryConfig);
+        new Pose2d(7.552, 2.96, new Rotation2d(-1.917)),
+        List.of(),
+        new Pose2d(7.583, 0.877, new Rotation2d(-1.604)),
+        Constants.Swerve.trajectoryConfig);
 
       Trajectory bottom4BallPart2 = TrajectoryGenerator.generateTrajectory(
-        List.of(
-            new Pose2d(5, 1.819, new Rotation2d(1.655)),
-            new Pose2d(7.584, 0.456, new Rotation2d(-1.62))
-            ),
-            Constants.Swerve.trajectoryConfig);
+        new Pose2d(7.583, 0.877, new Rotation2d(-1.604)),
+        List.of(),
+        new Pose2d(4.947, 2.125, new Rotation2d(1.902)),
+        Constants.Swerve.trajectoryConfig);
 
       Trajectory bottom4BallPart3 = TrajectoryGenerator.generateTrajectory(
-        List.of(
-            new Pose2d(7.584, 0.456, new Rotation2d(-1.62)),
-            new Pose2d(7.502, 3.024, new Rotation2d(1.167))
-            ),
-            Constants.Swerve.trajectoryConfig);
+        new Pose2d(4.947, 2.125, new Rotation2d(1.902)),
+        List.of(),
+        new Pose2d(4.879, 6.133, new Rotation2d(1.534)),
+        Constants.Swerve.trajectoryConfig);
   
           var thetaController =
               new ProfiledPIDController(
@@ -124,7 +121,7 @@ public class Bottom4Ball extends SequentialCommandGroup {
         new InstantCommand(() -> States.intake()),
         swerveControllerCommand2,
         swerveControllerCommand3,
-
+  
         new InstantCommand(() -> States.stopIntake()),
 
         //Activates the shooter and shoots 2 balls
