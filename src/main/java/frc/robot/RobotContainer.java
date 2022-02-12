@@ -55,8 +55,8 @@ public class RobotContainer {
   private final JoystickButton feedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
-  private final PneumaticHub m_pHub = new PneumaticHub();
-  private final Intaker m_Intaker = new Intaker(m_pHub);
+  //private final PneumaticHub m_pHub = new PneumaticHub();
+  //private final Intaker m_Intaker = new Intaker(m_pHub);
   private final Vision m_Vision = new Vision();
   private final Swerve s_Swerve = new Swerve(m_Vision);
   private final Shooter m_Shooter = new Shooter(m_Vision);
@@ -88,7 +88,7 @@ public class RobotContainer {
       () -> States.intake(), 
       () -> States.stopIntake()
     ));
-    outakeButton.whileHeld(new Intake(m_Intaker));
+    //outakeButton.whileHeld(new Intake(m_Intaker));
     
     /* Shooter */
     shootButton.toggleWhenPressed(new StartEndCommand(
@@ -115,6 +115,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Bottom5Ball(s_Swerve, m_Shooter);
+    return new Bottom4Ball(s_Swerve, m_Shooter);
   }
 }

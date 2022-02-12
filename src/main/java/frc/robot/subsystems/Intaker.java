@@ -32,12 +32,12 @@ public class Intaker extends SubsystemBase {
 
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
-  public Intaker(PneumaticHub m_pHub) {
-    intakeMotor1 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    intakeMotor2 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    intakeMotor3 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
-  }
+  //public Intaker(PneumaticHub m_pHub) {
+    //intakeMotor1 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    //intakeMotor2 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    //intakeMotor3 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    //intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
+  //}
 
   @Override
   public void periodic() {
