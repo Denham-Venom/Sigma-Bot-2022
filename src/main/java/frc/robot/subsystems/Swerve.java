@@ -35,10 +35,11 @@ public class Swerve extends SubsystemBase {
     public NetworkTableEntry headingEntry;
     private Limelight limelight;
     private int currentNeutral = 0;
+    private boolean isLowGear = true;
+    private double swerveSpeed;
 
     public Swerve(Vision m_Vision) {
         Constants.Swerve.thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -64,20 +65,28 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("robotAng_swerve_odo", 0);
     }
 
+    public void switchLowHighGear() {
+        if(isLowGear) {
+            isLowGear = false;
+        } else {
+            isLowGear = true;
+        }
+    }
+
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation, 
-                                    getYaw()
-                                )
-                                : new ChassisSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation)
-                                );
+                    translation.getX(), 
+                    translation.getY(), 
+                    rotation, 
+                    getYaw()
+                )
+                : new ChassisSpeeds(
+                    translation.getX(), 
+                    translation.getY(), 
+                    rotation)
+                );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){
