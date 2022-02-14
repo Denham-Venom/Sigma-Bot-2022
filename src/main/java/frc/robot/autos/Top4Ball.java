@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.States.IntakeStates;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -29,7 +30,7 @@ import frc.robot.subsystems.Swerve;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Top4Ball extends SequentialCommandGroup {
   /** Creates a new Top4Ball. */
-  public Top4Ball(Swerve s_Swerve) {
+  public Top4Ball(Swerve s_Swerve, Shooter m_Shooter) {
 
       Trajectory top4BallPart1 = TrajectoryGenerator.generateTrajectory(
           new Pose2d(4.866, 6.033, new Rotation2d(1.659)),

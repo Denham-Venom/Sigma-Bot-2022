@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -26,7 +27,7 @@ import frc.robot.subsystems.Swerve;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Top5Ball extends SequentialCommandGroup {
   /** Creates a new Top5Ball. */
-  public Top5Ball(Swerve s_Swerve) {      
+  public Top5Ball(Swerve s_Swerve, Shooter m_Shooter) {      
       Trajectory top5BallPart1 = TrajectoryGenerator.generateTrajectory(
           new Pose2d(7.152, 4.778, new Rotation2d(2.73)),
           List.of(),
