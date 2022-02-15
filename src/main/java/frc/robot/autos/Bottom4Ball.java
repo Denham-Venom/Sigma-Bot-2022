@@ -38,7 +38,6 @@ public class Bottom4Ball extends SequentialCommandGroup {
   /** Creates a new Bottom4Ball. 
    * @param m_Shooter */
   public Bottom4Ball(Swerve s_Swerve, Shooter m_Shooter) {
-    
       Trajectory bottom4BallPart1 = TrajectoryGenerator.generateTrajectory(
         new Pose2d(7.552, 2.96, new Rotation2d(-1.917)),
         List.of(),

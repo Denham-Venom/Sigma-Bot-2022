@@ -12,9 +12,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.States;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
@@ -26,27 +32,27 @@ public class Bottom5BallRight extends SequentialCommandGroup {
   public Bottom5BallRight(Swerve s_Swerve, Shooter m_Shooter) {
     
   Trajectory bottom5BallRightPart1 = TrajectoryGenerator.generateTrajectory(
-    new Pose2d(27.809, 6.014, new Rotation2d(-90.717)),
+    new Pose2d(8.476, 1.847, new Rotation2d(-1.561)),
     List.of(),
-    new Pose2d(24.833, 1.428, new Rotation2d(-109.65)),
+    new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
     Constants.Swerve.trajectoryConfig);
 
   Trajectory bottom5BallRightPart2 = TrajectoryGenerator.generateTrajectory(
-    new Pose2d(24.833, 1.428, new Rotation2d(-109.65)),
+    new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
     List.of(),
-    new Pose2d(16.633, 6.224, new Rotation2d(-118.923)),
+    new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
     Constants.Swerve.trajectoryConfig);
 
   Trajectory bottom5BallRightPart3 = TrajectoryGenerator.generateTrajectory(
-    new Pose2d(16.633, 6.224, new Rotation2d(-118.923)),
+    new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
     List.of(),
-    new Pose2d(3.969, 4.118, new Rotation2d(-138.52)),
+    new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
     Constants.Swerve.trajectoryConfig);
 
   Trajectory bottom5BallRightPart4 = TrajectoryGenerator.generateTrajectory(
-    new Pose2d(3.969, 4.118, new Rotation2d(-138.52)),
+    new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
     List.of(),
-    new Pose2d(16.097, 20.028, new Rotation2d(62.148)),
+    new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
     Constants.Swerve.trajectoryConfig);
 
       var thetaController =
@@ -100,6 +106,65 @@ public class Bottom5BallRight extends SequentialCommandGroup {
 
   
 
-    addCommands();
+    addCommands(
+        //Gets the initial pose
+        new InstantCommand(() -> s_Swerve.resetOdometry(bottom5BallRightPart1.getInitialPose())),
+        //Deploys the intake
+        new InstantCommand(() -> States.deployIntake()),
+
+        //Does the first trajectory while intaking and picks one ball
+        new ParallelDeadlineGroup (
+          swerveControllerCommand,
+          new InstantCommand(() -> States.intake())),
+
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Activates the shooter and shoots the 2 balls
+        new InstantCommand(() -> States.activateShooter()),
+        new WaitCommand(1.0), 
+        
+        new ParallelDeadlineGroup(
+          new WaitCommand(2.5),
+          new InstantCommand(() -> States.feed())),
+
+        new InstantCommand(() -> States.stopIntake()),
+        new InstantCommand(() -> States.deactivateShooter()),
+
+        //Does the second and third trajectories while intaking and picks up 2 balls
+        new InstantCommand(() -> States.intake()),
+        swerveControllerCommand2,
+        swerveControllerCommand3,
+
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Activates the shooter and shoots the 2 balls
+        new InstantCommand(() -> States.activateShooter()),
+        new WaitCommand(1.0), 
+        
+        new ParallelDeadlineGroup(
+          new WaitCommand(2.5),
+          new InstantCommand(() -> States.feed())),
+
+        new InstantCommand(() -> States.deactivateShooter()),
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Does the fourth trajectory while intaking and picks up 1 ball
+        new ParallelDeadlineGroup(
+          swerveControllerCommand4,
+          new InstantCommand(() -> States.intake())),
+
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Activated the shooter and shoots the ball
+        new InstantCommand(() -> States.activateShooter()),
+        new WaitCommand(1.0), 
+        
+        new ParallelDeadlineGroup(
+          new WaitCommand(2.5),
+          new InstantCommand(() -> States.feed())),
+
+        new InstantCommand(() -> States.deactivateShooter()),
+        new InstantCommand(() -> States.stopIntake())
+      );
   }
 }
