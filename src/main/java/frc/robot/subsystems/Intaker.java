@@ -28,8 +28,6 @@ public class Intaker extends SubsystemBase {
   private LazyTalonFX intakeMotor3;
   
   private DoubleSolenoid intakeExtend;
-
-
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
   public Intaker(PneumaticHub m_pHub) {

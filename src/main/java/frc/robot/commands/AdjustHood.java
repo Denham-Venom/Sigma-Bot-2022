@@ -9,18 +9,18 @@ import frc.robot.subsystems.Shooter;
 
 public class AdjustHood extends CommandBase {
   /** Creates a new AdjustHood. */
-  private Shooter m_Turreter;
+  private Shooter m_Hood;
   private double angle;
   public AdjustHood(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.angle = angle;
-    addRequirements(m_Turreter);
+    addRequirements(m_Hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Turreter.setHoodAngle(angle);
+    m_Hood.setHoodAngle(angle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
