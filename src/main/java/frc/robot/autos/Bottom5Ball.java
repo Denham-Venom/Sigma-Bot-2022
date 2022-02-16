@@ -7,7 +7,6 @@
 package frc.robot.autos;
 
 import java.util.List;
-import java.util.Stack;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -22,9 +21,6 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
-import frc.robot.States.IntakeStates;
-import frc.robot.States.ShooterStates;
-import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
