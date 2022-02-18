@@ -55,6 +55,12 @@ public class Bottom5Ball extends SequentialCommandGroup {
       new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
       Constants.Swerve.trajectoryConfig);
 
+  Trajectory bottom5BallPart5 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
+      List.of(),
+      new Pose2d(4.997, 5.342, new Rotation2d(-0.281)),
+      Constants.Swerve.trajectoryConfig);
+
         var thetaController =
             new ProfiledPIDController(
                 Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -103,7 +109,18 @@ public class Bottom5Ball extends SequentialCommandGroup {
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
-            
+
+        SwerveControllerCommand swerveControllerCommand5 = 
+            new SwerveControllerCommand(
+                bottom5BallPart4,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);           
+                
       addCommands(
         //Gets the initial pose
         new InstantCommand(() -> s_Swerve.resetOdometry(bottom5BallPart1.getInitialPose())),
@@ -152,6 +169,9 @@ public class Bottom5Ball extends SequentialCommandGroup {
           new InstantCommand(() -> States.intake())),
 
         new InstantCommand(() -> States.stopIntake()),
+
+        //Does the trajectory that turns to the goal
+        swerveControllerCommand5,
 
         //Activated the shooter and shoots the ball
         new InstantCommand(() -> States.activateShooter()),
