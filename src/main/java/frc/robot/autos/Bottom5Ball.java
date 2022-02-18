@@ -38,11 +38,11 @@ public class Bottom5Ball extends SequentialCommandGroup {
   Trajectory bottom5BallPart1 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(7.525, 3.017, new Rotation2d(-1.92)),
       List.of(),
-      new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
+      new Pose2d(7.61, 0.778, new Rotation2d(-1.583)),
       Constants.Swerve.trajectoryConfig);
         
   Trajectory bottom5BallPart2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
+      new Pose2d(7.61, 0.778, new Rotation2d(-1.583)),
       List.of(),
       new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
       Constants.Swerve.trajectoryConfig);
