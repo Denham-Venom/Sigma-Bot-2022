@@ -19,7 +19,7 @@ import frc.robot.States.IntakeStates;
 
 public class Intaker extends SubsystemBase {
   /** Creates a new Intaker. */
-  
+ 
   // indexer 1 by intake
   private LazyTalonFX intakeMotor1;
   // indexer 2 by shooter
