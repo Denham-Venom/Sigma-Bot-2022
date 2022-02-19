@@ -7,11 +7,13 @@
 package frc.robot.autos;
 
 import java.util.List;
+import java.util.Stack;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -21,6 +23,9 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.States.IntakeStates;
+import frc.robot.States.ShooterStates;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
@@ -34,25 +39,25 @@ public class Bottom5Ball extends SequentialCommandGroup {
   Trajectory bottom5BallPart1 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(7.525, 3.017, new Rotation2d(-1.92)),
       List.of(),
-      new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
+      new Pose2d(7.61, 0.778, new Rotation2d(-1.583)),
       Constants.Swerve.trajectoryConfig);
         
   Trajectory bottom5BallPart2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(7.528, 0.393, new Rotation2d(1.518)),
-      List.of(),
-      new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
+      new Pose2d(7.61, 0.778, new Rotation2d(-1.583)),
+      List.of(new Translation2d(5.029, 1.925)),
+      new Pose2d(1.305, 2.0838, new Rotation2d(-2.391)),
       Constants.Swerve.trajectoryConfig);
 
   Trajectory bottom5BallPart3 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
+      new Pose2d(1.305, 2.0838, new Rotation2d(-2.391)),
       List.of(),
-      new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
+      new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
       Constants.Swerve.trajectoryConfig);
 
   Trajectory bottom5BallPart4 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(1.305, 1.398, new Rotation2d(-2.391)),
-      List.of(),
       new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
+      List.of(),
+      new Pose2d(4.9688, 5.841, new Rotation2d(-2.339)),
       Constants.Swerve.trajectoryConfig);
 
         var thetaController =
@@ -122,7 +127,7 @@ public class Bottom5Ball extends SequentialCommandGroup {
         new WaitCommand(1.0), 
         
         new ParallelDeadlineGroup(
-          new WaitCommand(2.5),
+          new WaitCommand(1),
           new InstantCommand(() -> States.feed())),
 
         new InstantCommand(() -> States.stopIntake()),
@@ -131,7 +136,6 @@ public class Bottom5Ball extends SequentialCommandGroup {
         //Does the second and third trajectories while intaking and picks up 2 balls
         new InstantCommand(() -> States.intake()),
         swerveControllerCommand2,
-        swerveControllerCommand3,
 
         new InstantCommand(() -> States.stopIntake()),
 
@@ -140,7 +144,7 @@ public class Bottom5Ball extends SequentialCommandGroup {
         new WaitCommand(1.0), 
         
         new ParallelDeadlineGroup(
-          new WaitCommand(2.5),
+          new WaitCommand(1),
           new InstantCommand(() -> States.feed())),
 
         new InstantCommand(() -> States.deactivateShooter()),
@@ -148,17 +152,19 @@ public class Bottom5Ball extends SequentialCommandGroup {
 
         //Does the fourth trajectory while intaking and picks up 1 ball
         new ParallelDeadlineGroup(
-          swerveControllerCommand4,
+          swerveControllerCommand3,
           new InstantCommand(() -> States.intake())),
 
         new InstantCommand(() -> States.stopIntake()),
+
+        swerveControllerCommand4,
 
         //Activated the shooter and shoots the ball
         new InstantCommand(() -> States.activateShooter()),
         new WaitCommand(1.0), 
         
         new ParallelDeadlineGroup(
-          new WaitCommand(2.5),
+          new WaitCommand(1),
           new InstantCommand(() -> States.feed())),
 
         new InstantCommand(() -> States.deactivateShooter()),

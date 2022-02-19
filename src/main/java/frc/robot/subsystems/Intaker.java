@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -20,21 +21,21 @@ import frc.robot.States.IntakeStates;
 
 public class Intaker extends SubsystemBase {
   /** Creates a new Intaker. */
-  
+ 
   // indexer 1 by intake
-  private LazyTalonFX intakeMotor1;
+  private LazyTalonFX indexerMotor;
   // indexer 2 by shooter
-  private LazySparkMAX intakeMotor2;
+  private LazySparkMAX spinUpMotor;
   // intaker
-  private LazyTalonFX intakeMotor3;
+  private LazyTalonFX intakeMotor;
   
   private DoubleSolenoid intakeExtend;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
   public Intaker(PneumaticHub m_pHub) {
-    intakeMotor1 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    intakeMotor2 = new LazySparkMAX(Constants.Intake.intakeMotorConstants);
-    intakeMotor3 = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    indexerMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
+    intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
   }
 
@@ -45,35 +46,35 @@ public class Intaker extends SubsystemBase {
       case intaking:
         if(!intakeSensor.get()) {
           if(!shooterSensor.get()) {
-            intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+            spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
           } else {
-            intakeMotor2.set(ControlMode.PercentOutput, 0);
+            spinUpMotor.set(ControlType.kDutyCycle, 0);
           }
-          intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         }
         else if(!shooterSensor.get()) {
-          intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+          intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         } else {
-          intakeMotor1.set(ControlMode.PercentOutput, 0);
-          intakeMotor2.set(ControlMode.PercentOutput, 0);
-          intakeMotor3.set(ControlMode.PercentOutput, 0);
+          indexerMotor.set(ControlMode.PercentOutput, 0);
+          spinUpMotor.set(ControlType.kDutyCycle, 0);
+          intakeMotor.set(ControlMode.PercentOutput, 0);
         }
         break;
       case outtaking:
-        intakeMotor3.set(ControlMode.PercentOutput, -Constants.Intake.IntakeSpeed);
+        intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.IntakeSpeed);
         break;
       case feeding: 
-        intakeMotor1.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-        intakeMotor2.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-        intakeMotor3.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+        indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+        spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+        intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         break;
       case disabled:
-        intakeMotor1.set(ControlMode.PercentOutput, 0);
-        intakeMotor2.set(ControlMode.PercentOutput, 0);
-        intakeMotor3.set(ControlMode.PercentOutput, 0);
+        indexerMotor.set(ControlMode.PercentOutput, 0);
+        spinUpMotor.set(ControlType.kDutyCycle, 0);
+        intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 
     switch(States.intakeExtendState) {

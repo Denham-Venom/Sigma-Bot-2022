@@ -3,6 +3,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
+import frc.Controllers.SparkConstants;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
 import frc.lib.util.SwerveModuleConstants;
@@ -101,7 +104,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 2;
-            public static final double angleOffset = 207.33;
+            public static final double angleOffset = 27.509;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -111,7 +114,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 3;
-            public static final double angleOffset = 254.4;
+            public static final double angleOffset = 254.79;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -121,7 +124,7 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 4;
-            public static final double angleOffset = 24.8;
+            public static final double angleOffset = 205.40;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -207,9 +210,16 @@ public final class Constants {
         public static final double turretEncoderOffset = 285; // might need to be changed
     }
 
+    public static final class Climber {
+        public static final SparkConstants climberMotorConstants = 
+            new SparkConstants(0, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
+    }
+
     public static final class Intake {
         public static final TalonConstants intakeMotorConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+        public static final SparkConstants spinUpMotorConstants = 
+            new SparkConstants(0, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
         public static final double IntakeSpeed = 0;
 
         public static final int IntakeSolenoidForwardChannel = 0;
