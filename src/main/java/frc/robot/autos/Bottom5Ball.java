@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -43,23 +44,17 @@ public class Bottom5Ball extends SequentialCommandGroup {
         
   Trajectory bottom5BallPart2 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(7.61, 0.778, new Rotation2d(-1.583)),
-      List.of(),
-      new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
-      Constants.Swerve.trajectoryConfig);
-
-  Trajectory bottom5BallPart3 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(5.029, 1.925, new Rotation2d(2.234)),
-      List.of(),
+      List.of(new Translation2d(5.029, 1.925)),
       new Pose2d(1.305, 2.0838, new Rotation2d(-2.391)),
       Constants.Swerve.trajectoryConfig);
 
-  Trajectory bottom5BallPart4 = TrajectoryGenerator.generateTrajectory(
+  Trajectory bottom5BallPart3 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(1.305, 2.0838, new Rotation2d(-2.391)),
       List.of(),
       new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
       Constants.Swerve.trajectoryConfig);
 
-  Trajectory bottom5BallPart5 = TrajectoryGenerator.generateTrajectory(
+  Trajectory bottom5BallPart4 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
       List.of(),
       new Pose2d(4.9688, 5.841, new Rotation2d(-2.339)),
@@ -113,17 +108,6 @@ public class Bottom5Ball extends SequentialCommandGroup {
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
-
-        SwerveControllerCommand swerveControllerCommand5 = 
-            new SwerveControllerCommand(
-                bottom5BallPart5,
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                s_Swerve::setModuleStates,
-                s_Swerve);
             
       addCommands(
         //Gets the initial pose
@@ -152,7 +136,6 @@ public class Bottom5Ball extends SequentialCommandGroup {
         //Does the second and third trajectories while intaking and picks up 2 balls
         new InstantCommand(() -> States.intake()),
         swerveControllerCommand2,
-        swerveControllerCommand3,
 
         new InstantCommand(() -> States.stopIntake()),
 
@@ -169,12 +152,12 @@ public class Bottom5Ball extends SequentialCommandGroup {
 
         //Does the fourth trajectory while intaking and picks up 1 ball
         new ParallelDeadlineGroup(
-          swerveControllerCommand4,
+          swerveControllerCommand3,
           new InstantCommand(() -> States.intake())),
 
         new InstantCommand(() -> States.stopIntake()),
 
-        swerveControllerCommand5,
+        swerveControllerCommand4,
 
         //Activated the shooter and shoots the ball
         new InstantCommand(() -> States.activateShooter()),
