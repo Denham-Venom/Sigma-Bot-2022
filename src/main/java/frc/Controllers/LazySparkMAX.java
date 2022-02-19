@@ -1,5 +1,6 @@
 package frc.Controllers;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSensor;
@@ -19,15 +20,15 @@ public class LazySparkMAX extends CANSparkMax {
     /**
      * Config a Spark Max using sparkConstants.
      * 
-     * @param sparkConstants
+     * @param intakemotorconstants
      */
-    public LazySparkMAX(SparkConstants sparkConstants) {
-        super(sparkConstants.deviceId, sparkConstants.motorType);
+    public LazySparkMAX(TalonConstants intakemotorconstants) {
+        super(intakemotorconstants.deviceId, intakemotorconstants.motorType);
         super.restoreFactoryDefaults();
-        super.setSmartCurrentLimit(sparkConstants.smartCurrentLimit);
+        super.setSmartCurrentLimit(intakemotorconstants.smartCurrentLimit);
         super.enableVoltageCompensation(12);
-        super.setIdleMode(sparkConstants.idleMode);
-        super.setInverted(sparkConstants.inverted);
+        super.setIdleMode(intakemotorconstants.idleMode);
+        super.setInverted(intakemotorconstants.inverted);
         super.burnFlash();
 
         m_pidController = super.getPIDController();
@@ -36,8 +37,8 @@ public class LazySparkMAX extends CANSparkMax {
         m_encoder.setPosition(0);
     }
     
-    public void set(ControlType type, double setpoint) {
-        m_pidController.setReference(setpoint, type);
+    public void set(ControlMode percentoutput, double setpoint) {
+        m_pidController.setReference(setpoint, percentoutput);
     }
     
     /**
