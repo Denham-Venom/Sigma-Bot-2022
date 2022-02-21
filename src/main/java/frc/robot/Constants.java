@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -250,5 +251,22 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+    public static final Pose2d[] autoWaypoints = 
+        {
+            //Starting Positions
+            new Pose2d(7.606, 2.974, new Rotation2d(-1.894)),   //Defalt bottom starting position
+            new Pose2d(6.601, 2.546, new Rotation2d(-2.283)),   //Right bottom starting position
+            new Pose2d(8.439, 1.876, new Rotation2d(-1.561)),   //Left bottom starting position
+            new Pose2d(7.216, 1.99, new Rotation2d(-2.363)),    //Middle bottom starting postion
+            
+            //Going to balls
+            new Pose2d(7.606, 0.92, new Rotation2d(1.57)),      //Goes to ball 1 from bottom tarmac
 
+            new Pose2d(5.408, 1.448, new Rotation2d(2.258)),    //Goes to ball 2 from bottom tarmac
+
+            new Pose2d(1.436, 1.548, new Rotation2d(0.798)),    //Goes to ball 3 from bottom tarmac
+
+            new Pose2d(4.607, 5.705, new Rotation2d(0.952)),    //Goes to ball 4 from bottom tarmac
+            
+        };
 }
