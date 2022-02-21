@@ -36,28 +36,39 @@ public class Bottom5Ball extends SequentialCommandGroup {
   /** Creates a new Bottom5Ball. */
   public Bottom5Ball(Swerve s_Swerve, Shooter m_Shooter) {
 
+  //This goes from the start position to ball 1
   Trajectory bottom5BallPart1 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(7.525, 3.017, new Rotation2d(-1.92)),
+      new Pose2d(7.538, 2.988, new Rotation2d(-1.941)),
       List.of(),
-      new Pose2d(7.61, 0.778, new Rotation2d(-1.583)),
+      new Pose2d(7.596, 0.849, new Rotation2d(-1.611)),
       Constants.Swerve.trajectoryConfig);
-        
+  
+  //This goes from ball 1 to ball 2
   Trajectory bottom5BallPart2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(7.61, 0.778, new Rotation2d(-1.583)),
+      new Pose2d(7.596, 0.849, new Rotation2d(-1.611)),
       List.of(new Translation2d(5.029, 1.925)),
-      new Pose2d(1.305, 2.0838, new Rotation2d(-2.391)),
+      new Pose2d(5.491, 1.626, new Rotation2d(-3.735)),
       Constants.Swerve.trajectoryConfig);
 
+  //This goes from ball 2 to ball 3 (the one in the terminal)
   Trajectory bottom5BallPart3 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(1.305, 2.0838, new Rotation2d(-2.391)),
+      new Pose2d(5.491, 1.626, new Rotation2d(-3.735)),
       List.of(),
-      new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
+      new Pose2d(1.481, 1.54, new Rotation2d(-2.398)),
       Constants.Swerve.trajectoryConfig);
 
+  //This goes from ball 3 to ball 4
   Trajectory bottom5BallPart4 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(4.866, 6.033, new Rotation2d(1.659)),
+      new Pose2d(1.481, 1.54, new Rotation2d(-2.398)),
       List.of(),
-      new Pose2d(4.9688, 5.841, new Rotation2d(-2.339)),
+      new Pose2d(4.73, 5.677, new Rotation2d(1.149)),
+      Constants.Swerve.trajectoryConfig);
+
+  //This goes from ball 4 to a better shooting position
+  Trajectory bottom5BallPart5 = TrajectoryGenerator.generateTrajectory(
+      new Pose2d(4.73, 5.677, new Rotation2d(1.149)),
+      List.of(),
+      new Pose2d(4.743, 5.691, new Rotation2d(2.803)),
       Constants.Swerve.trajectoryConfig);
 
         var thetaController =
@@ -108,6 +119,17 @@ public class Bottom5Ball extends SequentialCommandGroup {
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
+
+        SwerveControllerCommand swerveControllerCommand5 = 
+            new SwerveControllerCommand(
+                bottom5BallPart5,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
             
       addCommands(
         //Gets the initial pose
@@ -136,6 +158,7 @@ public class Bottom5Ball extends SequentialCommandGroup {
         //Does the second and third trajectories while intaking and picks up 2 balls
         new InstantCommand(() -> States.intake()),
         swerveControllerCommand2,
+        swerveControllerCommand3,
 
         new InstantCommand(() -> States.stopIntake()),
 
@@ -151,13 +174,11 @@ public class Bottom5Ball extends SequentialCommandGroup {
         new InstantCommand(() -> States.stopIntake()),
 
         //Does the fourth trajectory while intaking and picks up 1 ball
-        new ParallelDeadlineGroup(
-          swerveControllerCommand3,
-          new InstantCommand(() -> States.intake())),
-
+        new InstantCommand(() -> States.intake()),
+        swerveControllerCommand4,
         new InstantCommand(() -> States.stopIntake()),
 
-        swerveControllerCommand4,
+        swerveControllerCommand5,
 
         //Activated the shooter and shoots the ball
         new InstantCommand(() -> States.activateShooter()),
