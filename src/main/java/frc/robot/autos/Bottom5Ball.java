@@ -38,37 +38,44 @@ public class Bottom5Ball extends SequentialCommandGroup {
 
   //This goes from the start position to ball 1
   Trajectory bottom5BallPart1 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(7.538, 2.988, new Rotation2d(-1.941)),
+      new Pose2d(7.606, 2.974, new Rotation2d(-1.894)), //autoWaypoints[0]
       List.of(),
-      new Pose2d(7.596, 0.849, new Rotation2d(-1.611)),
+      new Pose2d(7.61, 0.863, new Rotation2d(-1.618)), ////autoWaypoints[1]
       Constants.Swerve.trajectoryConfig);
   
   //This goes from ball 1 to ball 2
   Trajectory bottom5BallPart2 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(7.596, 0.849, new Rotation2d(-1.611)),
-      List.of(new Translation2d(5.029, 1.925)),
-      new Pose2d(5.491, 1.626, new Rotation2d(-3.735)),
+      new Pose2d(7.61, 0.863, new Rotation2d(-1.618)), //autoWaypoints[1]
+      List.of(),
+      new Pose2d(5.015, 1.983, new Rotation2d(2.339)), //autoWaypoints[2]
       Constants.Swerve.trajectoryConfig);
 
   //This goes from ball 2 to ball 3 (the one in the terminal)
   Trajectory bottom5BallPart3 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(5.491, 1.626, new Rotation2d(-3.735)),
+      new Pose2d(5.015, 1.983, new Rotation2d(2.339)),
       List.of(),
       new Pose2d(1.481, 1.54, new Rotation2d(-2.398)),
+      Constants.Swerve.trajectoryConfig);
+
+  Trajectory bottom5BallPartX = TrajectoryGenerator.generateTrajectory(
+      List.of(
+        new Pose2d(5.015, 1.983, new Rotation2d(2.339)),
+        new Pose2d(1.481, 1.54, new Rotation2d(-2.398))
+      ),
       Constants.Swerve.trajectoryConfig);
 
   //This goes from ball 3 to ball 4
   Trajectory bottom5BallPart4 = TrajectoryGenerator.generateTrajectory(
       new Pose2d(1.481, 1.54, new Rotation2d(-2.398)),
       List.of(),
-      new Pose2d(4.73, 5.677, new Rotation2d(1.149)),
+      new Pose2d(1.468, 1.512, new Rotation2d(-2.329)),
       Constants.Swerve.trajectoryConfig);
 
   //This goes from ball 4 to a better shooting position
   Trajectory bottom5BallPart5 = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(4.73, 5.677, new Rotation2d(1.149)),
+      new Pose2d(1.468, 1.512, new Rotation2d(-2.329)),
       List.of(),
-      new Pose2d(4.743, 5.691, new Rotation2d(2.803)),
+      new Pose2d(4.703, 5.719, new Rotation2d(1.027)),
       Constants.Swerve.trajectoryConfig);
 
         var thetaController =

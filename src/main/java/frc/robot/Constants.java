@@ -5,14 +5,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.constraint.TrajectoryConstraint;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
 import frc.lib.util.SwerveModuleConstants;
@@ -241,6 +240,18 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+        public static final Pose2d[] autoWaypoints = 
+        {
+            //Starting Positions
+            new Pose2d(7.606, 2.974, new Rotation2d(-1.894)),   //Defalt bottom starting position
+            new Pose2d(6.601, 2.546, new Rotation2d(-2.283)),   //Right bottom starting position
+            new Pose2d(8.439, 1.876, new Rotation2d(-1.561)),   //Left bottom starting position
+            new Pose2d(7.216, 1.99, new Rotation2d(-2.363)),    //Middle bottom starting postion
+            
+            //Going to balls
+            new Pose2d(7.606, 0.92, new Rotation2d(1.57)),      //Goes
+        };
     }
 
 }
