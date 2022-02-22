@@ -20,23 +20,35 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.States.IntakeStates;
 import frc.robot.subsystems.Swerve;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Top4Ball extends SequentialCommandGroup {
-  /** Creates a new Top4Ball. */
-  public Top4Ball(Swerve s_Swerve) {
-      Trajectory top4Ball = TrajectoryGenerator.generateTrajectory(
-        List.of(
-          new Pose2d(7.152, 4.778, new Rotation2d(2.73)),
-          new Pose2d(4.921, 6.133, new Rotation2d(2.617)),
-          new Pose2d(5.094, 1.84, new Rotation2d(0.754)),
-          new Pose2d(7.584, 0.456, new Rotation2d(-0.009))
-          ),
+public class Left4Ball extends SequentialCommandGroup {
+  /** Creates a new Left4Ball. */
+  public Left4Ball(Swerve s_Swerve) {
 
+    Pose2d startPos = AutoConstants.startPos;
+    
+      Trajectory Left4BallPart1 = TrajectoryGenerator.generateTrajectory(
+        startPos,
+        List.of(),
+        AutoConstants.leftPoints [0],
+        Constants.Swerve.trajectoryConfig);
+
+      Trajectory Left4BallPart2 = TrajectoryGenerator.generateTrajectory(
+        AutoConstants.leftPoints [0],
+        List.of(),
+        AutoConstants.leftPoints [1],
+        Constants.Swerve.trajectoryConfig);
+
+      Trajectory Left4BallPart3 = TrajectoryGenerator.generateTrajectory(
+        AutoConstants.leftPoints [1],
+        List.of(),
+        AutoConstants.leftPoints [2],
         Constants.Swerve.trajectoryConfig);
   
           var thetaController =
@@ -46,7 +58,7 @@ public class Top4Ball extends SequentialCommandGroup {
   
           SwerveControllerCommand swerveControllerCommand = 
             new SwerveControllerCommand(
-                top4Ball,
+                Left4BallPart1,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -54,7 +66,30 @@ public class Top4Ball extends SequentialCommandGroup {
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
+
+          SwerveControllerCommand swerveControllerCommand2 = 
+            new SwerveControllerCommand(
+                Left4BallPart2,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
+
+          SwerveControllerCommand swerveControllerCommand3 = 
+            new SwerveControllerCommand(
+                Left4BallPart3,
+                s_Swerve::getPose,
+                Constants.Swerve.swerveKinematics,
+                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                thetaController,
+                s_Swerve::setModuleStates,
+                s_Swerve);
+
       addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(top4Ball.getInitialPose())));
+        new InstantCommand(() -> s_Swerve.resetOdometry(Left4BallPart1.getInitialPose())));
   }
 }

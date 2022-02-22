@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Intaker;
@@ -28,10 +29,13 @@ import frc.robot.subsystems.Intaker;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Bottom2Ball extends SequentialCommandGroup {
-  /** Creates a new Bottom2Ball. */
-  public Bottom2Ball(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
-      Trajectory bottom2Ball = TrajectoryGenerator.generateTrajectory(
+public class Right2Ball extends SequentialCommandGroup {
+  /** Creates a new Right2Ball. */
+  public Right2Ball(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
+
+    Pose2d startPos = AutoConstants.startPos; 
+
+      Trajectory right2Ball = TrajectoryGenerator.generateTrajectory(
         new Pose2d(7.505, 2.981, new Rotation2d(-1.932)),
         List.of(),
         new Pose2d(7.571, 0.514, new Rotation2d(-1.586)),
@@ -44,7 +48,7 @@ public class Bottom2Ball extends SequentialCommandGroup {
   
           SwerveControllerCommand swerveControllerCommand = 
               new SwerveControllerCommand(
-                  bottom2Ball,
+                  right2Ball,
                   s_Swerve::getPose,
                   Constants.Swerve.swerveKinematics,
                   new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -54,7 +58,7 @@ public class Bottom2Ball extends SequentialCommandGroup {
                   s_Swerve);
 
       addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(bottom2Ball.getInitialPose())),
+        new InstantCommand(() -> s_Swerve.resetOdometry(right2Ball.getInitialPose())),
         new InstantCommand(() -> States.deployIntake()),
         
         new ParallelDeadlineGroup(

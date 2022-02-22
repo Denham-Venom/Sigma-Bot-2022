@@ -2,6 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+//I think this one is good
+
+//This one starts against the hub to the left of the tarmac
+
 package frc.robot.autos;
 
 import java.util.List;
@@ -19,73 +23,79 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Bottom4BallMiddle extends SequentialCommandGroup {
-  /** Creates a new Bottom4BallMiddle. */
-  public Bottom4BallMiddle(Swerve s_Swerve, Shooter m_Shooter) {
-    
-    Trajectory bottom4BallMiddlePart1 = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(7.212, 1.933, new Rotation2d(-2.293)),
+public class Right4Ball extends SequentialCommandGroup {
+  /** Creates a new right4Ball. 
+   * @param m_Shooter */
+  public Right4Ball(Swerve s_Swerve, Shooter m_Shooter) {
+
+    Pose2d startPos = AutoConstants.startPos; //Needs to be for the default
+
+      Trajectory right4BallPart1 = TrajectoryGenerator.generateTrajectory(
+        startPos,
         List.of(),
-        new Pose2d(7.583, 0.877, new Rotation2d(-1.604)),
+        AutoConstants.rightPoints [0],
         Constants.Swerve.trajectoryConfig);
- 
-    Trajectory bottom4BallMiddlePart2 = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(7.583, 0.877, new Rotation2d(-1.604)),
+
+      Trajectory right4BallPart2 = TrajectoryGenerator.generateTrajectory(
+        AutoConstants.rightPoints [0],
         List.of(),
-        new Pose2d(4.947, 2.125, new Rotation2d(1.902)),
+        AutoConstants.rightPoints [1],
         Constants.Swerve.trajectoryConfig);
- 
-    Trajectory bottom4BallMiddlePart3 = TrajectoryGenerator.generateTrajectory(
+
+      Trajectory right4BallPart3 = TrajectoryGenerator.generateTrajectory(
         new Pose2d(4.947, 2.125, new Rotation2d(1.902)),
         List.of(),
         new Pose2d(4.879, 6.133, new Rotation2d(1.534)),
         Constants.Swerve.trajectoryConfig);
+  
+          var thetaController =
+              new ProfiledPIDController(
+                  Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+          thetaController.enableContinuousInput(-Math.PI, Math.PI);
+  
+          SwerveControllerCommand swerveControllerCommand = 
+              new SwerveControllerCommand(
+                  right4BallPart1,
+                  s_Swerve::getPose,
+                  Constants.Swerve.swerveKinematics,
+                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                  thetaController,
+                  s_Swerve::setModuleStates,
+                  s_Swerve);
 
-      var thetaController =
-          new ProfiledPIDController(
-              Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
-      
-      SwerveControllerCommand swerveControllerCommand = 
-          new SwerveControllerCommand(
-              bottom4BallMiddlePart1,
-              s_Swerve::getPose,
-              Constants.Swerve.swerveKinematics,
-              new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-              new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-              thetaController,
-              s_Swerve::setModuleStates,
-              s_Swerve);
-      SwerveControllerCommand swerveControllerCommand2 = 
-          new SwerveControllerCommand(
-              bottom4BallMiddlePart2,
-              s_Swerve::getPose,
-              Constants.Swerve.swerveKinematics,
-              new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-              new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-              thetaController,
-              s_Swerve::setModuleStates,
-              s_Swerve);
-      SwerveControllerCommand swerveControllerCommand3 = 
-          new SwerveControllerCommand(
-              bottom4BallMiddlePart3,
-              s_Swerve::getPose,
-              Constants.Swerve.swerveKinematics,
-              new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-              new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-              thetaController,
-              s_Swerve::setModuleStates,
-              s_Swerve);
-    
-    addCommands(
+          SwerveControllerCommand swerveControllerCommand2 = 
+              new SwerveControllerCommand(
+                  right4BallPart2,
+                  s_Swerve::getPose,
+                  Constants.Swerve.swerveKinematics,
+                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                  thetaController,
+                  s_Swerve::setModuleStates,
+                  s_Swerve);
+
+          SwerveControllerCommand swerveControllerCommand3 = 
+              new SwerveControllerCommand(
+                  right4BallPart3,
+                  s_Swerve::getPose,
+                  Constants.Swerve.swerveKinematics,
+                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                  thetaController,
+                  s_Swerve::setModuleStates,
+                  s_Swerve);
+
+      addCommands(
         //Gets the initial pose 
-        new InstantCommand(() -> s_Swerve.resetOdometry(bottom4BallMiddlePart1.getInitialPose())),
+        new InstantCommand(() -> s_Swerve.resetOdometry(right4BallPart1.getInitialPose())),
         //Deploys the intake
         new InstantCommand(() -> States.deployIntake()),
 
@@ -124,5 +134,7 @@ public class Bottom4BallMiddle extends SequentialCommandGroup {
         new InstantCommand(() -> States.stopIntake()),
         new InstantCommand(() -> States.deactivateShooter())
       );
+  
   }
+
 }
