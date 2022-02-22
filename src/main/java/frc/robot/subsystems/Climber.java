@@ -5,10 +5,15 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Controllers.LazySparkMAX;
+import frc.Controllers.LazyTalonFX;
+import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
+  private LazySparkMAX climberMotor;
   public Climber() {
+    climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
   }
 
   @Override
