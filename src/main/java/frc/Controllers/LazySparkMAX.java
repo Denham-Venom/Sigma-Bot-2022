@@ -1,10 +1,11 @@
 package frc.Controllers;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSensor;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.ControlType;
 
 import frc.lib.math.PIDGains;
 
@@ -13,21 +14,21 @@ import frc.lib.math.PIDGains;
  * and automatically initalize the internal CANEncoder and PIDController.
  */
 public class LazySparkMAX extends CANSparkMax {
-    protected CANPIDController m_pidController;
-    protected CANEncoder m_encoder;
+    protected SparkMaxPIDController m_pidController;
+    protected RelativeEncoder m_encoder;
 
     /**
      * Config a Spark Max using sparkConstants.
      * 
-     * @param sparkConstants
+     * @param intakemotorconstants
      */
-    public LazySparkMAX(SparkConstants sparkConstants) {
-        super(sparkConstants.deviceId, sparkConstants.motorType);
+    public LazySparkMAX(SparkConstants intakemotorconstants) {
+        super(intakemotorconstants.deviceId, intakemotorconstants.motorType);
         super.restoreFactoryDefaults();
-        super.setSmartCurrentLimit(sparkConstants.smartCurrentLimit);
+        super.setSmartCurrentLimit(intakemotorconstants.smartCurrentLimit);
         super.enableVoltageCompensation(12);
-        super.setIdleMode(sparkConstants.idleMode);
-        super.setInverted(sparkConstants.inverted);
+        super.setIdleMode(intakemotorconstants.idleMode);
+        super.setInverted(intakemotorconstants.inverted);
         super.burnFlash();
 
         m_pidController = super.getPIDController();
@@ -36,8 +37,8 @@ public class LazySparkMAX extends CANSparkMax {
         m_encoder.setPosition(0);
     }
     
-    public void set(ControlType type, double setpoint) {
-        m_pidController.setReference(setpoint, type);
+    public void set(ControlType kdutycycle, double setpoint) {
+        m_pidController.setReference(setpoint, kdutycycle);
     }
     
     /**
@@ -72,7 +73,7 @@ public class LazySparkMAX extends CANSparkMax {
      * Set the internal pid controllers feedback device.
      * @param sensor
      */
-    public void setFeedbackDevice(CANSensor sensor) {
+    public void setFeedbackDevice(MotorFeedbackSensor sensor) {
         m_pidController.setFeedbackDevice(sensor);
     }
 

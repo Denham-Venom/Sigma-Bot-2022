@@ -40,29 +40,27 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kX.value);
+  private final JoystickButton testHood = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final POVButton intakeExtendButton = new POVButton(driver, 180);
   private final POVButton intakeRetractButton = new POVButton(driver, 0);
   private final JoystickButton zeroGyroButton = new JoystickButton(driver, XboxController.Button.kStart.value);
 
   /* Operator Buttons */
-  private final JoystickButton shootButton = new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton operatorShootButton = new JoystickButton(operator, XboxController.Button.kA.value);
   private final JoystickButton shooterActivateButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton shooterDeactivateButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton operatorIntakeButton = new JoystickButton(operator, XboxController.Button.kY.value);
   private final POVButton operatorIntakeExtendButton = new POVButton(operator, 180);
   private final POVButton operatorIntakeRetractButton = new POVButton(operator, 0);
-  private final JoystickButton feedButton = new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton operatorFeedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
-  //private final PneumaticHub m_pHub = new PneumaticHub();
-  //private final Intaker m_Intaker = new Intaker(m_pHub);
+  //private final Intaker m_Intaker = new Intaker(new PneumaticHub());
   private final Vision m_Vision = new Vision();
   private final Swerve s_Swerve = new Swerve(m_Vision);
   private final Shooter m_Shooter = new Shooter(m_Vision);
   
-
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     boolean fieldRelative = Constants.Swerve.fieldRelative;
@@ -100,7 +98,7 @@ public class RobotContainer {
       () -> States.stopIntake()
     ));
     
-    /* Operator Button */
+    /* Operator Buttons */
     operatorIntakeButton.whileHeld( new StartEndCommand(
       () -> States.intake(),
       () -> States.stopIntake()
@@ -115,6 +113,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Bottom5Ball(s_Swerve, m_Shooter);
+    return new Right5Ball(s_Swerve, m_Shooter);
   }
 }
