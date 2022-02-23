@@ -56,11 +56,11 @@ public class Left5Ball extends SequentialCommandGroup {
           AutoConstants.leftPoints [3],
           Constants.Swerve.trajectoryConfig);
 
-      Trajectory Left5BallPart5 = TrajectoryGenerator.generateTrajectory(
-          AutoConstants.leftPoints [3],
-          List.of(),
-          AutoConstants.leftPoints [4],
-          Constants.Swerve.trajectoryConfig);
+      // Trajectory Left5BallPart5 = TrajectoryGenerator.generateTrajectory(
+      //     AutoConstants.leftPoints [3],
+      //     List.of(),
+      //     AutoConstants.leftPoints [4],
+      //     Constants.Swerve.trajectoryConfig);
 
           var thetaController =
               new ProfiledPIDController(
@@ -111,19 +111,19 @@ public class Left5Ball extends SequentialCommandGroup {
                 s_Swerve::setModuleStates,
                 s_Swerve);
 
-          SwerveControllerCommand swerveControllerCommand5 = 
-            new SwerveControllerCommand(
-                Left5BallPart4,
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                s_Swerve::setModuleStates,
-                s_Swerve);
+          // SwerveControllerCommand swerveControllerCommand5 = 
+          //   new SwerveControllerCommand(
+          //       Left5BallPart5,
+          //       s_Swerve::getPose,
+          //       Constants.Swerve.swerveKinematics,
+          //       new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+          //       new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+          //       thetaController,
+          //       s_Swerve::setModuleStates,
+          //       s_Swerve);
 
       addCommands(
-        //Gets the initial pose
+      //Gets the initial pose
       new InstantCommand(() -> s_Swerve.resetOdometry(Left5BallPart1.getInitialPose())),
       //Deploys the intake
       new InstantCommand(() -> States.deployIntake()),
@@ -169,7 +169,7 @@ public class Left5Ball extends SequentialCommandGroup {
       swerveControllerCommand4,
       new InstantCommand(() -> States.stopIntake()),
 
-      swerveControllerCommand5,
+      //swerveControllerCommand5,
 
       //Activated the shooter and shoots the ball
       new InstantCommand(() -> States.activateShooter()),

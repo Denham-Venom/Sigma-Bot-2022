@@ -36,9 +36,9 @@ public class Right2Ball extends SequentialCommandGroup {
     Pose2d startPos = AutoConstants.startPos; 
 
       Trajectory right2Ball = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(7.505, 2.981, new Rotation2d(-1.932)),
+        startPos,
         List.of(),
-        new Pose2d(7.571, 0.514, new Rotation2d(-1.586)),
+        AutoConstants.rightPoints [0],
         Constants.Swerve.trajectoryConfig);
   
           var thetaController =

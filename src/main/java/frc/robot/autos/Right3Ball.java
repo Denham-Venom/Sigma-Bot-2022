@@ -49,15 +49,8 @@ public class Right3Ball extends SequentialCommandGroup {
     //This goes from ball 1 to ball 2
     Trajectory right3BallPart2 = TrajectoryGenerator.generateTrajectory(
         AutoConstants.rightPoints [0],
-        List.of(new Translation2d(5.029, 1.925)),
-        AutoConstants.rightPoints [1],
-        Constants.Swerve.trajectoryConfig);
-
-    //This goes from ball 2 to ball 3 (the one in the terminal)
-    Trajectory right3BallPart3 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [1],
         List.of(),
-        AutoConstants.rightPoints [2],
+        AutoConstants.rightPoints [1],
         Constants.Swerve.trajectoryConfig);
 
     var thetaController =
@@ -87,18 +80,6 @@ public class Right3Ball extends SequentialCommandGroup {
             s_Swerve::setModuleStates,
             s_Swerve);
 
-    SwerveControllerCommand swerveControllerCommand3 = 
-        new SwerveControllerCommand(
-            right3BallPart3,
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController,
-            s_Swerve::setModuleStates,
-            s_Swerve);
-            
-
     addCommands(
       //Gets the initial pose
       new InstantCommand(() -> s_Swerve.resetOdometry(right3BallPart1.getInitialPose())),
@@ -126,7 +107,6 @@ public class Right3Ball extends SequentialCommandGroup {
       //Does the second and third trajectories while intaking and picks up 2 balls
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand2,
-      swerveControllerCommand3,
 
       new InstantCommand(() -> States.stopIntake()),
 

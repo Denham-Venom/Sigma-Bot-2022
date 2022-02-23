@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.Constants.AutoConstants;
@@ -90,6 +91,45 @@ public class Left4Ball extends SequentialCommandGroup {
                 s_Swerve);
 
       addCommands(
-        new InstantCommand(() -> s_Swerve.resetOdometry(Left4BallPart1.getInitialPose())));
+        //Gets the initial pose 
+        new InstantCommand(() -> s_Swerve.resetOdometry(Left4BallPart1.getInitialPose())),
+        //Deploys the intake
+        new InstantCommand(() -> States.deployIntake()),
+
+        //Does the first trajectory while intaking and picks up 1 ball
+        new InstantCommand(() -> States.intake()),
+        swerveControllerCommand,
+
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Activates the shooter and shoots 2 balls 
+        new InstantCommand(() -> States.activateShooter()),
+        new WaitCommand(1.0),
+
+        new ParallelDeadlineGroup(
+            new WaitCommand(2.5),
+            new InstantCommand(() -> States.feed())),
+        
+        new InstantCommand(() -> States.deactivateShooter()),
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Does the second and third trajectory while intaking and picks up 2 balls
+        new InstantCommand(() -> States.intake()),
+        swerveControllerCommand2,
+        swerveControllerCommand3,
+  
+        new InstantCommand(() -> States.stopIntake()),
+
+        //Activates the shooter and shoots 2 balls
+        new InstantCommand(() -> States.activateShooter()),
+        new WaitCommand(1.0),
+
+        new ParallelDeadlineGroup(
+            new WaitCommand(2.5),
+            new InstantCommand(() -> States.feed())),
+        
+        new InstantCommand(() -> States.stopIntake()),
+        new InstantCommand(() -> States.deactivateShooter())
+      );
   }
 }

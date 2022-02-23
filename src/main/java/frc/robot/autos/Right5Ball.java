@@ -67,12 +67,12 @@ public class Right5Ball extends SequentialCommandGroup {
         AutoConstants.rightPoints [3],
         Constants.Swerve.trajectoryConfig);
 
-    //This goes from ball 4 to a better shooting position
-    Trajectory right5BallPart5 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [3],
-        List.of(),
-        AutoConstants.rightPoints [4],
-        Constants.Swerve.trajectoryConfig);
+    // //This goes from ball 4 to a better shooting position
+    // Trajectory right5BallPart5 = TrajectoryGenerator.generateTrajectory(
+    //     AutoConstants.rightPoints [3],
+    //     List.of(),
+    //     AutoConstants.rightPoints [4],
+    //     Constants.Swerve.trajectoryConfig);
 
     var thetaController =
         new ProfiledPIDController(
@@ -123,16 +123,16 @@ public class Right5Ball extends SequentialCommandGroup {
             s_Swerve::setModuleStates,
             s_Swerve);
 
-    SwerveControllerCommand swerveControllerCommand5 = 
-        new SwerveControllerCommand(
-            right5BallPart5,
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController,
-            s_Swerve::setModuleStates,
-            s_Swerve);
+    // SwerveControllerCommand swerveControllerCommand5 = 
+    //     new SwerveControllerCommand(
+    //         right5BallPart5,
+    //         s_Swerve::getPose,
+    //         Constants.Swerve.swerveKinematics,
+    //         new PIDController(Constants.AutoConstants.kPXController, 0, 0),
+    //         new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+    //         thetaController,
+    //         s_Swerve::setModuleStates,
+    //         s_Swerve);
             
     addCommands(
       //Gets the initial pose
@@ -181,7 +181,7 @@ public class Right5Ball extends SequentialCommandGroup {
       swerveControllerCommand4,
       new InstantCommand(() -> States.stopIntake()),
 
-      swerveControllerCommand5,
+      // swerveControllerCommand5,
 
       //Activated the shooter and shoots the ball
       new InstantCommand(() -> States.activateShooter()),

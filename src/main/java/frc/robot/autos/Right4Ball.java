@@ -50,9 +50,9 @@ public class Right4Ball extends SequentialCommandGroup {
         Constants.Swerve.trajectoryConfig);
 
       Trajectory right4BallPart3 = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(4.947, 2.125, new Rotation2d(1.902)),
+        AutoConstants.rightPoints [1],
         List.of(),
-        new Pose2d(4.879, 6.133, new Rotation2d(1.534)),
+        AutoConstants.rightPoints [2],
         Constants.Swerve.trajectoryConfig);
   
           var thetaController =
