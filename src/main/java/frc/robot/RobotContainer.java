@@ -89,11 +89,11 @@ public class RobotContainer {
     //outakeButton.whileHeld(new Intake(m_Intaker));
     
     /* Shooter */
-    shootButton.toggleWhenPressed(new StartEndCommand(
+    operatorShootButton.toggleWhenPressed(new StartEndCommand(
       () -> States.activateShooter(),
       () -> States.deactivateShooter()
     ));
-    feedButton.whileHeld(new StartEndCommand(
+    operatorFeedButton.whileHeld(new StartEndCommand(
       () -> States.feed(), 
       () -> States.stopIntake()
     ));
