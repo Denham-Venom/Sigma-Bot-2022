@@ -49,7 +49,7 @@ public class Right5Ball extends SequentialCommandGroup {
     //This goes from ball 1 to ball 2
     Trajectory right5BallPart2 = TrajectoryGenerator.generateTrajectory(
         AutoConstants.rightPoints [0],
-        List.of(new Translation2d(5.029, 1.925)),
+        List.of(),
         AutoConstants.rightPoints [1],
         Constants.Swerve.trajectoryConfig);
 
