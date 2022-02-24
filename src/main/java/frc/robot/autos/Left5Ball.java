@@ -28,7 +28,7 @@ import frc.robot.subsystems.Swerve;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Left5Ball extends SequentialCommandGroup {
   /** Creates a new Left5Ball. */
-  public Left5Ball(Swerve s_Swerve, Shooter m_Shooter) {    
+  public Left5Ball(Swerve s_Swerve) {    
     
     Pose2d startPos = AutoConstants.startPos;
     

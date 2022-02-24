@@ -44,6 +44,8 @@ public class Intaker extends SubsystemBase {
     // This method will be called once per scheduler run
     switch(States.intakeState) {
       case intaking:
+      // check if a ball is detected by a sensor (2 total)
+      // if it is, run only the motors with no ball detected
         if(!intakeSensor.get()) {
           if(!shooterSensor.get()) {
             spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
@@ -64,14 +66,17 @@ public class Intaker extends SubsystemBase {
         }
         break;
       case outtaking:
+      // reverses the intake motor
         intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.IntakeSpeed);
         break;
       case feeding: 
+      // Runs all intake/indexer motors
         indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
         intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         break;
       case disabled:
+      // Stops all intake/indexer motors
         indexerMotor.set(ControlMode.PercentOutput, 0);
         spinUpMotor.set(ControlType.kDutyCycle, 0);
         intakeMotor.set(ControlMode.PercentOutput, 0);

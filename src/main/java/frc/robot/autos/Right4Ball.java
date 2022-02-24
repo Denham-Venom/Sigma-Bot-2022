@@ -33,7 +33,7 @@ import frc.robot.subsystems.Swerve;
 public class Right4Ball extends SequentialCommandGroup {
   /** Creates a new right4Ball. 
    * @param m_Shooter */
-  public Right4Ball(Swerve s_Swerve, Shooter m_Shooter) {
+  public Right4Ball(Swerve s_Swerve) {
 
     Pose2d startPos = AutoConstants.startPos; //Needs to be for the default
 

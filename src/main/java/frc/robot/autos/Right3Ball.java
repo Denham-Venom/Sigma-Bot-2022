@@ -35,7 +35,7 @@ import frc.robot.subsystems.Swerve;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Right3Ball extends SequentialCommandGroup {
   /** Creates a new right3Ball. */
-  public Right3Ball(Swerve s_Swerve, Shooter m_Shooter) {
+  public Right3Ball(Swerve s_Swerve) {
 
     Pose2d startPos = AutoConstants.startPos;
 

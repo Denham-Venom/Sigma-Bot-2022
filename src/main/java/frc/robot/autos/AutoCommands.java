@@ -23,6 +23,10 @@ public class AutoCommands {
         new AbstractMap.SimpleImmutableEntry<String, Pose2d>("RightRight", new Pose2d(8.476, 1.847, new Rotation2d(-1.561)))
     );
 
+    public void selectPath(String start, int numBalls) {
+        
+    }
+
     public Pose2d getStartingPose(String start) {
         return positions.get(start);
     }

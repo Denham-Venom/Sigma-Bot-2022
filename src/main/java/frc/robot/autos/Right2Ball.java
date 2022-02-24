@@ -24,14 +24,13 @@ import frc.robot.States;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Intaker;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Right2Ball extends SequentialCommandGroup {
   /** Creates a new Right2Ball. */
-  public Right2Ball(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
+  public Right2Ball(Swerve s_Swerve) {
 
     Pose2d startPos = AutoConstants.startPos; 
 

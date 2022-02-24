@@ -20,6 +20,7 @@ public class AdjustHood extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // sets the hood to a specific angle (testing purposes)
     m_Hood.setHoodAngle(angle);
   }
 
