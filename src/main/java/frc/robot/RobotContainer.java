@@ -39,6 +39,7 @@ public class RobotContainer {
   /* Driver Buttons */
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+  private final JoystickButton highLowGearButton = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kX.value);
   private final JoystickButton testHood = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
@@ -80,6 +81,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
+    highLowGearButton.whenPressed(new InstantCommand(() -> s_Swerve.switchLowHighGear()));
 
       // Intake
       intakeButton.whileHeld(new StartEndCommand(

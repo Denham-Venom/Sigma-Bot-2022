@@ -13,7 +13,7 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private LazySparkMAX climberMotor;
   public Climber() {
-    climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
+    //climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
   }
 
   @Override

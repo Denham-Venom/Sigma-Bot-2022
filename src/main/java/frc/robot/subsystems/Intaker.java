@@ -34,7 +34,7 @@ public class Intaker extends SubsystemBase {
   private DigitalInput shooterSensor;
   public Intaker(PneumaticHub m_pHub) {
     indexerMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
+    //spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
   }
@@ -48,7 +48,7 @@ public class Intaker extends SubsystemBase {
       // if it is, run only the motors with no ball detected
         if(!intakeSensor.get()) {
           if(!shooterSensor.get()) {
-            spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+            //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
           } else {
             spinUpMotor.set(ControlType.kDutyCycle, 0);
           }
@@ -57,11 +57,11 @@ public class Intaker extends SubsystemBase {
         }
         else if(!shooterSensor.get()) {
           indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+          //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
           intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         } else {
           indexerMotor.set(ControlMode.PercentOutput, 0);
-          spinUpMotor.set(ControlType.kDutyCycle, 0);
+          //spinUpMotor.set(ControlType.kDutyCycle, 0);
           intakeMotor.set(ControlMode.PercentOutput, 0);
         }
         break;
@@ -72,13 +72,13 @@ public class Intaker extends SubsystemBase {
       case feeding: 
       // Runs all intake/indexer motors
         indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-        spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+        //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
         intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         break;
       case disabled:
       // Stops all intake/indexer motors
         indexerMotor.set(ControlMode.PercentOutput, 0);
-        spinUpMotor.set(ControlType.kDutyCycle, 0);
+        //spinUpMotor.set(ControlType.kDutyCycle, 0);
         intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 

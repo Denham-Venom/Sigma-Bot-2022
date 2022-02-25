@@ -24,7 +24,7 @@ public class AutoCommands {
     );
 
     public void selectPath(String start, int numBalls) {
-        
+    
     }
 
     public Pose2d getStartingPose(String start) {
