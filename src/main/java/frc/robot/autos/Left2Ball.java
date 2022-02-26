@@ -12,9 +12,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.States;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Swerve;
 
@@ -27,7 +31,7 @@ public class Left2Ball extends SequentialCommandGroup {
     
     Pose2d startPos = AutoConstants.startPos;
     
-    Trajectory Left4Ball = TrajectoryGenerator.generateTrajectory(
+    Trajectory Left2Ball = TrajectoryGenerator.generateTrajectory(
         startPos,
         List.of(),
         AutoConstants.leftPoints [0],
@@ -40,7 +44,7 @@ public class Left2Ball extends SequentialCommandGroup {
   
           SwerveControllerCommand swerveControllerCommand = 
             new SwerveControllerCommand(
-                Left4Ball,
+                Left2Ball,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -48,6 +52,30 @@ public class Left2Ball extends SequentialCommandGroup {
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
-    addCommands();
+                
+    addCommands(
+      //Gets the initial pose 
+      new InstantCommand(() -> s_Swerve.resetOdometry(Left2Ball.getInitialPose())),
+      //Deploys the intake
+      new InstantCommand(() -> States.deployIntake()),
+
+      //Goes to ball 4 while intaking
+      new InstantCommand(() -> States.intake()),
+      
+      swerveControllerCommand,
+
+      new InstantCommand(() -> States.stopIntake()),
+
+      //Activates the shooter and shoots the 2 balls
+      new InstantCommand(() -> States.activateShooter()),
+      new WaitCommand(1.0), 
+      
+      new ParallelDeadlineGroup(
+        new WaitCommand(1),
+        new InstantCommand(() -> States.feed())),
+
+      new InstantCommand(() -> States.stopIntake()),
+      new InstantCommand(() -> States.deactivateShooter())
+    );
   }
 }
