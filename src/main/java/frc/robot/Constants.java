@@ -134,7 +134,6 @@ public final class Constants {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
-        //public static final TrajectoryConstraint trajCon = new Trajeco
         public static final TrajectoryConfig trajectoryConfig =
             new TrajectoryConfig(
                     Constants.AutoConstants.kMaxSpeedMetersPerSecond,
@@ -257,37 +256,37 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
 
 
-        public static final Pose2d startPos = new Pose2d(7.606, 2.974, new Rotation2d(-1.894));
-         //Starting Positions
-            //Bottom
-            //new Pose2d(7.606, 2.974, new Rotation2d(-1.894)),   //0 Defalt bottom starting position
-            //new Pose2d(6.601, 2.546, new Rotation2d(-2.283)),   //1 Right bottom starting position
-            //new Pose2d(8.439, 1.876, new Rotation2d(-1.561)),   //2 Left bottom starting position
-            //new Pose2d(7.216, 1.99, new Rotation2d(-2.363)),    //3 Middle bottom starting postion
-            //Top
-            //new Pose2d(7.103, 4.871, new Rotation2d(2.742)),    //Defalt top starting position
-            //new Pose2d(5.962, 3.958, new Rotation2d(3.141)),    //Right top starting position
-            //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
-            //new Pose2d(6.152, 5.156, new Rotation2d(2.399)),    //Middle top starting position
-        public static final Pose2d[] rightPoints = 
-        {
-            new Pose2d(7.53, 0.899, new Rotation2d(-1.629)),    //Goes to ball 1
-            new Pose2d(6.687, 1.241, new Rotation2d(2.687)),    //Moves to the side a bit before going to ball 2 so it doesnt hit the wall
-            new Pose2d(5.409, 1.983, new Rotation2d(-2.918)),   //Goes to ball 2
-            new Pose2d(1.536, 1.54, new Rotation2d(-2.434)),    //Goes to ball 3
-            new Pose2d(1.142, 2.154, new Rotation2d(0.658)),    //Moves to the side a bit before going to ball 4 so it doesnt hit the wall
-            new Pose2d(4.54, 5.748, new Rotation2d(0.82)),      //Goes to ball 4
-            new Pose2d(5.423, 5.192, new Rotation2d(2.99))      //Rotates to face the goal after going to ball 4
-        };
-
-        public static final Pose2d[] leftPoints = 
-        {
-            new Pose2d(5.367, 5.869, new Rotation2d(2.681)),    //Goes to ball 4
-            new Pose2d(1.563, 1.612, new Rotation2d(-2.414)),   //Goes to ball 3
-            new Pose2d(4.512, 1.911, new Rotation2d(0)),        //Goes to ball 2
-            new Pose2d(5.559, 2.04, new Rotation2d(-2.629)),    //Rotates to face the goal after going to ball 2
-            new Pose2d(7.611, 0.884, new Rotation2d(-1.592))    //Goes to ball 1
-        };
+                public static final Pose2d startPos = new Pose2d(7.606, 2.974, new Rotation2d(-1.894));
+                //Starting Positions
+                   //Bottom
+                   //new Pose2d(7.606, 2.974, new Rotation2d(-1.894)),   //0 Defalt bottom starting position
+                   //new Pose2d(6.601, 2.546, new Rotation2d(-2.283)),   //1 Right bottom starting position
+                   //new Pose2d(8.439, 1.876, new Rotation2d(-1.561)),   //2 Left bottom starting position
+                   //new Pose2d(7.216, 1.99, new Rotation2d(-2.363)),    //3 Middle bottom starting postion
+                   //Top
+                   //new Pose2d(7.103, 4.871, new Rotation2d(2.742)),    //Defalt top starting position
+                   //new Pose2d(5.962, 3.958, new Rotation2d(3.141)),    //Right top starting position
+                   //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
+                   //new Pose2d(6.152, 5.156, new Rotation2d(2.399)),    //Middle top starting position
+               public static final Pose2d[] rightPoints = 
+               {
+                   new Pose2d(7.53, 0.899, new Rotation2d(-1.629)),    //Goes to ball 1
+                   new Pose2d(6.687, 1.241, new Rotation2d(2.687)),    //Moves to the side a bit before going to ball 2 so it doesnt hit the wall
+                   new Pose2d(5.409, 1.983, new Rotation2d(-2.918)),   //Goes to ball 2
+                   new Pose2d(1.536, 1.54, new Rotation2d(-2.434)),    //Goes to ball 3
+                   new Pose2d(1.142, 2.154, new Rotation2d(0.658)),    //Moves to the side a bit before going to ball 4 so it doesnt hit the wall
+                   new Pose2d(4.54, 5.748, new Rotation2d(0.82)),      //Goes to ball 4
+                   new Pose2d(5.423, 5.192, new Rotation2d(2.99))      //Rotates to face the goal after going to ball 4
+               };
+       
+               public static final Pose2d[] leftPoints = 
+               {
+                   new Pose2d(5.367, 5.869, new Rotation2d(2.681)),    //Goes to ball 4
+                   new Pose2d(1.563, 1.612, new Rotation2d(-2.414)),   //Goes to ball 3
+                   new Pose2d(4.512, 1.911, new Rotation2d(0)),        //Goes to ball 2
+                   new Pose2d(5.559, 2.04, new Rotation2d(-2.629)),    //Rotates to face the goal after going to ball 2
+                   new Pose2d(7.611, 0.884, new Rotation2d(-1.592))    //Goes to ball 1
+               };
     }
     
 }

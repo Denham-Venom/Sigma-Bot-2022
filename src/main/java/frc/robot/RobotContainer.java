@@ -57,7 +57,7 @@ public class RobotContainer {
   private final JoystickButton operatorFeedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
-  //private final Intaker m_Intaker = new Intaker(new PneumaticHub());
+  private final Intaker m_Intaker = new Intaker(new PneumaticHub());
   private final Vision m_Vision = new Vision();
   private final Swerve s_Swerve = new Swerve(m_Vision);
   private final Shooter m_Shooter = new Shooter(m_Vision);
@@ -82,23 +82,26 @@ public class RobotContainer {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
     highLowGearButton.whenPressed(new InstantCommand(() -> s_Swerve.switchLowHighGear()));
-    
-    /* Intake */
-    intakeButton.whileHeld(new StartEndCommand(
-      () -> States.intake(), 
-      () -> States.stopIntake()
-    ));
-    //outakeButton.whileHeld(new Intake(m_Intaker));
-    
-    /* Shooter */
-    operatorShootButton.toggleWhenPressed(new StartEndCommand(
-      () -> States.activateShooter(),
-      () -> States.deactivateShooter()
-    ));
-    operatorFeedButton.whileHeld(new StartEndCommand(
-      () -> States.feed(), 
-      () -> States.stopIntake()
-    ));
+
+      // Intake
+      intakeButton.whileHeld(new StartEndCommand(
+        () -> States.intake(), 
+        () -> States.stopIntake()
+      ));
+      outakeButton.whileHeld(new Intake(m_Intaker));
+
+      // Shooter
+      operatorShootButton.toggleWhenPressed(new StartEndCommand(
+        () -> States.activateShooter(),
+        () -> States.deactivateShooter()
+      ));
+      operatorFeedButton.whileHeld(new StartEndCommand(
+        () -> States.feed(), 
+        () -> States.stopIntake()
+      ));
+
+      // Test Hood
+      testHood.whenPressed(new InstantCommand(() -> m_Shooter.setHoodAngle(0)));
     
     /* Operator Buttons */
     operatorIntakeButton.whileHeld( new StartEndCommand(
@@ -115,6 +118,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Left5Ball(s_Swerve, m_Shooter);
+    return new Right5Ball(s_Swerve, m_Shooter);
   }
 }
