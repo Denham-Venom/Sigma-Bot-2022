@@ -2,8 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-//I think this is done
-
 package frc.robot.autos;
 
 import java.util.List;
@@ -34,23 +32,28 @@ import frc.robot.subsystems.Swerve;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Right3Ball extends SequentialCommandGroup {
+  
+  private int waypointIndex;
+  
   /** Creates a new right3Ball. */
-  public Right3Ball(Swerve s_Swerve) {
+  public Right3Ball(Swerve s_Swerve, Shooter m_Shooter) {
 
     Pose2d startPos = AutoConstants.startPos;
+    waypointIndex = 0;
 
     //This goes from the start position to ball 1
     Trajectory right3BallPart1 = TrajectoryGenerator.generateTrajectory(
         startPos,
         List.of(),
-        AutoConstants.rightPoints [0],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
     
     //This goes from ball 1 to ball 2
     Trajectory right3BallPart2 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [0],
-        List.of(),
-        AutoConstants.rightPoints [1],
+        List.of(
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex]),
         Constants.Swerve.trajectoryConfig);
 
     var thetaController =
