@@ -61,38 +61,24 @@ public class Right5Ball extends SequentialCommandGroup {
     
     //This goes from ball 1 to ball 2
     Trajectory right5BallPart2 = TrajectoryGenerator.generateTrajectory(
+        List.of(
         AutoConstants.rightPoints [waypointIndex++],
-        List.of(),
-        AutoConstants.rightPoints [waypointIndex],
-        Constants.Swerve.trajectoryConfig);
-
-    //This goes from ball 2 to ball 3 (the one in the terminal)
-    Trajectory right5BallPart3 = TrajectoryGenerator.generateTrajectory(
         AutoConstants.rightPoints [waypointIndex++],
-        List.of(),
-        AutoConstants.rightPoints [waypointIndex],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex]),
         Constants.Swerve.trajectoryConfig);
-      
-    //right5BallPart2 = right5BallPart2.concatenate(right5BallPart3);
-      
-    // Trajectory right5BallPart23 = TrajectoryGenerator.generateTrajectory(
-    //   List.of(
-    //     AutoConstants.rightPoints[0], 
-    //     AutoConstants.rightPoints[1], 
-    //     AutoConstants.rightPoints[2]
-    //   ), Constants.Swerve.trajectoryConfig
-    // );
 
     //This goes to ball 4 from ball 3
-    Trajectory right5BallPart4 = TrajectoryGenerator.generateTrajectory(
+    Trajectory right5BallPart3 = TrajectoryGenerator.generateTrajectory(
+        List.of(
         AutoConstants.rightPoints [waypointIndex++],
-        List.of(),
-        AutoConstants.rightPoints [waypointIndex],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex]),
         Constants.Swerve.trajectoryConfig);
       
     
     //This goes from ball 4 to a better shooting position
-    Trajectory right5BallPart5 = TrajectoryGenerator.generateTrajectory(
+    Trajectory right5BallPart4 = TrajectoryGenerator.generateTrajectory(
         AutoConstants.rightPoints [waypointIndex++],
         List.of(),
         AutoConstants.rightPoints [waypointIndex],
@@ -145,32 +131,10 @@ public class Right5Ball extends SequentialCommandGroup {
             new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             s_Swerve::setModuleStates,
             s_Swerve);
-
-  //  SwerveControllerCommand swerveControllerCommand23 = 
-  //      new SwerveControllerCommand(
-  //          right5BallPart23,
-  //          s_Swerve::getPose,
-  //          Constants.Swerve.swerveKinematics,
-  //          new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-  //          new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-  //          new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-  //          s_Swerve::setModuleStates,
-  //          s_Swerve);
             
     SwerveControllerCommand swerveControllerCommand4 = 
         new SwerveControllerCommand(
             right5BallPart4,
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            s_Swerve::setModuleStates,
-            s_Swerve);
-
-    SwerveControllerCommand swerveControllerCommand5 = 
-        new SwerveControllerCommand(
-            right5BallPart5,
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -199,48 +163,43 @@ public class Right5Ball extends SequentialCommandGroup {
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
-      new InstantCommand(() -> States.deactivateShooter())//,
+      new InstantCommand(() -> States.deactivateShooter()),
 
-      // //Turns to ball 2
-      // // swerveControllerCommand1T,
-
-      // //Picks up ball 2 and 3
-      // new InstantCommand(() -> States.intake()),
-      // swerveControllerCommand2,
-      // // swerveControllerCommand2T,
-      // swerveControllerCommand3,
+      //Picks up ball 2 and 3
+      new InstantCommand(() -> States.intake()),
+      swerveControllerCommand2,
     
-      // new InstantCommand(() -> States.stopIntake()),
+      new InstantCommand(() -> States.stopIntake()),
 
-      // //Activates the shooter and shoots the 2 balls
-      // new InstantCommand(() -> States.activateShooter()),
-      // new WaitCommand(1.0), 
+      //Activates the shooter and shoots the 2 balls
+      new InstantCommand(() -> States.activateShooter()),
+      new WaitCommand(1.0), 
       
-      // new ParallelDeadlineGroup(
-      //   new WaitCommand(1),
-      //   new InstantCommand(() -> States.feed())),
+      new ParallelDeadlineGroup(
+        new WaitCommand(1),
+        new InstantCommand(() -> States.feed())),
 
-      // new InstantCommand(() -> States.deactivateShooter()),
-      // new InstantCommand(() -> States.stopIntake()),
+      new InstantCommand(() -> States.deactivateShooter()),
+      new InstantCommand(() -> States.stopIntake()),
 
-      // //Picks up ball 4
-      // new InstantCommand(() -> States.intake()),
-      // swerveControllerCommand4,
-      // new InstantCommand(() -> States.stopIntake()),
+      //Picks up ball 4
+      new InstantCommand(() -> States.intake()),
+      swerveControllerCommand3,
+      new InstantCommand(() -> States.stopIntake()),
 
-      // //Turns to the goal
-      // swerveControllerCommand5,
+      //Turns to the goal
+      swerveControllerCommand4,
 
-      // //Activated the shooter and shoots the ball
-      // new InstantCommand(() -> States.activateShooter()),
-      // new WaitCommand(1.0), 
+      //Activated the shooter and shoots the ball
+      new InstantCommand(() -> States.activateShooter()),
+      new WaitCommand(1.0), 
       
-      // new ParallelDeadlineGroup(
-      //   new WaitCommand(1),
-      //   new InstantCommand(() -> States.feed())),
+      new ParallelDeadlineGroup(
+        new WaitCommand(1),
+        new InstantCommand(() -> States.feed())),
 
-      // new InstantCommand(() -> States.deactivateShooter()),
-      // new InstantCommand(() -> States.stopIntake())
+      new InstantCommand(() -> States.deactivateShooter()),
+      new InstantCommand(() -> States.stopIntake())
     );
     
   }

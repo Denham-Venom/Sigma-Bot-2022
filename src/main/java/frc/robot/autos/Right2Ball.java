@@ -2,8 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-//I think this one is done
-
 package frc.robot.autos;
 
 import java.util.List;
@@ -30,15 +28,19 @@ import frc.robot.subsystems.Intaker;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Right2Ball extends SequentialCommandGroup {
+
+  private int waypointIndex;
+
   /** Creates a new Right2Ball. */
   public Right2Ball(Swerve s_Swerve, Shooter m_Shooter, Intaker m_Intaker) {
 
     Pose2d startPos = AutoConstants.startPos; 
+    waypointIndex = 0;
 
       Trajectory right2Ball = TrajectoryGenerator.generateTrajectory(
         startPos,
         List.of(),
-        AutoConstants.rightPoints [0],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
   
           var thetaController =
@@ -58,15 +60,19 @@ public class Right2Ball extends SequentialCommandGroup {
                   s_Swerve);
 
       addCommands(
+        //Gets the initial pose
         new InstantCommand(() -> s_Swerve.resetOdometry(right2Ball.getInitialPose())),
+        //Deploys the intake 
         new InstantCommand(() -> States.deployIntake()),
         
+        //Picks up ball 1 while intaking 
         new ParallelDeadlineGroup(
           swerveControllerCommand, 
           new InstantCommand(() -> States.intake())),
 
         new InstantCommand(() -> States.stopIntake()),
-        
+
+        //Activates the shooter and shoots 2 balls        
         new InstantCommand(() -> States.activateShooter()),
         new WaitCommand(1.0), 
         
@@ -74,6 +80,7 @@ public class Right2Ball extends SequentialCommandGroup {
           new WaitCommand(2.5),
           new InstantCommand(() -> States.feed())),
 
+        //Stops the shooter and intake
         new InstantCommand(() -> States.deactivateShooter()),
         new InstantCommand(() -> States.intake()));
   
