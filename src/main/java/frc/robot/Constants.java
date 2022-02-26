@@ -272,7 +272,6 @@ public final class Constants {
         public static final Pose2d[] rightPoints = 
         {
             new Pose2d(7.53, 0.899, new Rotation2d(-1.629)),
-            new Pose2d(7.271, 1.997, new Rotation2d(1.463)),
             new Pose2d(5.409, 1.983, new Rotation2d(-2.918)),
             new Pose2d(1.536, 1.54, new Rotation2d(-2.434)),
             new Pose2d(4.54, 5.748, new Rotation2d(0.82)),

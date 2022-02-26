@@ -42,13 +42,13 @@ import frc.robot.subsystems.Swerve;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Right5Ball extends SequentialCommandGroup {
 
-  private Timer m_timer;
+  //private Timer m_timer;
   private int waypointIndex;
 
   /** Creates a new right5Ball. */
   public Right5Ball(Swerve s_Swerve, Shooter m_Shooter) {
 
-    m_timer = new Timer();
+    //m_timer = new Timer();
     waypointIndex = 0;
     Pose2d startPos = AutoConstants.startPos;
 
@@ -56,28 +56,21 @@ public class Right5Ball extends SequentialCommandGroup {
     Trajectory right5BallPart1 = TrajectoryGenerator.generateTrajectory(
         startPos,
         List.of(),
-        AutoConstants.rightPoints [0],
-        Constants.Swerve.trajectoryConfig);
-
-    //This goes from ball 1 forward a couple inches
-    Trajectory right5BallPart1Up = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [0],
-        List.of(),
-        AutoConstants.rightPoints [1],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
     
     //This goes from ball 1 to ball 2
     Trajectory right5BallPart2 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [1],
+        AutoConstants.rightPoints [waypointIndex++],
         List.of(),
-        AutoConstants.rightPoints [2],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
 
     //This goes from ball 2 to ball 3 (the one in the terminal)
     Trajectory right5BallPart3 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [2],
+        AutoConstants.rightPoints [waypointIndex++],
         List.of(),
-        AutoConstants.rightPoints [3],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
       
     //right5BallPart2 = right5BallPart2.concatenate(right5BallPart3);
@@ -92,17 +85,17 @@ public class Right5Ball extends SequentialCommandGroup {
 
     //This goes to ball 4 from ball 3
     Trajectory right5BallPart4 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [3],
+        AutoConstants.rightPoints [waypointIndex++],
         List.of(),
-        AutoConstants.rightPoints [4],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
       
     
     //This goes from ball 4 to a better shooting position
     Trajectory right5BallPart5 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [4],
+        AutoConstants.rightPoints [waypointIndex++],
         List.of(),
-        AutoConstants.rightPoints [5],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
 
     var thetaController =
@@ -110,15 +103,15 @@ public class Right5Ball extends SequentialCommandGroup {
             Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    List<Double> waypointTimeStamps = new ArrayList<Double>();
-    waypointIndex = 0;
-    Supplier<Rotation2d> rotSupplier = () -> {
-      double curTime = m_timer.get();
-      if(curTime >= waypointTimeStamps.get(waypointIndex)) {
-        waypointIndex++;
-      }
-      return Constants.AutoConstants.rightPoints[waypointIndex].getRotation();
-    };
+    // List<Double> waypointTimeStamps = new ArrayList<Double>();
+    // waypointIndex = 0;
+    // Supplier<Rotation2d> rotSupplier = () -> {
+    //   double curTime = m_timer.get();
+    //   if(curTime >= waypointTimeStamps.get(waypointIndex)) {
+    //     waypointIndex++;
+    //   }
+    //   return Constants.AutoConstants.rightPoints[waypointIndex].getRotation();
+    // };
 
     SwerveControllerCommand swerveControllerCommand1 = 
         new SwerveControllerCommand(
@@ -130,17 +123,6 @@ public class Right5Ball extends SequentialCommandGroup {
             new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             s_Swerve::setModuleStates,
             s_Swerve);
-
-    SwerveControllerCommand swerveControllerCommand1Up = 
-        new SwerveControllerCommand(
-            right5BallPart1Up,
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            s_Swerve::setModuleStates,
-            s_Swerve);            
 
     SwerveControllerCommand swerveControllerCommand2 = 
         new SwerveControllerCommand(
@@ -206,7 +188,6 @@ public class Right5Ball extends SequentialCommandGroup {
       //Picks up ball 1  
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand1,
-      swerveControllerCommand1Up,
       new InstantCommand(() -> States.stopIntake()),
 
       //Activates the shooter and shoots the 2 balls
@@ -218,76 +199,51 @@ public class Right5Ball extends SequentialCommandGroup {
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
-      new InstantCommand(() -> States.deactivateShooter()),
+      new InstantCommand(() -> States.deactivateShooter())//,
 
-      //Turns to ball 2
-      // swerveControllerCommand1T,
+      // //Turns to ball 2
+      // // swerveControllerCommand1T,
 
-      //Picks up ball 2 and 3
-      new InstantCommand(() -> States.intake()),
-      swerveControllerCommand2,
-      // swerveControllerCommand2T,
-      swerveControllerCommand3,
+      // //Picks up ball 2 and 3
+      // new InstantCommand(() -> States.intake()),
+      // swerveControllerCommand2,
+      // // swerveControllerCommand2T,
+      // swerveControllerCommand3,
     
-      new InstantCommand(() -> States.stopIntake()),
+      // new InstantCommand(() -> States.stopIntake()),
 
-      //Activates the shooter and shoots the 2 balls
-      new InstantCommand(() -> States.activateShooter()),
-      new WaitCommand(1.0), 
+      // //Activates the shooter and shoots the 2 balls
+      // new InstantCommand(() -> States.activateShooter()),
+      // new WaitCommand(1.0), 
       
-      new ParallelDeadlineGroup(
-        new WaitCommand(1),
-        new InstantCommand(() -> States.feed())),
+      // new ParallelDeadlineGroup(
+      //   new WaitCommand(1),
+      //   new InstantCommand(() -> States.feed())),
 
-      new InstantCommand(() -> States.deactivateShooter()),
-      new InstantCommand(() -> States.stopIntake()),
+      // new InstantCommand(() -> States.deactivateShooter()),
+      // new InstantCommand(() -> States.stopIntake()),
 
-      //Picks up ball 4
-      new InstantCommand(() -> States.intake()),
-      swerveControllerCommand4,
-      new InstantCommand(() -> States.stopIntake()),
+      // //Picks up ball 4
+      // new InstantCommand(() -> States.intake()),
+      // swerveControllerCommand4,
+      // new InstantCommand(() -> States.stopIntake()),
 
-      //Turns to the goal
-      swerveControllerCommand5,
+      // //Turns to the goal
+      // swerveControllerCommand5,
 
-      //Activated the shooter and shoots the ball
-      new InstantCommand(() -> States.activateShooter()),
-      new WaitCommand(1.0), 
+      // //Activated the shooter and shoots the ball
+      // new InstantCommand(() -> States.activateShooter()),
+      // new WaitCommand(1.0), 
       
-      new ParallelDeadlineGroup(
-        new WaitCommand(1),
-        new InstantCommand(() -> States.feed())),
+      // new ParallelDeadlineGroup(
+      //   new WaitCommand(1),
+      //   new InstantCommand(() -> States.feed())),
 
-      new InstantCommand(() -> States.deactivateShooter()),
-      new InstantCommand(() -> States.stopIntake())
+      // new InstantCommand(() -> States.deactivateShooter()),
+      // new InstantCommand(() -> States.stopIntake())
     );
     
   }
-
-  
-
-  @Override
-  public void initialize() {
-    // TODO Auto-generated method stub
-    super.initialize();
-    m_timer.reset();
-    m_timer.start();
-  }
-
-  @Override
-  public void execute() {
-    // TODO Auto-generated method stub
-    super.execute();
-    double curTime = m_timer.get();
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-      // TODO Auto-generated method stub
-      super.end(interrupted);
-  }
-
-
   
 }
 
