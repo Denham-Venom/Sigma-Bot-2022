@@ -35,7 +35,6 @@ public class Swerve extends SubsystemBase {
     private Limelight limelight;
     private int currentNeutral = 0;
     private boolean isLowGear = true;
-    private double swerveSpeed;
 
     public Swerve(Vision m_Vision) {
         Constants.Swerve.thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -69,6 +68,14 @@ public class Swerve extends SubsystemBase {
             isLowGear = false;
         } else {
             isLowGear = true;
+        }
+    }
+
+    public double gethighLowGear() {
+        if(isLowGear) {
+            return Constants.Swerve.lowGearValue;
+        } else {
+            return Constants.Swerve.highGearValue;
         }
     }
 
