@@ -2,20 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-//I think this is done
-
 package frc.robot.autos;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.spline.Spline.ControlVector;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -34,59 +41,72 @@ import frc.robot.subsystems.Swerve;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Right5Ball extends SequentialCommandGroup {
-  /** Creates a new right5Ball. */
-  public Right5Ball(Swerve s_Swerve) {
 
+  //private Timer m_timer;
+  private int waypointIndex;
+
+  /** Creates a new right5Ball. */
+  public Right5Ball(Swerve s_Swerve, Shooter m_Shooter) {
+
+    //m_timer = new Timer();
+    waypointIndex = 0;
     Pose2d startPos = AutoConstants.startPos;
 
     //This goes from the start position to ball 1
     Trajectory right5BallPart1 = TrajectoryGenerator.generateTrajectory(
         startPos,
         List.of(),
-        AutoConstants.rightPoints [0],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
     
     //This goes from ball 1 to ball 2
     Trajectory right5BallPart2 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [0],
-        List.of(),
-        AutoConstants.rightPoints [1],
+        List.of(
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex]),
         Constants.Swerve.trajectoryConfig);
 
-    //This goes from ball 2 to ball 3 (the one in the terminal)
+    //This goes to ball 4 from ball 3
     Trajectory right5BallPart3 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [1],
-        List.of(),
-        AutoConstants.rightPoints [2],
+        List.of(
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex]),
         Constants.Swerve.trajectoryConfig);
-
-    //This goes from ball 3 to ball 4
+      
+    
+    //This goes from ball 4 to a better shooting position
     Trajectory right5BallPart4 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [2],
+        AutoConstants.rightPoints [waypointIndex++],
         List.of(),
-        AutoConstants.rightPoints [3],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
-
-    // //This goes from ball 4 to a better shooting position
-    // Trajectory right5BallPart5 = TrajectoryGenerator.generateTrajectory(
-    //     AutoConstants.rightPoints [3],
-    //     List.of(),
-    //     AutoConstants.rightPoints [4],
-    //     Constants.Swerve.trajectoryConfig);
 
     var thetaController =
         new ProfiledPIDController(
             Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    SwerveControllerCommand swerveControllerCommand = 
+    // List<Double> waypointTimeStamps = new ArrayList<Double>();
+    // waypointIndex = 0;
+    // Supplier<Rotation2d> rotSupplier = () -> {
+    //   double curTime = m_timer.get();
+    //   if(curTime >= waypointTimeStamps.get(waypointIndex)) {
+    //     waypointIndex++;
+    //   }
+    //   return Constants.AutoConstants.rightPoints[waypointIndex].getRotation();
+    // };
+
+    SwerveControllerCommand swerveControllerCommand1 = 
         new SwerveControllerCommand(
             right5BallPart1,
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController,
+            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             s_Swerve::setModuleStates,
             s_Swerve);
 
@@ -97,7 +117,7 @@ public class Right5Ball extends SequentialCommandGroup {
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController,
+            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             s_Swerve::setModuleStates,
             s_Swerve);
 
@@ -108,7 +128,7 @@ public class Right5Ball extends SequentialCommandGroup {
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController,
+            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             s_Swerve::setModuleStates,
             s_Swerve);
             
@@ -119,20 +139,9 @@ public class Right5Ball extends SequentialCommandGroup {
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            thetaController,
+            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             s_Swerve::setModuleStates,
             s_Swerve);
-
-    // SwerveControllerCommand swerveControllerCommand5 = 
-    //     new SwerveControllerCommand(
-    //         right5BallPart5,
-    //         s_Swerve::getPose,
-    //         Constants.Swerve.swerveKinematics,
-    //         new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-    //         new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-    //         thetaController,
-    //         s_Swerve::setModuleStates,
-    //         s_Swerve);
             
     addCommands(
       //Gets the initial pose
@@ -140,11 +149,9 @@ public class Right5Ball extends SequentialCommandGroup {
       //Deploys the intake
       new InstantCommand(() -> States.deployIntake()),
 
-      //Does the first trajectory while intaking and picks one ball
-      new ParallelDeadlineGroup (
-        swerveControllerCommand,
-        new InstantCommand(() -> States.intake())),
-
+      //Picks up ball 1  
+      new InstantCommand(() -> States.intake()),
+      swerveControllerCommand1,
       new InstantCommand(() -> States.stopIntake()),
 
       //Activates the shooter and shoots the 2 balls
@@ -158,11 +165,10 @@ public class Right5Ball extends SequentialCommandGroup {
       new InstantCommand(() -> States.stopIntake()),
       new InstantCommand(() -> States.deactivateShooter()),
 
-      //Does the second and third trajectories while intaking and picks up 2 balls
+      //Picks up ball 2 and 3
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand2,
-      swerveControllerCommand3,
-
+    
       new InstantCommand(() -> States.stopIntake()),
 
       //Activates the shooter and shoots the 2 balls
@@ -176,12 +182,13 @@ public class Right5Ball extends SequentialCommandGroup {
       new InstantCommand(() -> States.deactivateShooter()),
       new InstantCommand(() -> States.stopIntake()),
 
-      //Does the fourth trajectory while intaking and picks up 1 ball
+      //Picks up ball 4
       new InstantCommand(() -> States.intake()),
-      swerveControllerCommand4,
+      swerveControllerCommand3,
       new InstantCommand(() -> States.stopIntake()),
 
-      // swerveControllerCommand5,
+      //Turns to the goal
+      swerveControllerCommand4,
 
       //Activated the shooter and shoots the ball
       new InstantCommand(() -> States.activateShooter()),
