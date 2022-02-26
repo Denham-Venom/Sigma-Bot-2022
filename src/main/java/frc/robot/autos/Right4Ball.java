@@ -31,28 +31,27 @@ import frc.robot.subsystems.Swerve;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Right4Ball extends SequentialCommandGroup {
-  /** Creates a new right4Ball. 
-   * @param m_Shooter */
-  public Right4Ball(Swerve s_Swerve) {
+  
+  private int waypointIndex;
+  
+  /** Creates a new right4Ball.*/
+  public Right4Ball(Swerve s_Swerve, Shooter m_Shooter) {
 
-    Pose2d startPos = AutoConstants.startPos; //Needs to be for the default
+    Pose2d startPos = AutoConstants.startPos; 
+    waypointIndex = 0;
 
       Trajectory right4BallPart1 = TrajectoryGenerator.generateTrajectory(
         startPos,
         List.of(),
-        AutoConstants.rightPoints [0],
+        AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
 
       Trajectory right4BallPart2 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [0],
-        List.of(),
-        AutoConstants.rightPoints [1],
-        Constants.Swerve.trajectoryConfig);
-
-      Trajectory right4BallPart3 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.rightPoints [1],
-        List.of(),
-        AutoConstants.rightPoints [2],
+        List.of(
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex++],
+        AutoConstants.rightPoints [waypointIndex]),
         Constants.Swerve.trajectoryConfig);
   
           var thetaController =
@@ -74,17 +73,6 @@ public class Right4Ball extends SequentialCommandGroup {
           SwerveControllerCommand swerveControllerCommand2 = 
               new SwerveControllerCommand(
                   right4BallPart2,
-                  s_Swerve::getPose,
-                  Constants.Swerve.swerveKinematics,
-                  new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                  new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                  thetaController,
-                  s_Swerve::setModuleStates,
-                  s_Swerve);
-
-          SwerveControllerCommand swerveControllerCommand3 = 
-              new SwerveControllerCommand(
-                  right4BallPart3,
                   s_Swerve::getPose,
                   Constants.Swerve.swerveKinematics,
                   new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -119,7 +107,6 @@ public class Right4Ball extends SequentialCommandGroup {
         //Does the second and third trajectory while intaking and picks up 2 balls
         new InstantCommand(() -> States.intake()),
         swerveControllerCommand2,
-        swerveControllerCommand3,
   
         new InstantCommand(() -> States.stopIntake()),
 
