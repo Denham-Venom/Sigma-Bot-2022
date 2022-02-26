@@ -29,28 +29,28 @@ import frc.robot.subsystems.Swerve;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Left4Ball extends SequentialCommandGroup {
+
+  private int waypointIndex;
+
   /** Creates a new Left4Ball. */
   public Left4Ball(Swerve s_Swerve) {
 
     Pose2d startPos = AutoConstants.startPos;
+    waypointIndex = 0;
     
       Trajectory Left4BallPart1 = TrajectoryGenerator.generateTrajectory(
-        startPos,
+        new Pose2d(7.103, 4.757, new Rotation2d(2.752)),
         List.of(),
-        AutoConstants.leftPoints [0],
+        AutoConstants.leftPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
 
       Trajectory Left4BallPart2 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.leftPoints [0],
-        List.of(),
-        AutoConstants.leftPoints [1],
-        Constants.Swerve.trajectoryConfig);
-
-      Trajectory Left4BallPart3 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.leftPoints [1],
-        List.of(),
-        AutoConstants.leftPoints [2],
-        Constants.Swerve.trajectoryConfig);
+          List.of(
+          AutoConstants.leftPoints [waypointIndex++],
+          AutoConstants.leftPoints [waypointIndex++],
+          AutoConstants.leftPoints [waypointIndex++],
+          AutoConstants.leftPoints [waypointIndex]),
+          Constants.Swerve.trajectoryConfig);
   
           var thetaController =
               new ProfiledPIDController(
@@ -71,17 +71,6 @@ public class Left4Ball extends SequentialCommandGroup {
           SwerveControllerCommand swerveControllerCommand2 = 
             new SwerveControllerCommand(
                 Left4BallPart2,
-                s_Swerve::getPose,
-                Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-                thetaController,
-                s_Swerve::setModuleStates,
-                s_Swerve);
-
-          SwerveControllerCommand swerveControllerCommand3 = 
-            new SwerveControllerCommand(
-                Left4BallPart3,
                 s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
                 new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -116,7 +105,6 @@ public class Left4Ball extends SequentialCommandGroup {
         //Does the second and third trajectory while intaking and picks up 2 balls
         new InstantCommand(() -> States.intake()),
         swerveControllerCommand2,
-        swerveControllerCommand3,
   
         new InstantCommand(() -> States.stopIntake()),
 
