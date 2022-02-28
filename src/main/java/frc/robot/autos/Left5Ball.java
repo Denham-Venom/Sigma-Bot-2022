@@ -114,7 +114,7 @@ public class Left5Ball extends SequentialCommandGroup {
       new WaitCommand(1.0), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
+        new WaitCommand(0.5),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
@@ -131,7 +131,7 @@ public class Left5Ball extends SequentialCommandGroup {
       new WaitCommand(1.0), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
+        new WaitCommand(0.5),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.deactivateShooter()),
@@ -147,7 +147,7 @@ public class Left5Ball extends SequentialCommandGroup {
       new WaitCommand(1.0), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
+        new WaitCommand(0.5),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.deactivateShooter()),

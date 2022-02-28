@@ -241,7 +241,7 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 1.5;
+        public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
@@ -270,24 +270,24 @@ public final class Constants {
                    //new Pose2d(6.152, 5.156, new Rotation2d(2.399)),    //Middle top starting position
                public static final Pose2d[] rightPoints = 
                {
-                   new Pose2d(7.53, 0.899, new Rotation2d(-1.629)),    //Goes to ball 1
-                   new Pose2d(6.687, 1.241, new Rotation2d(2.687)),    //Moves to the side a bit before going to ball 2 so it doesnt hit the wall
-                   new Pose2d(5.409, 1.983, new Rotation2d(-2.918)),   //Goes to ball 2
-                   new Pose2d(1.536, 1.54, new Rotation2d(-2.434)),    //Goes to ball 3
-                   new Pose2d(1.142, 2.154, new Rotation2d(0.658)),    //Moves to the side a bit before going to ball 4 so it doesnt hit the wall
-                   new Pose2d(4.54, 5.748, new Rotation2d(0.82)),      //Goes to ball 4
-                   new Pose2d(5.423, 5.192, new Rotation2d(2.99))      //Rotates to face the goal after going to ball 4
+                new Pose2d(7.57, 1.027, new Rotation2d(-1.575)),
+                new Pose2d(5.6, 1.769, new Rotation2d(3.004)),
+                new Pose2d(1.726, 1.911, new Rotation2d(-2.398)),
+                new Pose2d(1.998, 2.382, new Rotation2d(0.392)),
+                new Pose2d(3.874, 4.564, new Rotation2d(1.057)),
+                new Pose2d(4.526, 6.19, new Rotation2d(0)),
+                new Pose2d(5.572, 5.933, new Rotation2d(-0.586)) 
                };
        
                public static final Pose2d[] leftPoints = 
                {
                     new Pose2d(5.381, 5.855, new Rotation2d(2.602)),
-                    new Pose2d(3.316, 3.694, new Rotation2d(-2.098)),
-                    new Pose2d(1.549, 1.654, new Rotation2d(-2.478)),
-                    new Pose2d(1.984, 1.868, new Rotation2d(0.474)),
+                    new Pose2d(4.241, 4.15, new Rotation2d(-2.098)),
+                    new Pose2d(1.74, 1.74, new Rotation2d(-2.478)),
+                    new Pose2d(1.984, 1.868, new Rotation2d(0.429)),
                     new Pose2d(4.485, 1.754, new Rotation2d(0.2)),
                     new Pose2d(5.763, 1.983, new Rotation2d(-2.297)),
-                    new Pose2d(7.57, 0.913, new Rotation2d(-1.658))
+                    new Pose2d(7.638, 1.112, new Rotation2d(-1.636))
                 };
     }
     
