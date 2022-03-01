@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazySparkMAX;
 import frc.Controllers.LazyTalonFX;
@@ -14,6 +16,10 @@ public class Climber extends SubsystemBase {
   private LazySparkMAX climberMotor;
   public Climber() {
     //climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
+    // SmartDashboard.putData("Climber Motor", new StartEndCommand(
+    //   () -> States.activateClimber(),
+    //   () -> States.deactivateClimber()
+    // ));
   }
 
   @Override

@@ -6,9 +6,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
@@ -28,7 +30,7 @@ public class Shooter extends SubsystemBase {
 
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
-  private ShuffleboardTab gamerist = Shuffleboard.getTab("gamer");
+  private ShuffleboardTab gamer = Shuffleboard.getTab("gamer");
   
   public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.childShooterConstants);
@@ -42,7 +44,11 @@ public class Shooter extends SubsystemBase {
     //turretMotor.configPID(Constants.Shooter.turretPID);
     limelight = m_Vision.getLimelight();
 
-    //SmartDashboard.putData("Shooter Motors", new setPower(0));
+
+    SmartDashboard.putData("Shooter Motors", new StartEndCommand(
+      () -> States.activateShooter(),
+      () -> States.deactivateShooter()
+    ));
 
     if (Constants.Shooter.calibrationMode){
       SmartDashboard.getNumber("Shooter RPM Calib", 0);
