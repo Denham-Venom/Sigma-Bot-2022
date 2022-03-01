@@ -33,11 +33,11 @@ public class Left5Ball extends SequentialCommandGroup {
   /** Creates a new Left5Ball. */
   public Left5Ball(Swerve s_Swerve) {    
     
-    Pose2d startPos = AutoConstants.startPos;
+    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
     waypointIndex = 0;
     
       Trajectory Left5BallPart1 = TrajectoryGenerator.generateTrajectory(
-          new Pose2d(7.09, 4.771, new Rotation2d(2.769)),
+          startPos,
           List.of(),
           AutoConstants.leftPoints [waypointIndex],
           Constants.Swerve.trajectoryConfig);
