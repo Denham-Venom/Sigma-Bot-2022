@@ -29,7 +29,7 @@ public class Left2Ball extends SequentialCommandGroup {
   /** Creates a new Left2Ball. */
   public Left2Ball(Swerve s_Swerve) {
     
-    Pose2d startPos = AutoConstants.startPos;
+    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
     
     Trajectory Left2Ball = TrajectoryGenerator.generateTrajectory(
         startPos,

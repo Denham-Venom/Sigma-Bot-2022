@@ -258,16 +258,14 @@ public final class Constants {
 
         public static final Pose2d startPos = new Pose2d(7.606, 2.974, new Rotation2d(-1.894));
          //Starting Positions
-            //Bottom
+            //Right
             //new Pose2d(7.606, 2.974, new Rotation2d(-1.894)),   //0 Defalt bottom starting position
             //new Pose2d(6.601, 2.546, new Rotation2d(-2.283)),   //1 Right bottom starting position
             //new Pose2d(8.439, 1.876, new Rotation2d(-1.561)),   //2 Left bottom starting position
-            //new Pose2d(7.216, 1.99, new Rotation2d(-2.363)),    //3 Middle bottom starting postion
-            //Top
+            //Left
             //new Pose2d(7.103, 4.871, new Rotation2d(2.742)),    //Defalt top starting position
             //new Pose2d(5.962, 3.958, new Rotation2d(3.141)),    //Right top starting position
             //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
-            //new Pose2d(6.152, 5.156, new Rotation2d(2.399)),    //Middle top starting position
         public static final Pose2d[] rightPoints = 
         {
             new Pose2d(7.606, 0.92, new Rotation2d(1.57)),      //Goes to ball 1 from bottom tarmac

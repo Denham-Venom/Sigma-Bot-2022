@@ -50,7 +50,7 @@ public class Right5Ball extends SequentialCommandGroup {
 
     //m_timer = new Timer();
     waypointIndex = 0;
-    Pose2d startPos = AutoConstants.startPos;
+    Pose2d startPos = AutoCommands.getStartingPose("RightMid");
 
     //This goes from the start position to ball 1
     Trajectory right5BallPart1 = TrajectoryGenerator.generateTrajectory(
