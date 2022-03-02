@@ -126,7 +126,7 @@ public class RobotContainer {
       m_chooser.addOption("Right2Ball", new Right4Ball(s_Swerve));
       m_chooser.addOption("Left5Ball", new Right4Ball(s_Swerve));
       m_chooser.addOption("Left4Ball", new Right4Ball(s_Swerve));
-      m_chooser.addOption("Leftt3Ball", new Right4Ball(s_Swerve));
+      m_chooser.addOption("Left3Ball", new Right4Ball(s_Swerve));
       m_chooser.addOption("Left2Ball", new Right4Ball(s_Swerve));
       // Puts the chooser on the dashboard
       SmartDashboard.putData("auto", m_chooser);

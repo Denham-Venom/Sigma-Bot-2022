@@ -268,18 +268,25 @@ public final class Constants {
             //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
         public static final Pose2d[] rightPoints = 
         {
-            new Pose2d(7.606, 0.92, new Rotation2d(1.57)),      //Goes to ball 1 from bottom tarmac
-            new Pose2d(5.408, 1.448, new Rotation2d(2.258)),    //Goes to ball 2 from bottom tarmac
-            new Pose2d(1.436, 1.548, new Rotation2d(0.798)),    //Goes to ball 3 from bottom tarmac
-            new Pose2d(4.607, 5.705, new Rotation2d(0.952)),    //Goes to ball 4 from bottom tarmac
+            new Pose2d(7.584, 1.084, new Rotation2d(-1.575)),
+            new Pose2d(6.986, 1.269, new Rotation2d(2.25)),
+            new Pose2d(5.572, 1.868, new Rotation2d(3.134)),
+            new Pose2d(1.699, 1.811, new Rotation2d(-2.269)),
+            new Pose2d(2.324, 2.111, new Rotation2d(0.583)),
+            new Pose2d(4.771, 5.662, new Rotation2d(1.201)),
+            new Pose2d(4.811, 5.577, new Rotation2d(2.855))
         };
+
         public static final Pose2d[] leftPoints = 
         {
-            new Pose2d(5.272, 5.712, new Rotation2d(2.255)),    //Goes to ball 4 from top tarmac
-            new Pose2d(1.536, 1.583, new Rotation2d(-2.475)),   //Goes to ball 3 from top tarmac
-            new Pose2d(4.499, 1.783, new Rotation2d(0.161)),    //Goes to ball 2 from top tarmac
-            new Pose2d(7.598, 0.913, new Rotation2d(-1.623))    //Goes to ball 1 from top tarmac
+            new Pose2d(5.381, 5.855, new Rotation2d(2.602)),
+            new Pose2d(4.241, 4.15, new Rotation2d(-2.098)),
+            new Pose2d(1.74, 1.74, new Rotation2d(-2.478)),
+            new Pose2d(1.984, 1.868, new Rotation2d(0.429)),
+            new Pose2d(4.485, 1.754, new Rotation2d(0.2)),
+            new Pose2d(5.763, 1.983, new Rotation2d(-2.297)),
+            new Pose2d(7.638, 1.112, new Rotation2d(-1.636))
         };
-    }
+}
     
 }
