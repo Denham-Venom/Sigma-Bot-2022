@@ -46,7 +46,7 @@ public class Right5Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new right5Ball. */
-  public Right5Ball(Swerve s_Swerve, Shooter m_Shooter) {
+  public Right5Ball(Swerve s_Swerve) {
 
     //m_timer = new Timer();
     waypointIndex = 0;
@@ -71,8 +71,8 @@ public class Right5Ball extends SequentialCommandGroup {
     //This goes to ball 4 from ball 3
     Trajectory right5BallPart3 = TrajectoryGenerator.generateTrajectory(
         List.of(
-        AutoConstants.rightPoints [waypointIndex++],
-        AutoConstants.rightPoints [waypointIndex++],
+        //AutoConstants.rightPoints [waypointIndex++],
+        //AutoConstants.rightPoints [waypointIndex++],
         AutoConstants.rightPoints [waypointIndex]),
         Constants.Swerve.trajectoryConfig);
       

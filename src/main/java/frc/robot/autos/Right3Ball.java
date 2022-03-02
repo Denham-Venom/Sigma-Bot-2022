@@ -36,7 +36,7 @@ public class Right3Ball extends SequentialCommandGroup {
   private int waypointIndex;
   
   /** Creates a new right3Ball. */
-  public Right3Ball(Swerve s_Swerve, Shooter m_Shooter) {
+  public Right3Ball(Swerve s_Swerve) {
 
     Pose2d startPos = AutoCommands.getStartingPose("RightMid");
     waypointIndex = 0;
