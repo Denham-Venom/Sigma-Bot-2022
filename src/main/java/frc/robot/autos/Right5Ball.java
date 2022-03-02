@@ -46,11 +46,11 @@ public class Right5Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new right5Ball. */
-  public Right5Ball(Swerve s_Swerve) {
+  public Right5Ball(Swerve s_Swerve, String start) {
 
     //m_timer = new Timer();
     waypointIndex = 0;
-    Pose2d startPos = AutoCommands.getStartingPose("RightMid");
+    Pose2d startPos = AutoCommands.getStartingPose(start);
 
     //This goes from the start position to ball 1
     Trajectory right5BallPart1 = TrajectoryGenerator.generateTrajectory(
