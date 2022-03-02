@@ -14,7 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class AutoCommands {
     //"RightMid" - first word: left/right tarmac, second word: left/mid/right positions on tarmac
     // So the above example would be the Right Tarmac in the Middle Position
-    Map<String, Pose2d> positions = Map.ofEntries(
+    static Map<String, Pose2d> positions = Map.ofEntries(
         new AbstractMap.SimpleImmutableEntry<String, Pose2d>("LeftLeft", new Pose2d(6.764, 5.712, new Rotation2d(2.035))),
         new AbstractMap.SimpleImmutableEntry<String, Pose2d>("LeftMid", new Pose2d(7.103, 4.871, new Rotation2d(2.742))),
         new AbstractMap.SimpleImmutableEntry<String, Pose2d>("LeftRight", new Pose2d(5.962, 3.958, new Rotation2d(3.141))),
@@ -23,11 +23,7 @@ public class AutoCommands {
         new AbstractMap.SimpleImmutableEntry<String, Pose2d>("RightRight", new Pose2d(6.601, 2.546, new Rotation2d(-2.283)))
     );
 
-    public void selectPath(String start, int numBalls) {
-    
-    }
-
-    public Pose2d getStartingPose(String start) {
+    public static Pose2d getStartingPose(String start) {
         return positions.get(start);
     }
 }

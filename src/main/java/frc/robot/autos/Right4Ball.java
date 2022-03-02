@@ -37,7 +37,7 @@ public class Right4Ball extends SequentialCommandGroup {
   /** Creates a new right4Ball.*/
   public Right4Ball(Swerve s_Swerve, Shooter m_Shooter) {
 
-    Pose2d startPos = AutoConstants.startPos; 
+    Pose2d startPos = AutoCommands.getStartingPose("RightMid");
     waypointIndex = 0;
 
       Trajectory right4BallPart1 = TrajectoryGenerator.generateTrajectory(
