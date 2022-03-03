@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.time.Instant;
 
+import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -85,8 +86,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-      //Sendable Chooser for Autos
-      SendableChooser<Command> m_chooser = new SendableChooser<>();
+  //Sendable Chooser for Autos
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  SendableChooser<Command> m_chooseBall = new SendableChooser<>();
+  SendableChooser<Command> m_chooseTarmac = new SendableChooser<>();
 
   private void configureButtonBindings() {
     /* Driver Buttons */
@@ -128,8 +131,18 @@ public class RobotContainer {
       m_chooser.addOption("Left4Ball", new Right4Ball(s_Swerve));
       m_chooser.addOption("Left3Ball", new Right4Ball(s_Swerve));
       m_chooser.addOption("Left2Ball", new Right4Ball(s_Swerve));
+
+      m_chooseBall.setDefaultOption("2 Balls", AutoCommands.setBalls(2));
+      m_chooseBall.addOption("3 Balls", AutoCommands.setBalls(3));
+      m_chooseBall.addOption("4 Balls", AutoCommands.setBalls(4));
+      m_chooseBall.addOption("5 Balls", AutoCommands.setBalls(5));
+
+      m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.setTarmac(false));
+      m_chooseTarmac.addOption("Left Tarmac", AutoCommands.setTarmac(true));
       // Puts the chooser on the dashboard
       SmartDashboard.putData("auto", m_chooser);
+      SmartDashboard.putData("Auto # Balls", m_chooseBall);
+      SmartDashboard.putData("Auto Choose Tarmac", m_chooseTarmac);
   };
 
   /**
