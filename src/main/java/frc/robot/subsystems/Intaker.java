@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazySparkMAX;
 import frc.Controllers.LazyTalonFX;
@@ -37,6 +39,20 @@ public class Intaker extends SubsystemBase {
     // spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     // intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     // intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
+
+    indexerMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    //spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
+    intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
+    SmartDashboard.putData("Intake Motors", new StartEndCommand(
+      () -> States.intake(),
+      () -> States.stopIntake()
+    ));
+    SmartDashboard.putData("Extend/Retract Intaker", new StartEndCommand(
+      () -> States.deployIntake(),
+      () -> States.retractIntake()
+    ));
+
   }
 
   @Override
@@ -44,9 +60,11 @@ public class Intaker extends SubsystemBase {
     // This method will be called once per scheduler run
     switch(States.intakeState) {
       case intaking:
+      // check if a ball is detected by a sensor (2 total)
+      // if it is, run only the motors with no ball detected
         if(!intakeSensor.get()) {
           if(!shooterSensor.get()) {
-            spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+            //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
           } else {
             spinUpMotor.set(ControlType.kDutyCycle, 0);
           }
@@ -55,25 +73,28 @@ public class Intaker extends SubsystemBase {
         }
         else if(!shooterSensor.get()) {
           indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+          //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
           intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         } else {
           indexerMotor.set(ControlMode.PercentOutput, 0);
-          spinUpMotor.set(ControlType.kDutyCycle, 0);
+          //spinUpMotor.set(ControlType.kDutyCycle, 0);
           intakeMotor.set(ControlMode.PercentOutput, 0);
         }
         break;
       case outtaking:
+      // reverses the intake motor
         intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.IntakeSpeed);
         break;
       case feeding: 
+      // Runs all intake/indexer motors
         indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-        spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+        //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
         intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         break;
       case disabled:
+      // Stops all intake/indexer motors
         indexerMotor.set(ControlMode.PercentOutput, 0);
-        spinUpMotor.set(ControlType.kDutyCycle, 0);
+        //spinUpMotor.set(ControlType.kDutyCycle, 0);
         intakeMotor.set(ControlMode.PercentOutput, 0);
     }
 

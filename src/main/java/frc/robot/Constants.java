@@ -276,7 +276,7 @@ public final class Constants {
             new Pose2d(1.699, 1.811, new Rotation2d(-2.269)),
             new Pose2d(2.324, 2.111, new Rotation2d(0.583)),
             new Pose2d(4.771, 5.662, new Rotation2d(1.201)),
-            new Pose2d(4.811, 5.577, new Rotation2d(2.855))
+            new Pose2d(5.79, 6.247, new Rotation2d(2.353))
         };
 
         public static final Pose2d[] leftPoints = 

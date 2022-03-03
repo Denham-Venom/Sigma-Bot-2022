@@ -143,6 +143,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
+        SmartDashboard.putBoolean("preShoot", States.shooterState == States.ShooterStates.preShoot);
         swerveOdometry.update(getYaw(), getStates());  
 
         for(SwerveModule mod : mSwerveMods){

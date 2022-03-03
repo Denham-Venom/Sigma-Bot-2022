@@ -4,10 +4,16 @@
 
 package frc.robot;
 
+import java.time.Instant;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -61,6 +67,7 @@ public class RobotContainer {
   private final Vision m_Vision = new Vision();
   private final Swerve s_Swerve = new Swerve(m_Vision);
   //private final Shooter m_Shooter = new Shooter(m_Vision);
+
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -78,6 +85,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+      //Sendable Chooser for Autos
+      SendableChooser<Command> m_chooser = new SendableChooser<>();
+
   private void configureButtonBindings() {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
@@ -103,13 +113,24 @@ public class RobotContainer {
       // Test Hood
       //testHood.whenPressed(new InstantCommand(() -> m_Shooter.setHoodAngle(0)));
     
-    /* Operator Buttons */
-    operatorIntakeButton.whileHeld( new StartEndCommand(
-      () -> States.intake(),
-      () -> States.stopIntake()
-    ));
+      /* Operator Buttons */
+      operatorIntakeButton.whileHeld( new StartEndCommand(
+        () -> States.intake(),
+        () -> States.stopIntake()
+      ));
+
+      //Auto command chooser
+      m_chooser.setDefaultOption("Right5Ball", new Right5Ball(s_Swerve));
+      m_chooser.addOption("Right4Ball", new Right4Ball(s_Swerve));
+      m_chooser.addOption("Right3Ball", new Right3Ball(s_Swerve));
+      m_chooser.addOption("Right2Ball", new Right2Ball(s_Swerve));
+      m_chooser.addOption("Left5Ball", new Left5Ball(s_Swerve));
+      m_chooser.addOption("Left4Ball", new Left4Ball(s_Swerve));
+      m_chooser.addOption("Left3Ball", new Left3Ball(s_Swerve));
+      m_chooser.addOption("Left2Ball", new Left2Ball(s_Swerve));
+      // Puts the chooser on the dashboard
+      SmartDashboard.putData("auto", m_chooser);
   };
-  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -118,6 +139,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new Right5Ball(s_Swerve, "RightMid");
+    return m_chooser.getSelected();
   }
 }
