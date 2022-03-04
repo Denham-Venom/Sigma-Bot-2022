@@ -87,7 +87,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   //Sendable Chooser for Autos
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  // SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<AutoCommands.NumberOfBalls> m_chooseBall = new SendableChooser<>();
   SendableChooser<AutoCommands.StartingTarmac> m_chooseTarmac = new SendableChooser<>();
   SendableChooser<AutoCommands.StartingPosition> m_choosePosition = new SendableChooser<>();
@@ -145,8 +145,9 @@ public class RobotContainer {
       m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.StartingTarmac.right);
       m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
       // Puts the chooser on the dashboard
-      SmartDashboard.putData("auto", m_chooser);
+      //SmartDashboard.putData("auto", m_chooser);
       SmartDashboard.putData("Auto # Balls", m_chooseBall);
+      SmartDashboard.putData("Auto Choose Position", m_choosePosition);
       SmartDashboard.putData("Auto Choose Tarmac", m_chooseTarmac);
   };
 
