@@ -33,9 +33,9 @@ public class Left4Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new Left4Ball. */
-  public Left4Ball(Swerve s_Swerve) {
+  public Left4Ball(Swerve s_Swerve, String position) {
 
-    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
+    Pose2d startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
     
       Trajectory Left4BallPart1 = TrajectoryGenerator.generateTrajectory(

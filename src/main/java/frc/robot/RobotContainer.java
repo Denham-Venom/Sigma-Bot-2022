@@ -88,8 +88,9 @@ public class RobotContainer {
    */
   //Sendable Chooser for Autos
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-  SendableChooser<Command> m_chooseBall = new SendableChooser<>();
-  SendableChooser<Command> m_chooseTarmac = new SendableChooser<>();
+  SendableChooser<AutoCommands.NumberOfBalls> m_chooseBall = new SendableChooser<>();
+  SendableChooser<AutoCommands.StartingTarmac> m_chooseTarmac = new SendableChooser<>();
+  SendableChooser<AutoCommands.StartingPosition> m_choosePosition = new SendableChooser<>();
 
   private void configureButtonBindings() {
     /* Driver Buttons */
@@ -123,22 +124,26 @@ public class RobotContainer {
       ));
 
       //Auto command chooser
-      m_chooser.setDefaultOption("Right5Ball", new Right5Ball(s_Swerve));
-      m_chooser.addOption("Right4Ball", new Right4Ball(s_Swerve));
-      m_chooser.addOption("Right3Ball", new Right4Ball(s_Swerve));
-      m_chooser.addOption("Right2Ball", new Right4Ball(s_Swerve));
-      m_chooser.addOption("Left5Ball", new Right4Ball(s_Swerve));
-      m_chooser.addOption("Left4Ball", new Right4Ball(s_Swerve));
-      m_chooser.addOption("Left3Ball", new Right4Ball(s_Swerve));
-      m_chooser.addOption("Left2Ball", new Right4Ball(s_Swerve));
+      // m_chooser.setDefaultOption("Right5Ball", new Right5Ball(s_Swerve));
+      // m_chooser.addOption("Right4Ball", new Right4Ball(s_Swerve));
+      // m_chooser.addOption("Right3Ball", new Right4Ball(s_Swerve));
+      // m_chooser.addOption("Right2Ball", new Right4Ball(s_Swerve));
+      // m_chooser.addOption("Left5Ball", new Right4Ball(s_Swerve));
+      // m_chooser.addOption("Left4Ball", new Right4Ball(s_Swerve));
+      // m_chooser.addOption("Left3Ball", new Right4Ball(s_Swerve));
+      // m_chooser.addOption("Left2Ball", new Right4Ball(s_Swerve));
 
-      m_chooseBall.setDefaultOption("2 Balls", AutoCommands.setBalls(2));
-      m_chooseBall.addOption("3 Balls", AutoCommands.setBalls(3));
-      m_chooseBall.addOption("4 Balls", AutoCommands.setBalls(4));
-      m_chooseBall.addOption("5 Balls", AutoCommands.setBalls(5));
+      m_chooseBall.setDefaultOption("2 Balls", AutoCommands.NumberOfBalls.two);
+      m_chooseBall.addOption("3 Balls", AutoCommands.NumberOfBalls.three);
+      m_chooseBall.addOption("4 Balls", AutoCommands.NumberOfBalls.four);
+      m_chooseBall.addOption("5 Balls", AutoCommands.NumberOfBalls.five);
 
-      m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.setTarmac(false));
-      m_chooseTarmac.addOption("Left Tarmac", AutoCommands.setTarmac(true));
+      m_choosePosition.setDefaultOption("Middle of Tarmac", AutoCommands.StartingPosition.middle);
+      m_choosePosition.addOption("Left of Tarmac", AutoCommands.StartingPosition.left);
+      m_choosePosition.addOption("Right of Tarmac", AutoCommands.StartingPosition.right);
+
+      m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.StartingTarmac.right);
+      m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
       // Puts the chooser on the dashboard
       SmartDashboard.putData("auto", m_chooser);
       SmartDashboard.putData("Auto # Balls", m_chooseBall);
@@ -152,6 +157,14 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_chooser.getSelected();
+
+    AutoCommands.StartingTarmac tarmac = m_chooseTarmac.getSelected();
+    AutoCommands.setTarmac(tarmac);
+    AutoCommands.StartingPosition start = m_choosePosition.getSelected();
+    AutoCommands.setPosition(start);
+    AutoCommands.NumberOfBalls balls = m_chooseBall.getSelected();
+    AutoCommands.setBalls(balls);
+
+    return AutoCommands.getSelectedAuto(s_Swerve);
   }
 }

@@ -30,9 +30,9 @@ public class Left3Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new Left3Ball. */
-  public Left3Ball(Swerve s_Swerve) {
+  public Left3Ball(Swerve s_Swerve, String position) {
     
-    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
+    Pose2d startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
     
     Trajectory Left3BallPart1 = TrajectoryGenerator.generateTrajectory(

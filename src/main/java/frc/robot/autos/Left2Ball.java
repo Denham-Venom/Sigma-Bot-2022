@@ -27,9 +27,9 @@ import frc.robot.subsystems.Swerve;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Left2Ball extends SequentialCommandGroup {
   /** Creates a new Left2Ball. */
-  public Left2Ball(Swerve s_Swerve) {
+  public Left2Ball(Swerve s_Swerve, String position) {
     
-    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
+    Pose2d startPos = AutoCommands.getStartingPose("Left" + position);
     
     Trajectory Left2Ball = TrajectoryGenerator.generateTrajectory(
         startPos,

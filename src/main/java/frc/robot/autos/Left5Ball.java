@@ -31,9 +31,9 @@ public class Left5Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new Left5Ball. */
-  public Left5Ball(Swerve s_Swerve) {    
+  public Left5Ball(Swerve s_Swerve, String position) {    
     
-    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
+    Pose2d startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
     
       Trajectory Left5BallPart1 = TrajectoryGenerator.generateTrajectory(

@@ -10,9 +10,16 @@ import java.util.Map;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.Swerve;
 
 /** Add your docs here. */
 public class AutoCommands {
+
+    public enum StartingTarmac {left, right};
+    public enum StartingPosition {left, middle, right};
+    public enum NumberOfBalls {two, three, four, five};
+
     static boolean leftTarmac;
     static String position;
     static int numBalls;
@@ -35,22 +42,117 @@ public class AutoCommands {
         return startPositions.get(start);
     }
 
-    public static Command setTarmac(boolean isLeftTarmac) {
-        leftTarmac = isLeftTarmac;
-        return null;
+    public static void setTarmac(StartingTarmac tarmac) {
+        switch(tarmac) {
+            case left:
+            leftTarmac = true;
+            case right:
+            leftTarmac = false;
+        }
     }
 
-    public static Command setPosition(String aPosition) {
-        position = aPosition;
-        return null;
+    public static void setPosition(StartingPosition aPosition) {
+        switch(aPosition) {
+            case left:
+            position = "Left";
+            case middle:
+            position = "Mid";
+            case right:
+            position = "Right";
+        }
     }
 
-    public static Command setBalls(int balls) {
-        numBalls = balls;
-        return null;
+    public static void setBalls(NumberOfBalls balls) {
+        switch(balls) {
+            case two:
+            numBalls = 2;
+            case three:
+            numBalls = 3;
+            case four:
+            numBalls = 4;
+            case five:
+            numBalls = 5;
+        }
     }
 
-    public static void getPath() {
+    public static Command getSelectedAuto(Swerve swerve) {
         
-    }
+        if(leftTarmac && position == "Left" && numBalls == 2){
+            return new Left2Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Left" && numBalls == 3) {
+            return new Left3Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Left" && numBalls == 4) {
+            return new Left4Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Left" && numBalls == 5) {
+            return new Left5Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Mid" && numBalls == 2) {
+            return new Left2Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Mid" && numBalls == 3) {
+            return new Left3Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Mid" && numBalls == 4) {
+            return new Left4Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Middle" && numBalls == 5) {
+            return new Left5Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Right" && numBalls == 2) {
+            return new Left2Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Right" && numBalls == 3) {
+            return new Left3Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Right" && numBalls == 4) {
+            return new Left4Ball(swerve, position);
+        }
+        else if(leftTarmac && position == "Right" && numBalls == 5) {
+            return new Left5Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Left" && numBalls == 2){
+            return new Right2Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Left" && numBalls == 3) {
+            return new Right3Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Left" && numBalls == 4) {
+            return new Right4Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Left" && numBalls == 5) {
+            return new Right5Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Mid" && numBalls == 2) {
+            return new Right2Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Mid" && numBalls == 3) {
+            return new Right3Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Mid" && numBalls == 4) {
+            return new Right4Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Mid" && numBalls == 5) {
+            return new Right5Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Right" && numBalls == 2) {
+            return new Right2Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Right" && numBalls == 3) {
+            return new Right3Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Right" && numBalls == 4) {
+            return new Right4Ball(swerve, position);
+        }
+        else if(!leftTarmac && position == "Right" && numBalls == 5) {
+            return new Right5Ball(swerve, position);
+        }
+        else {
+            return new Left2Ball(swerve, position);
+        }
+        
+    }  
 }
+
