@@ -46,12 +46,11 @@ public class Right5Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new right5Ball. */
-
-  public Right5Ball(Swerve s_Swerve /*String start*/) {
+  public Right5Ball(Swerve s_Swerve, String position) {
 
     //m_timer = new Timer();
     waypointIndex = 0;
-    Pose2d startPos = AutoCommands.getStartingPose("RightMid"/*start*/);
+    Pose2d startPos = AutoCommands.getStartingPose("Right" + position);
 
     //This goes from the start position to ball 1
     Trajectory right5BallPart1 = TrajectoryGenerator.generateTrajectory(
@@ -89,6 +88,16 @@ public class Right5Ball extends SequentialCommandGroup {
         new ProfiledPIDController(
             Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    // List<Double> waypointTimeStamps = new ArrayList<Double>();
+    // waypointIndex = 0;
+    // Supplier<Rotation2d> rotSupplier = () -> {
+    //   double curTime = m_timer.get();
+    //   if(curTime >= waypointTimeStamps.get(waypointIndex)) {
+    //     waypointIndex++;
+    //   }
+    //   return Constants.AutoConstants.rightPoints[waypointIndex].getRotation();
+    // };
 
     SwerveControllerCommand swerveControllerCommand1 = 
         new SwerveControllerCommand(

@@ -31,21 +31,19 @@ public class Left5Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new Left5Ball. */
-  public Left5Ball(Swerve s_Swerve) {    
+  public Left5Ball(Swerve s_Swerve, String position) {    
     
-    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
+    Pose2d startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
     
       Trajectory Left5BallPart1 = TrajectoryGenerator.generateTrajectory(
-          startPos,
+          new Pose2d(7.103, 4.757, new Rotation2d(2.752)),
           List.of(),
           AutoConstants.leftPoints [waypointIndex],
           Constants.Swerve.trajectoryConfig);
           
       Trajectory Left5BallPart2 = TrajectoryGenerator.generateTrajectory(
           List.of(
-          AutoConstants.leftPoints [waypointIndex++],
-          AutoConstants.leftPoints [waypointIndex++],
           AutoConstants.leftPoints [waypointIndex++],
           AutoConstants.leftPoints [waypointIndex++],
           AutoConstants.leftPoints [waypointIndex++],
@@ -114,7 +112,7 @@ public class Left5Ball extends SequentialCommandGroup {
       new WaitCommand(1.0), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(0.5),
+        new WaitCommand(1),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
@@ -131,7 +129,7 @@ public class Left5Ball extends SequentialCommandGroup {
       new WaitCommand(1.0), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(0.5),
+        new WaitCommand(1),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.deactivateShooter()),
@@ -147,7 +145,7 @@ public class Left5Ball extends SequentialCommandGroup {
       new WaitCommand(1.0), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(0.5),
+        new WaitCommand(1),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.deactivateShooter()),

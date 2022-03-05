@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+/// Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -30,9 +30,9 @@ public class Left3Ball extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new Left3Ball. */
-  public Left3Ball(Swerve s_Swerve) {
+  public Left3Ball(Swerve s_Swerve, String position) {
     
-    Pose2d startPos = AutoCommands.getStartingPose("LeftMid");
+    Pose2d startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
     
     Trajectory Left3BallPart1 = TrajectoryGenerator.generateTrajectory(

@@ -29,12 +29,14 @@ public class Intake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // runs passive intake (only runs motors that dont have a ball)
     States.intakeState = IntakeStates.intaking;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // stops the intake
     States.intakeState = IntakeStates.disabled;
   }
 

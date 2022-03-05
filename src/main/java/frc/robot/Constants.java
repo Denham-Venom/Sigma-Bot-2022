@@ -257,17 +257,15 @@ public final class Constants {
 
 
         public static final Pose2d startPos = new Pose2d(7.606, 2.974, new Rotation2d(-1.894));
-        //Starting Positions
-            //Bottom
+         //Starting Positions
+            //Right
             //new Pose2d(7.606, 2.974, new Rotation2d(-1.894)),   //0 Defalt bottom starting position
             //new Pose2d(6.601, 2.546, new Rotation2d(-2.283)),   //1 Right bottom starting position
             //new Pose2d(8.439, 1.876, new Rotation2d(-1.561)),   //2 Left bottom starting position
-            //new Pose2d(7.216, 1.99, new Rotation2d(-2.363)),    //3 Middle bottom starting postion
-            //Top
+            //Left
             //new Pose2d(7.103, 4.871, new Rotation2d(2.742)),    //Defalt top starting position
             //new Pose2d(5.962, 3.958, new Rotation2d(3.141)),    //Right top starting position
             //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
-            //new Pose2d(6.152, 5.156, new Rotation2d(2.399)),    //Middle top starting position
         public static final Pose2d[] rightPoints = 
         {
             new Pose2d(7.584, 1.084, new Rotation2d(-1.575)),
@@ -276,7 +274,7 @@ public final class Constants {
             new Pose2d(1.699, 1.811, new Rotation2d(-2.269)),
             new Pose2d(2.324, 2.111, new Rotation2d(0.583)),
             new Pose2d(4.771, 5.662, new Rotation2d(1.201)),
-            new Pose2d(5.79, 6.247, new Rotation2d(2.353))
+            new Pose2d(4.811, 5.577, new Rotation2d(2.855))
         };
 
         public static final Pose2d[] leftPoints = 
@@ -290,4 +288,5 @@ public final class Constants {
             new Pose2d(7.638, 1.112, new Rotation2d(-1.636))
         };
     }
+    
 }

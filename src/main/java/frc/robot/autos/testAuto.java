@@ -74,7 +74,6 @@ public class testAuto extends SequentialCommandGroup {
                 new Intake(m_Intaker)
             ),
             new InstantCommand(() -> States.shooterState = ShooterStates.disabled)
-
         );
     }
 }

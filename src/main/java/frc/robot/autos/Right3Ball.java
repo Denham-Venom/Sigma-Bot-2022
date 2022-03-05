@@ -2,8 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-//I think this is done
-
 package frc.robot.autos;
 
 import java.util.List;
@@ -38,9 +36,9 @@ public class Right3Ball extends SequentialCommandGroup {
   private int waypointIndex;
   
   /** Creates a new right3Ball. */
-  public Right3Ball(Swerve s_Swerve) {
+  public Right3Ball(Swerve s_Swerve, String position) {
 
-    Pose2d startPos = AutoCommands.getStartingPose("RightMid");
+    Pose2d startPos = AutoCommands.getStartingPose("Right" + position);
     waypointIndex = 0;
 
     //This goes from the start position to ball 1

@@ -30,6 +30,7 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // runs shooter with a specific power 
     m_Shooter.setPower(power);
   }
 

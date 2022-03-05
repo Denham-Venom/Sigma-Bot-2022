@@ -52,7 +52,6 @@ public class Intaker extends SubsystemBase {
       () -> States.deployIntake(),
       () -> States.retractIntake()
     ));
-
   }
 
   @Override
