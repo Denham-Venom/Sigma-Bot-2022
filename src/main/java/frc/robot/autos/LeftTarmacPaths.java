@@ -35,7 +35,7 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
   /** Creates a new leftTarmacPaths. */
   public LeftTarmacPaths(Swerve s_Swerve, String position, int numBalls) {    
     
-    SwerveTrajectoryWaypoint startPos = new SwerveTrajectoryWaypoint();//AutoCommands.getStartingPose("Left" + position);
+    SwerveTrajectoryWaypoint startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
 
     SwerveTrajectory leftTarmacPaths1 = new SwerveTrajectory(
