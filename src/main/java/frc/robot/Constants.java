@@ -298,13 +298,13 @@ public final class Constants {
             // new Pose2d(5.763, 1.983, new Rotation2d(-2.297)),
             // new Pose2d(7.638, 1.112, new Rotation2d(-1.636))
 
-            new Pose2d(7.498, 2.946, new Rotation2d(-1.9)),
-            new Pose2d(7.623, 1.077, new Rotation2d(-1.608)),
-            new Pose2d(3.996, 2.154, new Rotation2d(3.052)),
-            new Pose2d(1.672, 1.654, new Rotation2d(-2.445)),
-            new Pose2d(1.604, 2.61, new Rotation2d(0.722)),
-            new Pose2d(4.757, 5.534, new Rotation2d(1.178)),
-            new Pose2d(5.722, 5.819, new Rotation2d(-0.702))
+            new SwerveTrajectoryWaypoint(7.498, 2.946, -1.9, -1.9),
+            new SwerveTrajectoryWaypoint(7.623, 1.077, -1.608, -1.608),
+            new SwerveTrajectoryWaypoint(3.996, 2.154, 3.052, 3.052),
+            new SwerveTrajectoryWaypoint(1.672, 1.654, -2.445, -2.445),
+            new SwerveTrajectoryWaypoint(1.604, 2.61, 0.722, 0.722),
+            new SwerveTrajectoryWaypoint(4.757, 5.534, 1.178, 1.178),
+            new SwerveTrajectoryWaypoint(5.722, 5.819, -0.702, -0.702)
         };
 }
     
