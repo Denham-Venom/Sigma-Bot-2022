@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazySparkMAX;
@@ -44,14 +45,22 @@ public class Intaker extends SubsystemBase {
     //spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
-    testing.add("Intake Motors", new StartEndCommand(
-      () -> States.intake(),
+    
+    testing.add("Start Intake Motors", new InstantCommand(
+      () -> States.feed()
+    ));
+    testing.add("Stop Intake Motors", new InstantCommand(
       () -> States.stopIntake()
     ));
-    testing.add("Extend/Retract Intaker", new StartEndCommand(
-      () -> States.deployIntake(),
+
+    testing.add("Extend Intaker", new InstantCommand(
+      () -> States.deployIntake()
+    ));
+    testing.add("Retract Intaker", new InstantCommand(
       () -> States.retractIntake()
     ));
+
+
   }
 
   @Override
