@@ -53,6 +53,7 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
     SwerveTrajectory leftTarmacPaths3 = new SwerveTrajectory (
       Constants.Swerve.trajectoryConfig,
       AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++],
       AutoConstants.leftPoints [waypointIndex]
     );
         var thetaController =
