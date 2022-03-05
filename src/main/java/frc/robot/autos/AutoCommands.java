@@ -32,7 +32,7 @@ public class AutoCommands {
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftMid", SwerveTrajectoryWaypoint(7.103, 4.871, 2.742, 2.742)),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftRight", SwerveTrajectoryWaypoint(5.962, 3.958, 3.141, 3.141)),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightLeft", SwerveTrajectoryWaypoint(8.439, 1.876, -1.561, -1.561)),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightMid", SwerveTrajectoryWaypoint(7.606, 2.974, -1.894, -1.894)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightMid", SwerveTrajectoryWaypoint(7.566, 2.96, -1.939, -1.939)),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightRight", SwerveTrajectoryWaypoint(6.601, 2.546, -2.283, -2.283))
     );
     // shuffleboard value for number of balls, starting Position, left/right tarmac

@@ -78,6 +78,8 @@ public class RightTarmacPaths extends SequentialCommandGroup {
     SwerveTrajectory rightTarmacPaths4 = new SwerveTrajectory(
       Constants.Swerve.trajectoryConfig,
       AutoConstants.rightPoints [waypointIndex++],
+      AutoConstants.rightPoints [waypointIndex++],
+      AutoConstants.rightPoints [waypointIndex++],
       AutoConstants.rightPoints [waypointIndex]
     );
 
