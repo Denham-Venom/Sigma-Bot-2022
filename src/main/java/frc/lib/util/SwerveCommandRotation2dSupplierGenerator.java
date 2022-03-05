@@ -35,7 +35,7 @@ public class SwerveCommandRotation2dSupplierGenerator {
     public static Supplier<Rotation2d> generateSwerveCommandRotation2dSupplier(Trajectory trajectory, List<SwerveTrajectoryWaypoint> trajectoryWaypoints) {
         ArrayList<Pose2d> waypoints = new ArrayList<>();
         for(var pt : trajectoryWaypoints) {
-            waypoints.add(pt.getPose());
+            waypoints.add(pt.getPositionAndOrientation());
         }  
         ArrayList<Double> times = new ArrayList<>();
         //first waypoint should occur at time zero so skip
