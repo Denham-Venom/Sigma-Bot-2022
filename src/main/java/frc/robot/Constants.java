@@ -288,7 +288,7 @@ public final class Constants {
             new SwerveTrajectoryWaypoint(7.584, 1.141, -1.543, -1.543)
         };
 
-        public static final Pose2d[] leftPoints = 
+        public static final SwerveTrajectoryWaypoint[] leftPoints = 
         {
             // new Pose2d(5.381, 5.855, new Rotation2d(2.602)),
             // new Pose2d(4.241, 4.15, new Rotation2d(-2.098)),
