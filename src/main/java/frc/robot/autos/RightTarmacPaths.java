@@ -28,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.lib.util.SwerveTrajectory;
+import frc.lib.util.SwerveTrajectoryWaypoint;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.Constants.AutoConstants;
@@ -50,14 +52,19 @@ public class RightTarmacPaths extends SequentialCommandGroup {
 
     //m_timer = new Timer();
     waypointIndex = 0;
-    Pose2d startPos = AutoCommands.getStartingPose("Right" + position);
+    SwerveTrajectoryWaypoint startPos = new SwerveTrajectoryWaypoint();//AutoCommands.getStartingPose("Right" + position);
 
     //This goes from the start position to ball 1
-    Trajectory rightTarmacPathsPart1 = TrajectoryGenerator.generateTrajectory(
-        startPos,
-        List.of(),
-        AutoConstants.rightPoints [waypointIndex],
-        Constants.Swerve.trajectoryConfig);
+    SwerveTrajectory rightTarmacPathsPart1 = new SwerveTrajectory(
+      Constants.Swerve.trajectoryConfig,
+      startPos,
+      AutoConstants.rightPoints [waypointIndex]
+    );
+    // Trajectory rightTarmacPathsPart1 = TrajectoryGenerator.generateTrajectory(
+    //     startPos,
+    //     List.of(),
+    //     AutoConstants.rightPoints [waypointIndex],
+    //     Constants.Swerve.trajectoryConfig);
     
     //This goes from ball 1 to ball 2
     Trajectory rightTarmacPathsPart2 = TrajectoryGenerator.generateTrajectory(
@@ -101,12 +108,13 @@ public class RightTarmacPaths extends SequentialCommandGroup {
 
     SwerveControllerCommand swerveControllerCommand1 = 
         new SwerveControllerCommand(
-            rightTarmacPathsPart1,
+            rightTarmacPathsPart1.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
             new PIDController(Constants.AutoConstants.kPYController, 0, 0),
             new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            rightTarmacPathsPart1.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
 

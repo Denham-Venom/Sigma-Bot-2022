@@ -8,52 +8,73 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-/** Add your docs here. */
-public class SwerveTrajectoryWaypoint {
-    private Pose2d pose;
-    private Rotation2d heading;
+/** 
+ * Class for representing waypoints used in trajectory 
+ * waypoints while also storing additional information 
+ * regarding point orientation angle used to control 
+ * robot angle during pathing. This class returns 
+ * values by reference without copying.
+*/
+public class SwerveTrajectoryWaypoint extends Pose2d {
 
+    // Contains angle for direction point is facing
+    private Rotation2d orientation;
+
+    /**
+     * Create an empty SwerveTrajectoryWaypoint with 
+     * default values for position, heading, and 
+     * orientation (all 0).
+     */
     public SwerveTrajectoryWaypoint() {
-        this.pose = new Pose2d();
-        this.heading = new Rotation2d();
+        super();
+        this.orientation = new Rotation2d();
     }
 
-    public SwerveTrajectoryWaypoint(Pose2d pose, Rotation2d heading) {
-        this.pose = pose;
-        this.heading = heading;
-    }
-
+    /**
+     * Creates a SwerveTrajectoryWaypoint using the 
+     * provided position, orientation, and heading.
+     * @param position Translation2d representing (x,y) 
+     * position of the point.
+     * @param orientation Rotation2d representing the angle 
+     * the point is facing.
+     * @param heading Rotation2d representing the direction of 
+     * motion of the point.
+     */
     public SwerveTrajectoryWaypoint(Translation2d position, Rotation2d orientation, Rotation2d heading) {
-        this.pose = new Pose2d(position, orientation);
-        this.heading = heading;
+        super(position, heading);
+        this.orientation = orientation;
     }
 
+    /**
+     * Creates a SwerveTrajectoryWaypoint using the 
+     * provided position, orientation, and heading.
+     * @param x The position along the x axis.
+     * @param y The position along the y axis.
+     * @param orientationRadians The angle the point is 
+     * facing in radians.
+     * @param headingRadians The angle of the direction of 
+     * motion of the point in radians.
+     */
     public SwerveTrajectoryWaypoint(double x, double y, double orientationRadians, double headingRadians) {
-        this.pose = new Pose2d(x, y, new Rotation2d(orientationRadians));
-        this.heading = new Rotation2d(headingRadians);
+        super(x, y, new Rotation2d(headingRadians));
+        this.orientation = new Rotation2d(orientationRadians);
     }
 
     /**
-     * Get pose containing position and orientation of point. 
-     * @return Pose2d with Translation2d for (x,y) position, Rotation2d for orientation
+     * Gets the orientation angle of this waypoint.
+     * @return Rotation2d representing angle.
      */
-    public Pose2d getPose() {
-        return pose;
+    public Rotation2d getOrientation() {
+        return this.orientation;
     }
 
     /**
-     * Get rotation for direction of movement of waypoint.
-     * @return Rotation2d indicating the direction of movement.
+     * Gets a pose representing the (x,y) position of 
+     * this waypoint and the orientation angle of the 
+     * waypoint.
+     * @return Pose2d from position and orientation.
      */
-    public Rotation2d getHeading() {
-        return heading;
-    }
-
-    /**
-     * Get a pose for the trajectory generator to use as a waypoint.
-     * @return Pose2d with (x,y) position in a Translation2d, heading in Rotation2d.
-     */
-    public Pose2d getTrajectoryPose() {
-        return new Pose2d(pose.getTranslation(), heading);
+    public Pose2d getPositionAndOrientation() {
+        return new Pose2d(this.getTranslation(), orientation);
     }
 }
