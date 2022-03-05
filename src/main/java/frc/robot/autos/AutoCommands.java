@@ -76,83 +76,11 @@ public class AutoCommands {
     }
 
     public static Command getSelectedAuto(Swerve swerve) {
-        
-        if(leftTarmac && position == "Left" && numBalls == 2){
-            return new Left2Ball(swerve, position);
+        if(leftTarmac) {
+            return new LeftTarmacPaths(swerve, position, numBalls);
+        } else {
+            return new RightTarmacPaths(swerve, position, numBalls);
         }
-        else if(leftTarmac && position == "Left" && numBalls == 3) {
-            return new Left3Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Left" && numBalls == 4) {
-            return new Left4Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Left" && numBalls == 5) {
-            return new Left5Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Mid" && numBalls == 2) {
-            return new Left2Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Mid" && numBalls == 3) {
-            return new Left3Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Mid" && numBalls == 4) {
-            return new Left4Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Middle" && numBalls == 5) {
-            return new Left5Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Right" && numBalls == 2) {
-            return new Left2Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Right" && numBalls == 3) {
-            return new Left3Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Right" && numBalls == 4) {
-            return new Left4Ball(swerve, position);
-        }
-        else if(leftTarmac && position == "Right" && numBalls == 5) {
-            return new Left5Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Left" && numBalls == 2){
-            return new Right2Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Left" && numBalls == 3) {
-            return new Right3Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Left" && numBalls == 4) {
-            return new Right4Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Left" && numBalls == 5) {
-            return new Right5Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Mid" && numBalls == 2) {
-            return new Right2Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Mid" && numBalls == 3) {
-            return new Right3Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Mid" && numBalls == 4) {
-            return new Right4Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Mid" && numBalls == 5) {
-            return new Right5Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Right" && numBalls == 2) {
-            return new Right2Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Right" && numBalls == 3) {
-            return new Right3Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Right" && numBalls == 4) {
-            return new Right4Ball(swerve, position);
-        }
-        else if(!leftTarmac && position == "Right" && numBalls == 5) {
-            return new Right5Ball(swerve, position);
-        }
-        else {
-            return new Left2Ball(swerve, position);
-        }
-        
     }  
 }
 

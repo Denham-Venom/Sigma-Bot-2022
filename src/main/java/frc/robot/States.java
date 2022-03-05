@@ -22,9 +22,14 @@ public class States {
         disabled, deployIntake, retractIntake
     }
 
+    public static enum ClimberStates {
+        disabled, extendClimber, retractClimber, fullClimb
+    }
+
     public static ShooterStates shooterState = ShooterStates.disabled;
     public static IntakeStates intakeState = IntakeStates.disabled;
     public static IntakeExtendStates intakeExtendState = IntakeExtendStates.disabled;
+    public static ClimberStates climberState = ClimberStates.disabled;
 
     public static void deployIntake(){
         States.intakeExtendState = IntakeExtendStates.deployIntake;
@@ -57,6 +62,22 @@ public class States {
 
     public static void outtake() {
         States.intakeState = IntakeStates.outtaking;
+    }
+
+    public static void stopClimber() {
+        States.climberState = ClimberStates.disabled;
+    }
+
+    public static void extendClimber() {
+        States.climberState = ClimberStates.extendClimber;
+    }
+
+    public static void retractClimber() {
+        States.climberState = ClimberStates.retractClimber;
+    }
+
+    public static void fullClimb() {
+        States.climberState = ClimberStates.fullClimb;
     }
 
 }
