@@ -34,7 +34,7 @@ public class BetterTestAuto extends SequentialCommandGroup {
     );
 
     Trajectory traj = TrajectoryGenerator.generateTrajectory(points, Constants.Swerve.trajectoryConfig);
-    Supplier<Rotation2d> rot = SwerveCommandRotation2dSupplierGenerator.generateSwerveCommandRotation2dSupplier(traj, points);
+    //Supplier<Rotation2d> rot = SwerveCommandRotation2dSupplierGenerator.generateSwerveCommandRotation2dSupplier(traj, points);
     SwerveControllerCommand move = new SwerveControllerCommand(
       traj,
       s_Swerve::getPose,
@@ -42,7 +42,7 @@ public class BetterTestAuto extends SequentialCommandGroup {
       new PIDController(Constants.AutoConstants.kPXController, 0, 0),
       new PIDController(Constants.AutoConstants.kPYController, 0, 0),
       new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-      rot,
+      //rot,
       s_Swerve::setModuleStates,
       s_Swerve);
 
