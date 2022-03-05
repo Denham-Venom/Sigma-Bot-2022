@@ -1,12 +1,9 @@
 package frc.Controllers;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-
 import frc.lib.math.PIDGains;
 
 /**

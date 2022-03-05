@@ -13,15 +13,12 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazySparkMAX;
 import frc.Controllers.LazyTalonFX;
 import frc.robot.Constants;
 import frc.robot.States;
-import frc.robot.States.IntakeExtendStates;
-import frc.robot.States.IntakeStates;
 
 public class Intaker extends SubsystemBase {
   /** Creates a new Intaker. */
@@ -107,7 +104,6 @@ public class Intaker extends SubsystemBase {
       case disabled:
         intakeExtend.set(Value.kOff);
       }
-      
     }
   }
 

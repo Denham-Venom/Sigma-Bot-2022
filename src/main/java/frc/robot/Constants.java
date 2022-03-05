@@ -14,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.Controllers.SparkConstants;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
@@ -221,6 +220,11 @@ public final class Constants {
             new SparkConstants(0, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
         public static final int ClimberSolenoidForwardChannel = 0;
         public static final int ClimberSolenoidReverseChannel = 1;
+        public static final double ClimberSpeed = 0.2;
+        public static final int climberEncoderPort = 0;
+        public static final double climberHighLimit = 0;
+        public static final double climberLowLimit = 0;
+        public static final double climberGearRatio = 0;
     }
 
     public static final class Intake {

@@ -1,8 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import frc.robot.Constants.AutoConstants;
-
 public class States {
 
     /**
@@ -23,7 +20,7 @@ public class States {
     }
 
     public static enum ClimberStates {
-        disabled, extendClimber, retractClimber, fullClimb
+        disabled, extendClimberPiston, retractClimberPiston, extendClimber, retractClimber, fullClimb
     }
 
     public static ShooterStates shooterState = ShooterStates.disabled;
@@ -66,6 +63,14 @@ public class States {
 
     public static void stopClimber() {
         States.climberState = ClimberStates.disabled;
+    }
+
+    public static void extendClimberPiston() {
+        States.climberState = ClimberStates.extendClimberPiston;
+    }
+
+    public static void retractClimberPiston() {
+        States.climberState = ClimberStates.retractClimberPiston;
     }
 
     public static void extendClimber() {

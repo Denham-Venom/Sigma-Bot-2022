@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import java.time.Instant;
-
-import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -20,9 +17,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.States.IntakeExtendStates;
-import frc.robot.States.IntakeStates;
-import frc.robot.States.ShooterStates;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
