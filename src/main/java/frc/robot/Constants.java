@@ -218,6 +218,8 @@ public final class Constants {
     public static final class Climber {
         public static final SparkConstants climberMotorConstants = 
             new SparkConstants(0, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
+        public static final int ClimberSolenoidForwardChannel = 0;
+        public static final int ClimberSolenoidReverseChannel = 1;
     }
 
     public static final class Intake {
