@@ -19,6 +19,7 @@ import frc.Controllers.SparkConstants;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
 import frc.lib.util.SwerveModuleConstants;
+import frc.lib.util.SwerveTrajectoryWaypoint;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
@@ -268,7 +269,7 @@ public final class Constants {
             //new Pose2d(7.103, 4.871, new Rotation2d(2.742)),    //Defalt top starting position
             //new Pose2d(5.962, 3.958, new Rotation2d(3.141)),    //Right top starting position
             //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
-        public static final Pose2d[] rightPoints = 
+        public static final SwerveTrajectoryWaypoint[] rightPoints = 
         {
             // new Pose2d(7.584, 1.084, new Rotation2d(-1.575)),
             // new Pose2d(6.986, 1.269, new Rotation2d(2.25)),
@@ -278,13 +279,13 @@ public final class Constants {
             // new Pose2d(4.771, 5.662, new Rotation2d(1.201)),
             // new Pose2d(4.811, 5.577, new Rotation2d(2.855))
 
-            new Pose2d(7.076, 4.771, new Rotation2d(2.72)),
-            new Pose2d(5.49, 5.983, new Rotation2d(2.865)),
-            new Pose2d(3.901, 4.165, new Rotation2d(-2.233)),
-            new Pose2d(1.672, 1.769, new Rotation2d(-2.304)),
-            new Pose2d(2.718, 1.754, new Rotation2d(0)),
-            new Pose2d(5.355, 1.968, new Rotation2d(-0.062)),
-            new Pose2d(7.584, 1.141, new Rotation2d(-1.543))
+            new SwerveTrajectoryWaypoint(7.076, 4.771, 2.72, 2.72),
+            new SwerveTrajectoryWaypoint(5.49, 5.983, 2.865, 2.865),
+            new SwerveTrajectoryWaypoint(3.901, 4.165, -2.233, -2.233),
+            new SwerveTrajectoryWaypoint(1.672, 1.769, -2.304, -2.304),
+            new SwerveTrajectoryWaypoint(2.718, 1.754, 0, 0),
+            new SwerveTrajectoryWaypoint(5.355, 1.968, -0.062, -0.062),
+            new SwerveTrajectoryWaypoint(7.584, 1.141, -1.543, -1.543)
         };
 
         public static final Pose2d[] leftPoints = 
