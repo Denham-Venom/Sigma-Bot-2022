@@ -270,24 +270,40 @@ public final class Constants {
             //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
         public static final Pose2d[] rightPoints = 
         {
-            new Pose2d(7.584, 1.084, new Rotation2d(-1.575)),
-            new Pose2d(6.986, 1.269, new Rotation2d(2.25)),
-            new Pose2d(5.572, 1.868, new Rotation2d(3.134)),
-            new Pose2d(1.699, 1.811, new Rotation2d(-2.269)),
-            new Pose2d(2.324, 2.111, new Rotation2d(0.583)),
-            new Pose2d(4.771, 5.662, new Rotation2d(1.201)),
-            new Pose2d(4.811, 5.577, new Rotation2d(2.855))
+            // new Pose2d(7.584, 1.084, new Rotation2d(-1.575)),
+            // new Pose2d(6.986, 1.269, new Rotation2d(2.25)),
+            // new Pose2d(5.572, 1.868, new Rotation2d(3.134)),
+            // new Pose2d(1.699, 1.811, new Rotation2d(-2.269)),
+            // new Pose2d(2.324, 2.111, new Rotation2d(0.583)),
+            // new Pose2d(4.771, 5.662, new Rotation2d(1.201)),
+            // new Pose2d(4.811, 5.577, new Rotation2d(2.855))
+
+            new Pose2d(7.076, 4.771, new Rotation2d(2.72)),
+            new Pose2d(5.49, 5.983, new Rotation2d(2.865)),
+            new Pose2d(3.901, 4.165, new Rotation2d(-2.233)),
+            new Pose2d(1.672, 1.769, new Rotation2d(-2.304)),
+            new Pose2d(2.718, 1.754, new Rotation2d(0)),
+            new Pose2d(5.355, 1.968, new Rotation2d(-0.062)),
+            new Pose2d(7.584, 1.141, new Rotation2d(-1.543))
         };
 
         public static final Pose2d[] leftPoints = 
         {
-            new Pose2d(5.381, 5.855, new Rotation2d(2.602)),
-            new Pose2d(4.241, 4.15, new Rotation2d(-2.098)),
-            new Pose2d(1.74, 1.74, new Rotation2d(-2.478)),
-            new Pose2d(1.984, 1.868, new Rotation2d(0.429)),
-            new Pose2d(4.485, 1.754, new Rotation2d(0.2)),
-            new Pose2d(5.763, 1.983, new Rotation2d(-2.297)),
-            new Pose2d(7.638, 1.112, new Rotation2d(-1.636))
+            // new Pose2d(5.381, 5.855, new Rotation2d(2.602)),
+            // new Pose2d(4.241, 4.15, new Rotation2d(-2.098)),
+            // new Pose2d(1.74, 1.74, new Rotation2d(-2.478)),
+            // new Pose2d(1.984, 1.868, new Rotation2d(0.429)),
+            // new Pose2d(4.485, 1.754, new Rotation2d(0.2)),
+            // new Pose2d(5.763, 1.983, new Rotation2d(-2.297)),
+            // new Pose2d(7.638, 1.112, new Rotation2d(-1.636))
+
+            new Pose2d(7.498, 2.946, new Rotation2d(-1.9)),
+            new Pose2d(7.623, 1.077, new Rotation2d(-1.608)),
+            new Pose2d(3.996, 2.154, new Rotation2d(3.052)),
+            new Pose2d(1.672, 1.654, new Rotation2d(-2.445)),
+            new Pose2d(1.604, 2.61, new Rotation2d(0.722)),
+            new Pose2d(4.757, 5.534, new Rotation2d(1.178)),
+            new Pose2d(5.722, 5.819, new Rotation2d(-0.702))
         };
 }
     
