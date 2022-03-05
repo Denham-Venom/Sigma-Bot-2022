@@ -40,27 +40,27 @@ import frc.robot.subsystems.Swerve;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Right5Ball extends SequentialCommandGroup {
+public class RightTarmacPaths extends SequentialCommandGroup {
 
   //private Timer m_timer;
   private int waypointIndex;
 
-  /** Creates a new right5Ball. */
-  public Right5Ball(Swerve s_Swerve, String position) {
+  /** Creates a new rightTarmacPaths. */
+  public RightTarmacPaths(Swerve s_Swerve, String position, int numBalls) {
 
     //m_timer = new Timer();
     waypointIndex = 0;
     Pose2d startPos = AutoCommands.getStartingPose("Right" + position);
 
     //This goes from the start position to ball 1
-    Trajectory right5BallPart1 = TrajectoryGenerator.generateTrajectory(
+    Trajectory rightTarmacPathsPart1 = TrajectoryGenerator.generateTrajectory(
         startPos,
         List.of(),
         AutoConstants.rightPoints [waypointIndex],
         Constants.Swerve.trajectoryConfig);
     
     //This goes from ball 1 to ball 2
-    Trajectory right5BallPart2 = TrajectoryGenerator.generateTrajectory(
+    Trajectory rightTarmacPathsPart2 = TrajectoryGenerator.generateTrajectory(
         List.of(
         AutoConstants.rightPoints [waypointIndex++],
         AutoConstants.rightPoints [waypointIndex++],
@@ -69,7 +69,7 @@ public class Right5Ball extends SequentialCommandGroup {
         Constants.Swerve.trajectoryConfig);
 
     //This goes to ball 4 from ball 3
-    Trajectory right5BallPart3 = TrajectoryGenerator.generateTrajectory(
+    Trajectory rightTarmacPathsPart3 = TrajectoryGenerator.generateTrajectory(
         List.of(
         AutoConstants.rightPoints [waypointIndex++],
         AutoConstants.rightPoints [waypointIndex++],
@@ -78,7 +78,7 @@ public class Right5Ball extends SequentialCommandGroup {
       
     
     //This goes from ball 4 to a better shooting position
-    Trajectory right5BallPart4 = TrajectoryGenerator.generateTrajectory(
+    Trajectory rightTarmacPathsPart4 = TrajectoryGenerator.generateTrajectory(
         AutoConstants.rightPoints [waypointIndex++],
         List.of(),
         AutoConstants.rightPoints [waypointIndex],
@@ -101,7 +101,7 @@ public class Right5Ball extends SequentialCommandGroup {
 
     SwerveControllerCommand swerveControllerCommand1 = 
         new SwerveControllerCommand(
-            right5BallPart1,
+            rightTarmacPathsPart1,
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -112,7 +112,7 @@ public class Right5Ball extends SequentialCommandGroup {
 
     SwerveControllerCommand swerveControllerCommand2 = 
         new SwerveControllerCommand(
-            right5BallPart2,
+            rightTarmacPathsPart2,
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -123,7 +123,7 @@ public class Right5Ball extends SequentialCommandGroup {
 
     SwerveControllerCommand swerveControllerCommand3 = 
         new SwerveControllerCommand(
-            right5BallPart3,
+            rightTarmacPathsPart3,
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -134,7 +134,7 @@ public class Right5Ball extends SequentialCommandGroup {
             
     SwerveControllerCommand swerveControllerCommand4 = 
         new SwerveControllerCommand(
-            right5BallPart4,
+            rightTarmacPathsPart4,
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.AutoConstants.kPXController, 0, 0),
@@ -145,7 +145,7 @@ public class Right5Ball extends SequentialCommandGroup {
             
     addCommands(
       //Gets the initial pose
-      new InstantCommand(() -> s_Swerve.resetOdometry(right5BallPart1.getInitialPose())),
+      new InstantCommand(() -> s_Swerve.resetOdometry(rightTarmacPathsPart1.getInitialPose())),
       //Deploys the intake
       new InstantCommand(() -> States.deployIntake()),
 
@@ -163,8 +163,10 @@ public class Right5Ball extends SequentialCommandGroup {
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
-      new InstantCommand(() -> States.deactivateShooter()),
-
+      new InstantCommand(() -> States.deactivateShooter())
+    );
+    if(numBalls == 4 || numBalls == 5) {
+      addCommands(
       //Picks up ball 2 and 3
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand2,
@@ -180,8 +182,11 @@ public class Right5Ball extends SequentialCommandGroup {
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.deactivateShooter()),
-      new InstantCommand(() -> States.stopIntake()),
-
+      new InstantCommand(() -> States.stopIntake())
+      );
+    }
+      if(numBalls == 5) {
+      addCommands(
       //Picks up ball 4
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand3,
@@ -200,10 +205,9 @@ public class Right5Ball extends SequentialCommandGroup {
 
       new InstantCommand(() -> States.deactivateShooter()),
       new InstantCommand(() -> States.stopIntake())
-    );
-    
+      );
+    }
   }
-  
 }
 
 //InstantCommand starts intaking
