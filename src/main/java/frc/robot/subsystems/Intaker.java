@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,25 +32,23 @@ public class Intaker extends SubsystemBase {
   private LazySparkMAX spinUpMotor;
   // intaker
   private LazyTalonFX intakeMotor;
-  
+  private final ShuffleboardTab testing;
+
   private DoubleSolenoid intakeExtend;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
   public Intaker(PneumaticHub m_pHub) {
-    // indexerMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    // spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
-    // intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    // intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
+    testing = Shuffleboard.getTab("Testing");
 
     indexerMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     //spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
-    SmartDashboard.putData("Intake Motors", new StartEndCommand(
+    testing.add("Intake Motors", new StartEndCommand(
       () -> States.intake(),
       () -> States.stopIntake()
     ));
-    SmartDashboard.putData("Extend/Retract Intaker", new StartEndCommand(
+    testing.add("Extend/Retract Intaker", new StartEndCommand(
       () -> States.deployIntake(),
       () -> States.retractIntake()
     ));

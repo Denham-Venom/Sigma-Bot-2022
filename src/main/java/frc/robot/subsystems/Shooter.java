@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
 
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
-  private ShuffleboardTab gamer = Shuffleboard.getTab("gamer");
+  private ShuffleboardTab testing = Shuffleboard.getTab("Testing");
   
   public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.childShooterConstants);
@@ -43,9 +43,10 @@ public class Shooter extends SubsystemBase {
     hoodMotor.configPID(Constants.Shooter.hoodPID);
     //turretMotor.configPID(Constants.Shooter.turretPID);
     limelight = m_Vision.getLimelight();
+    testing.addNumber("Hood Angle", this::getHoodAngle);
 
 
-    SmartDashboard.putData("Shooter Motors", new StartEndCommand(
+    testing.add("Shooter Motors", new StartEndCommand(
       () -> States.activateShooter(),
       () -> States.deactivateShooter()
     ));
@@ -125,6 +126,9 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    
+    
+
     switch(States.shooterState){
       case disabled:
           shooterMotorParent.set(ControlMode.PercentOutput, 0);

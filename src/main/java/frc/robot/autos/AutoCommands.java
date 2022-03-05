@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.lib.util.SwerveTrajectoryWaypoint;
 import frc.robot.subsystems.Swerve;
 
 /** Add your docs here. */
@@ -26,20 +27,24 @@ public class AutoCommands {
 
     //"RightMid" - first word: left/right tarmac, second word: left/mid/right positions on tarmac
     // So the above example would be the Right Tarmac in the Middle Position
-    private static Map<String, Pose2d> startPositions = Map.ofEntries(
-        new AbstractMap.SimpleImmutableEntry<String, Pose2d>("LeftLeft", new Pose2d(6.764, 5.712, new Rotation2d(2.035))),
-        new AbstractMap.SimpleImmutableEntry<String, Pose2d>("LeftMid", new Pose2d(7.103, 4.871, new Rotation2d(2.742))),
-        new AbstractMap.SimpleImmutableEntry<String, Pose2d>("LeftRight", new Pose2d(5.962, 3.958, new Rotation2d(3.141))),
-        new AbstractMap.SimpleImmutableEntry<String, Pose2d>("RightLeft", new Pose2d(8.439, 1.876, new Rotation2d(-1.561))),
-        new AbstractMap.SimpleImmutableEntry<String, Pose2d>("RightMid", new Pose2d(7.606, 2.974, new Rotation2d(-1.894))),
-        new AbstractMap.SimpleImmutableEntry<String, Pose2d>("RightRight", new Pose2d(6.601, 2.546, new Rotation2d(-2.283)))
+    private static Map<String, SwerveTrajectoryWaypoint> startPositions = Map.ofEntries(
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftLeft", SwerveTrajectoryWaypoint(6.764, 5.712, 2.035, numBalls)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftMid", SwerveTrajectoryWaypoint(7.103, 4.871, 2.742, numBalls)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftRight", SwerveTrajectoryWaypoint(5.962, 3.958, 3.141, 3.141)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightLeft", SwerveTrajectoryWaypoint(8.439, 1.876, -1.561 -1.561, numBalls)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightMid", SwerveTrajectoryWaypoint(7.606, 2.974, -1.894, -1.894)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightRight", SwerveTrajectoryWaypoint(6.601, 2.546, -2.283, -2.283))
     );
     // shuffleboard value for number of balls, starting Position, left/right tarmac
     // make values to store shuffleboard values in this class
     // make if statements to determine which path is used and return it to robotContainer
 
-    public static Pose2d getStartingPose(String start) {
+    public static SwerveTrajectoryWaypoint getStartingPose(String start) {
         return startPositions.get(start);
+    }
+
+    private static SwerveTrajectoryWaypoint SwerveTrajectoryWaypoint(double d, double e, double f, double g) {
+        return null;
     }
 
     public static void setTarmac(StartingTarmac tarmac) {
