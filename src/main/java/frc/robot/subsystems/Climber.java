@@ -79,7 +79,7 @@ public class Climber extends SubsystemBase {
       case disabled:
       climberPiston.set(Value.kOff);
     }
-    SmartDashboard.putNumber("Climber Encoder Value", positionEncoder.get());
+    testing.add("Climber Encoder Value", positionEncoder.get());
   }
 }
 
