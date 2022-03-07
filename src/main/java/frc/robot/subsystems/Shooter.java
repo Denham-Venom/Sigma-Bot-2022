@@ -4,12 +4,14 @@
 
 package frc.robot.subsystems;
 
+import java.time.Instant;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazyTalonFX;
@@ -46,10 +48,14 @@ public class Shooter extends SubsystemBase {
     testing.addNumber("Hood Angle", this::getHoodAngle);
 
 
-    testing.add("Shooter Motors", new StartEndCommand(
-      () -> States.activateShooter(),
-      () -> States.deactivateShooter()
+    testing.add("Start Shooter Motors", new InstantCommand(
+      () -> setPower(0.5)
     ));
+
+    testing.add("Stop Shooter Motors", new InstantCommand(
+      () -> setPower(0)
+    ));
+
 
     if (Constants.Shooter.calibrationMode){
       SmartDashboard.getNumber("Shooter RPM Calib", 0);
@@ -126,9 +132,9 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
-    
-
+    if(Climber.canClimb()) {
+      return;
+    }
     switch(States.shooterState){
       case disabled:
           shooterMotorParent.set(ControlMode.PercentOutput, 0);

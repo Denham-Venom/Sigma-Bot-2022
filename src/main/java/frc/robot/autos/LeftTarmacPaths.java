@@ -9,7 +9,6 @@ import java.util.List;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,7 +21,6 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -35,29 +33,29 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
   /** Creates a new leftTarmacPaths. */
   public LeftTarmacPaths(Swerve s_Swerve, String position, int numBalls) {    
     
-    Pose2d startPos = AutoCommands.getStartingPose("Left" + position);
+    SwerveTrajectoryWaypoint startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
 
-    Trajectory leftTarmacPathsPart1 = TrajectoryGenerator.generateTrajectory(
-        startPos,
-        List.of(),
-        AutoConstants.leftPoints [waypointIndex],
-        Constants.Swerve.trajectoryConfig);
-        
-    Trajectory leftTarmacPathsPart2 = TrajectoryGenerator.generateTrajectory(
-        List.of(
-        AutoConstants.leftPoints [waypointIndex++],
-        AutoConstants.leftPoints [waypointIndex++],
-        AutoConstants.leftPoints [waypointIndex++],
-        AutoConstants.leftPoints [waypointIndex]),
-        Constants.Swerve.trajectoryConfig);
+    SwerveTrajectory leftTarmacPaths1 = new SwerveTrajectory(
+      Constants.Swerve.trajectoryConfig,
+      startPos,
+      AutoConstants.leftPoints [waypointIndex]
+    );
 
-    Trajectory leftTarmacPathsPart3 = TrajectoryGenerator.generateTrajectory(
-        AutoConstants.leftPoints [waypointIndex++],
-        List.of(),
-        AutoConstants.leftPoints [waypointIndex],
-        Constants.Swerve.trajectoryConfig);
+    SwerveTrajectory leftTarmacPaths2 = new SwerveTrajectory (
+      Constants.Swerve.trajectoryConfig,
+      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex]
+    );
 
+    SwerveTrajectory leftTarmacPaths3 = new SwerveTrajectory (
+      Constants.Swerve.trajectoryConfig,
+      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex]
+    );
         var thetaController =
             new ProfiledPIDController(
               Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -65,40 +63,43 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
 
     SwerveControllerCommand swerveControllerCommand = 
       new SwerveControllerCommand(
-          leftTarmacPathsPart1,
+          leftTarmacPaths1.getTrajectory(),
           s_Swerve::getPose,
           Constants.Swerve.swerveKinematics,
           new PIDController(Constants.AutoConstants.kPXController, 0, 0),
           new PIDController(Constants.AutoConstants.kPYController, 0, 0),
           thetaController,
+          leftTarmacPaths1.getAngleSupplier(),
           s_Swerve::setModuleStates,
           s_Swerve);
 
     SwerveControllerCommand swerveControllerCommand2 = 
       new SwerveControllerCommand(
-          leftTarmacPathsPart2,
+          leftTarmacPaths2.getTrajectory(),
           s_Swerve::getPose,
           Constants.Swerve.swerveKinematics,
           new PIDController(Constants.AutoConstants.kPXController, 0, 0),
           new PIDController(Constants.AutoConstants.kPYController, 0, 0),
           thetaController,
+          leftTarmacPaths2.getAngleSupplier(),
           s_Swerve::setModuleStates,
           s_Swerve);
 
     SwerveControllerCommand swerveControllerCommand3 = 
       new SwerveControllerCommand(
-          leftTarmacPathsPart3,
+          leftTarmacPaths3.getTrajectory(),
           s_Swerve::getPose,
           Constants.Swerve.swerveKinematics,
           new PIDController(Constants.AutoConstants.kPXController, 0, 0),
           new PIDController(Constants.AutoConstants.kPYController, 0, 0),
           thetaController,
+          leftTarmacPaths3.getAngleSupplier(),
           s_Swerve::setModuleStates,
           s_Swerve);
 
       addCommands(
         //Gets the initial pose
-        new InstantCommand(() -> s_Swerve.resetOdometry(leftTarmacPathsPart1.getInitialPose())),
+        new InstantCommand(() -> s_Swerve.resetOdometry(leftTarmacPaths1.getInitialPose())),
         //Deploys the intake
         new InstantCommand(() -> States.deployIntake()),
 

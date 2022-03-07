@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import java.time.Instant;
-
-import edu.wpi.first.cscore.VideoMode;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -20,9 +17,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.States.IntakeExtendStates;
-import frc.robot.States.IntakeStates;
-import frc.robot.States.ShooterStates;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -100,58 +94,58 @@ public class RobotContainer {
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
     highLowGearButton.whenPressed(new InstantCommand(() -> s_Swerve.switchLowHighGear()));
 
-      // Intake
-      intakeButton.whileHeld(new StartEndCommand(
-        () -> States.intake(), 
-        () -> States.stopIntake()
-      ));
-      outakeButton.whileHeld(new Intake(m_Intaker));
+    // Intake
+    intakeButton.whileHeld(new StartEndCommand(
+      () -> States.intake(), 
+      () -> States.stopIntake()
+    ));
+    outakeButton.whileHeld(new Intake(m_Intaker));
 
-      // Shooter
-      operatorShootButton.toggleWhenPressed(new StartEndCommand(
-        () -> States.activateShooter(),
-        () -> States.deactivateShooter()
-      ));
-      operatorFeedButton.whileHeld(new StartEndCommand(
-        () -> States.feed(), 
-        () -> States.stopIntake()
-      ));
+    // Shooter
+    operatorShootButton.toggleWhenPressed(new StartEndCommand(
+      () -> States.activateShooter(),
+      () -> States.deactivateShooter()
+    ));
+    operatorFeedButton.whileHeld(new StartEndCommand(
+      () -> States.feed(), 
+      () -> States.stopIntake()
+    ));
 
-      // Test Hood
-      testHood.whenPressed(new InstantCommand(() -> m_Shooter.setHoodAngle(0)));
-    
-      /* Operator Buttons */
-      operatorIntakeButton.whileHeld( new StartEndCommand(
-        () -> States.intake(),
-        () -> States.stopIntake()
-      ));
+    // Test Hood
+    testHood.whenPressed(new InstantCommand(() -> m_Shooter.setHoodAngle(0)));
+  
+    /* Operator Buttons */
+    operatorIntakeButton.whileHeld( new StartEndCommand(
+      () -> States.intake(),
+      () -> States.stopIntake()
+    ));
 
-      //Auto command chooser
-      // m_chooser.setDefaultOption("Right5Ball", new Right5Ball(s_Swerve));
-      // m_chooser.addOption("Right4Ball", new Right4Ball(s_Swerve));
-      // m_chooser.addOption("Right3Ball", new Right4Ball(s_Swerve));
-      // m_chooser.addOption("Right2Ball", new Right4Ball(s_Swerve));
-      // m_chooser.addOption("Left5Ball", new Right4Ball(s_Swerve));
-      // m_chooser.addOption("Left4Ball", new Right4Ball(s_Swerve));
-      // m_chooser.addOption("Left3Ball", new Right4Ball(s_Swerve));
-      // m_chooser.addOption("Left2Ball", new Right4Ball(s_Swerve));
+    //Auto command chooser
+    // m_chooser.setDefaultOption("Right5Ball", new Right5Ball(s_Swerve));
+    // m_chooser.addOption("Right4Ball", new Right4Ball(s_Swerve));
+    // m_chooser.addOption("Right3Ball", new Right4Ball(s_Swerve));
+    // m_chooser.addOption("Right2Ball", new Right4Ball(s_Swerve));
+    // m_chooser.addOption("Left5Ball", new Right4Ball(s_Swerve));
+    // m_chooser.addOption("Left4Ball", new Right4Ball(s_Swerve));
+    // m_chooser.addOption("Left3Ball", new Right4Ball(s_Swerve));
+    // m_chooser.addOption("Left2Ball", new Right4Ball(s_Swerve));
 
-      m_chooseBall.setDefaultOption("2 Balls", AutoCommands.NumberOfBalls.two);
-      m_chooseBall.addOption("3 Balls", AutoCommands.NumberOfBalls.three);
-      m_chooseBall.addOption("4 Balls", AutoCommands.NumberOfBalls.four);
-      m_chooseBall.addOption("5 Balls", AutoCommands.NumberOfBalls.five);
+    m_chooseBall.setDefaultOption("2 Balls", AutoCommands.NumberOfBalls.two);
+    m_chooseBall.addOption("3 Balls", AutoCommands.NumberOfBalls.three);
+    m_chooseBall.addOption("4 Balls", AutoCommands.NumberOfBalls.four);
+    m_chooseBall.addOption("5 Balls", AutoCommands.NumberOfBalls.five);
 
-      m_choosePosition.setDefaultOption("Middle of Tarmac", AutoCommands.StartingPosition.middle);
-      m_choosePosition.addOption("Left of Tarmac", AutoCommands.StartingPosition.left);
-      m_choosePosition.addOption("Right of Tarmac", AutoCommands.StartingPosition.right);
+    m_choosePosition.setDefaultOption("Middle of Tarmac", AutoCommands.StartingPosition.middle);
+    m_choosePosition.addOption("Left of Tarmac", AutoCommands.StartingPosition.left);
+    m_choosePosition.addOption("Right of Tarmac", AutoCommands.StartingPosition.right);
 
-      m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.StartingTarmac.right);
-      m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
-      // Puts the chooser on the dashboard
-      //SmartDashboard.putData("auto", m_chooser);
-      SmartDashboard.putData("Auto # Balls", m_chooseBall);
-      SmartDashboard.putData("Auto Choose Position", m_choosePosition);
-      SmartDashboard.putData("Auto Choose Tarmac", m_chooseTarmac);
+    m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.StartingTarmac.right);
+    m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
+    // Puts the chooser on the dashboard
+    //SmartDashboard.putData("auto", m_chooser);
+    SmartDashboard.putData("Auto # Balls", m_chooseBall);
+    SmartDashboard.putData("Auto Choose Position", m_choosePosition);
+    SmartDashboard.putData("Auto Choose Tarmac", m_chooseTarmac);
   };
 
   /**

@@ -21,8 +21,6 @@ import frc.Controllers.LazySparkMAX;
 import frc.Controllers.LazyTalonFX;
 import frc.robot.Constants;
 import frc.robot.States;
-import frc.robot.States.IntakeExtendStates;
-import frc.robot.States.IntakeStates;
 
 public class Intaker extends SubsystemBase {
   /** Creates a new Intaker. */
@@ -66,6 +64,9 @@ public class Intaker extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(Climber.canClimb()) {
+      return;
+    }
     switch(States.intakeState) {
       case intaking:
       // check if a ball is detected by a sensor (2 total)
@@ -116,7 +117,6 @@ public class Intaker extends SubsystemBase {
       case disabled:
         intakeExtend.set(Value.kOff);
       }
-      
     }
   }
 
