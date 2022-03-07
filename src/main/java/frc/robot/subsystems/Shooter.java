@@ -132,9 +132,9 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    
-    
-
+    if(Climber.canClimb()) {
+      return;
+    }
     switch(States.shooterState){
       case disabled:
           shooterMotorParent.set(ControlMode.PercentOutput, 0);

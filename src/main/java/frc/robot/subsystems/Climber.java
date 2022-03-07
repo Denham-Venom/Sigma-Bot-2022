@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.EncoderType;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -28,13 +31,13 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private LazySparkMAX climberMotor;
   private DoubleSolenoid climberPiston;
-  private DutyCycleEncoder positionEncoder;
+  private RelativeEncoder positionEncoder;
   private final ShuffleboardTab testing;
   public Climber(PneumaticHub m_pHub) {
     testing = Shuffleboard.getTab("Testing");
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
     climberPiston = m_pHub.makeDoubleSolenoid(Constants.Climber.ClimberSolenoidForwardChannel, Constants.Climber.ClimberSolenoidReverseChannel);
-    positionEncoder = new DutyCycleEncoder(new DigitalInput(Constants.Climber.climberEncoderPort));
+    positionEncoder = climberMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 8192);// Rev throughbore encoder //new DutyCycleEncoder(new DigitalInput(Constants.Climber.climberEncoderPort));
     testing.add("Climber Extend Piston", new InstantCommand(
       () -> States.extendClimberPiston()
     ));
@@ -49,7 +52,16 @@ public class Climber extends SubsystemBase {
     ));
   }
 
-  public void setClimberPosition(double climberPosition) {
+  public static boolean canClimb() {
+    return States.climberState != States.ClimberStates.fullClimb;
+  }
+
+  public void extendClimber() {
+    setClimberPosition(Constants.Climber.extendedCounts);
+  }
+
+  private void setClimberPosition(double climberPosition) {
+    if(!canClimb()) return;
     if (climberPosition > Constants.Climber.climberHighLimit){
       climberPosition = Constants.Climber.climberHighLimit;
     }
@@ -57,6 +69,19 @@ public class Climber extends SubsystemBase {
       climberPosition = Constants.Climber.climberLowLimit;
     }
     climberMotor.set(ControlType.kPosition, climberPosition);
+  }
+
+  public void setClimberPiston(boolean extended) {
+    if(!canClimb()) return;
+    if(extended) {
+      climberPiston.set(Value.kForward);
+    } else {
+      climberPiston.set(Value.kReverse);
+    }
+  }
+
+  public void setClimberPiston() {
+    climberPiston.set(Value.kOff);
   }
 
   @Override
@@ -69,9 +94,9 @@ public class Climber extends SubsystemBase {
       // climberPiston.set(Value.kReverse);
       // climberPiston.set(Value.kForward);
       case extendClimber:
-      setClimberPosition(0);
+      setClimberPosition(Constants.Climber.extendedCounts);
       case retractClimber:
-      setClimberPosition(0);
+      setClimberPosition(Constants.Climber.retractedCounts);
       case extendClimberPiston:
       climberPiston.set(Value.kForward);
       case retractClimberPiston:
@@ -79,7 +104,7 @@ public class Climber extends SubsystemBase {
       case disabled:
       climberPiston.set(Value.kOff);
     }
-    testing.add("Climber Encoder Value", positionEncoder.get());
+    testing.add("Climber Encoder Value", positionEncoder.getCountsPerRevolution());
   }
 }
 

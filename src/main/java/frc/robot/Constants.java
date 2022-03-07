@@ -225,6 +225,8 @@ public final class Constants {
         public static final double climberHighLimit = 0;
         public static final double climberLowLimit = 0;
         public static final double climberGearRatio = 0;
+        public static final double extendedCounts = 0;
+        public static final double retractedCounts = 0;
     }
 
     public static final class Intake {
@@ -236,7 +238,6 @@ public final class Constants {
 
         public static final int IntakeSolenoidForwardChannel = 0;
         public static final int IntakeSolenoidReverseChannel = 1;
-
     }
 
     public static final class talonCurrentLimit {
