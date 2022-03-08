@@ -105,6 +105,7 @@ public class Intaker extends SubsystemBase {
         indexerMotor.set(ControlMode.PercentOutput, 0);
         //spinUpMotor.set(ControlType.kDutyCycle, 0);
         intakeMotor.set(ControlMode.PercentOutput, 0);
+        break;
     }
 
     switch(States.intakeExtendState) {
@@ -116,6 +117,7 @@ public class Intaker extends SubsystemBase {
         break;
       case disabled:
         intakeExtend.set(Value.kOff);
+        break;
       }
     }
   }

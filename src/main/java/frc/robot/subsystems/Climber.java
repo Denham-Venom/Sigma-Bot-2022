@@ -95,14 +95,19 @@ public class Climber extends SubsystemBase {
       // climberPiston.set(Value.kForward);
       case extendClimber:
       setClimberPosition(Constants.Climber.extendedCounts);
+      break;
       case retractClimber:
       setClimberPosition(Constants.Climber.retractedCounts);
+      break;
       case extendClimberPiston:
       climberPiston.set(Value.kForward);
+      break;
       case retractClimberPiston:
       climberPiston.set(Value.kReverse);
+      break;
       case disabled:
       climberPiston.set(Value.kOff);
+      break;
     }
     testing.add("Climber Encoder Value", positionEncoder.getCountsPerRevolution());
   }
