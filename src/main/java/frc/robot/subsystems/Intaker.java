@@ -37,7 +37,7 @@ public class Intaker extends SubsystemBase {
   public Intaker(PneumaticHub m_pHub) {
     testing = Shuffleboard.getTab("Testing");
 
-    indexerMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     //spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);

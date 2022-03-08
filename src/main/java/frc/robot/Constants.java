@@ -233,6 +233,8 @@ public final class Constants {
     public static final class Intake {
         public static final TalonConstants intakeMotorConstants = 
             new TalonConstants(11, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+        public static final TalonConstants indexMotorConstants = 
+            new TalonConstants(13, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None);
         public static final SparkConstants spinUpMotorConstants = 
             new SparkConstants(14, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
         public static final double IntakeSpeed = 0;
