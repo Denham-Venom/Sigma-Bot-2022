@@ -7,10 +7,7 @@ package frc.robot.autos;
 import java.util.AbstractMap;
 import java.util.Map;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.lib.util.SwerveTrajectoryWaypoint;
 import frc.robot.subsystems.Swerve;
 
@@ -29,10 +26,10 @@ public class AutoCommands {
     // So the above example would be the Right Tarmac in the Middle Position
     private static Map<String, SwerveTrajectoryWaypoint> startPositions = Map.ofEntries(
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftLeft", SwerveTrajectoryWaypoint(6.764, 5.712, 2.035, 2.035)),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftMid", SwerveTrajectoryWaypoint(7.103, 4.871, 2.742, 2.742)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftMid", SwerveTrajectoryWaypoint(7.022, 4.814, 2.775, 2.775)),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("LeftRight", SwerveTrajectoryWaypoint(5.962, 3.958, 3.141, 3.141)),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightLeft", SwerveTrajectoryWaypoint(8.439, 1.876, -1.561, -1.561)),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightMid", SwerveTrajectoryWaypoint(7.566, 2.96, -1.939, -1.939)),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightMid",  SwerveTrajectoryWaypoint(7.566, 2.903, -1.878, -1.878)),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>("RightRight", SwerveTrajectoryWaypoint(6.601, 2.546, -2.283, -2.283))
     );
     // shuffleboard value for number of balls, starting Position, left/right tarmac

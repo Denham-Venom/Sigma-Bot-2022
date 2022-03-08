@@ -276,23 +276,31 @@ public final class Constants {
             //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
         public static final SwerveTrajectoryWaypoint[] rightPoints = 
         {
-            new SwerveTrajectoryWaypoint(7.542, 1.091, -1.553, -1.553),
-            new SwerveTrajectoryWaypoint(7.38, 1.383, 2.725, 2.725),
-            new SwerveTrajectoryWaypoint(4.784, 1.854, -3.079, -3.079),
-            new SwerveTrajectoryWaypoint(1.753, 1.712, -2.434, -2.434),
-            new SwerveTrajectoryWaypoint(1.848, 1.897, 1.066, 1.066),
-            new SwerveTrajectoryWaypoint(5.233, 6.261, 0.742, 0.742),
-            new SwerveTrajectoryWaypoint(5.26, 6.233, 2.333, 2.333)
+            new SwerveTrajectoryWaypoint(7.559, 1, -1.568, -1.568),
+            new SwerveTrajectoryWaypoint(7.271, 1.383, 2.67, 2.67),
+            new SwerveTrajectoryWaypoint(4.2, 1.854, -3.134, -3.134),
+            new SwerveTrajectoryWaypoint(1.617, 1.697, -2.372, -2.372),
+            new SwerveTrajectoryWaypoint(1.645, 2.082, 0.778, 0.778),
+            new SwerveTrajectoryWaypoint(4.839, 6.047, 0.998, 0.998),
+            new SwerveTrajectoryWaypoint(5.287, 5.748, 2.556, 2.556)
         };
 
         public static final SwerveTrajectoryWaypoint[] leftPoints = 
         {
-            new SwerveTrajectoryWaypoint(5.49, 5.841, 2.662, 2.662),
-            new SwerveTrajectoryWaypoint(4.703, 5.42, -2.144, -2.144),
-            new SwerveTrajectoryWaypoint(1.672, 1.712, -2.388, -2.388),
-            new SwerveTrajectoryWaypoint(2.039, 1.754, 0.161, 0.161),
-            new SwerveTrajectoryWaypoint(5.165, 1.897, -0.057, -0.057),
-            new SwerveTrajectoryWaypoint(7.557, 1.098, -1.661, -1.661)
+            new SwerveTrajectoryWaypoint(5.245, 5.955, 2.618, 2.618),
+            new SwerveTrajectoryWaypoint(4.213, 4.564, -2.147, -2.147),
+            new SwerveTrajectoryWaypoint(1.685, 1.697, -2.374, -2.374),
+            new SwerveTrajectoryWaypoint(2.297, 1.726, 0.209, 0.209),
+            new SwerveTrajectoryWaypoint(5.464, 1.954, 0, 0),
+            new SwerveTrajectoryWaypoint(6.198, 1.997, -2.356, -2.356),
+            new SwerveTrajectoryWaypoint(7.559, 1, -1.571, -1.571)
+
+            // new Pose2d(5.245, 5.955, new Rotation2d(2.622)),
+            // new Pose2d(4.213, 4.564, new Rotation2d(-2.141)),
+            // new Pose2d(1.685, 1.697, new Rotation2d(-2.37)),
+            // new Pose2d(2.297, 1.726, new Rotation2d(0.216)),
+            // new Pose2d(5.464, 1.954, new Rotation2d(0.008)),
+            // new Pose2d(7.559, 1, new Rotation2d(-1.571))
         };
 }
     

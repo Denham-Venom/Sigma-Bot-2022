@@ -42,12 +42,13 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
       AutoConstants.leftPoints [waypointIndex++],
       AutoConstants.leftPoints [waypointIndex++],
       AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++],
       AutoConstants.leftPoints [waypointIndex]
     );
 
     SwerveTrajectory leftTarmacPaths3 = new SwerveTrajectory (
       Constants.Swerve.trajectoryConfig,
-      AutoConstants.leftPoints [waypointIndex++],
       AutoConstants.leftPoints [waypointIndex++],
       AutoConstants.leftPoints [waypointIndex]
     );
