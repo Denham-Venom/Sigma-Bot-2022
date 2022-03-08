@@ -22,6 +22,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
+    public static final int PneumaticHubID = 2;
 
     public static final class Swerve {
         public static final int pigeonID = 1;
@@ -153,13 +154,13 @@ public final class Constants {
 
     public static final class Shooter {
         public static final TalonConstants parentShooterConstants = 
-            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(9, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
     
         public static final TalonConstants childShooterConstants = 
-            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(10, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
         public static final TalonConstants hoodConstants = 
-            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(12, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
         public static final TalonConstants turretConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
@@ -217,7 +218,7 @@ public final class Constants {
 
     public static final class Climber {
         public static final SparkConstants climberMotorConstants = 
-            new SparkConstants(0, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
+            new SparkConstants(15, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
         public static final int ClimberSolenoidForwardChannel = 0;
         public static final int ClimberSolenoidReverseChannel = 1;
         public static final double ClimberSpeed = 0.2;
@@ -231,9 +232,9 @@ public final class Constants {
 
     public static final class Intake {
         public static final TalonConstants intakeMotorConstants = 
-            new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(11, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
         public static final SparkConstants spinUpMotorConstants = 
-            new SparkConstants(0, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
+            new SparkConstants(14, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
         public static final double IntakeSpeed = 0;
 
         public static final int IntakeSolenoidForwardChannel = 0;
