@@ -36,10 +36,12 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry shootP = tuning.add("Shoot P", 0).getEntry();
   private NetworkTableEntry shootI = tuning.add("Shoot I", 0).getEntry();
   private NetworkTableEntry shootD = tuning.add("Shoot D", 0).getEntry();
+  private NetworkTableEntry shootRPM = tuning.add("Shoot RPM", 0.).getEntry();
+  private PIDGains tuningShooterPID;
   private NetworkTableEntry hoodP = tuning.add("Hood P", 0).getEntry();
   private NetworkTableEntry hoodI = tuning.add("Hood I", 0).getEntry();
   private NetworkTableEntry hoodD = tuning.add("Hood D", 0).getEntry();
-  private PIDGains tuningShooterPID;
+  private NetworkTableEntry hoodAng = tuning.add("Hood Ang", 0.).getEntry();
   private PIDGains tuningHoodPID;
   
 
@@ -69,9 +71,6 @@ public class Shooter extends SubsystemBase {
       () -> setPower(0)
     ));
 
-    tuning.add("Shoot P", 0.);
-    tuning.add("Shoot I", 0.);
-    tuning.add("Shoot D", 0.);
 
     if (Constants.Shooter.calibrationMode){
       SmartDashboard.getNumber("Shooter RPM Calib", 0);
@@ -170,6 +169,7 @@ public class Shooter extends SubsystemBase {
     }
 
     if(Constants.tuningMode) {
+      shootRPM.setDouble(this.getShooterRPM());
       if(shootP.getDouble(0) != Constants.Shooter.shooterPID.kP
           | shootI.getDouble(0) != Constants.Shooter.shooterPID.kI
           | shootD.getDouble(0) != Constants.Shooter.shooterPID.kD) {
