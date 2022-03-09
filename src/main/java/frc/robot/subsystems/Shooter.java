@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
+import frc.lib.math.PIDGains;
 import frc.lib.util.Interpolatable;
 import frc.lib.util.InterpolatableTreeMap;
 import frc.lib.util.Limelight;
@@ -30,7 +32,19 @@ public class Shooter extends SubsystemBase {
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
   private ShuffleboardTab testing = Shuffleboard.getTab("Testing");
+  private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+  private NetworkTableEntry shootP = tuning.add("Shoot P", 0).getEntry();
+  private NetworkTableEntry shootI = tuning.add("Shoot I", 0).getEntry();
+  private NetworkTableEntry shootD = tuning.add("Shoot D", 0).getEntry();
+  private NetworkTableEntry shootRPM = tuning.add("Shoot RPM", 0.).getEntry();
+  private PIDGains tuningShooterPID;
+  private NetworkTableEntry hoodP = tuning.add("Hood P", 0).getEntry();
+  private NetworkTableEntry hoodI = tuning.add("Hood I", 0).getEntry();
+  private NetworkTableEntry hoodD = tuning.add("Hood D", 0).getEntry();
+  private NetworkTableEntry hoodAng = tuning.add("Hood Ang", 0.).getEntry();
+  private PIDGains tuningHoodPID;
   
+
   public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
@@ -42,6 +56,10 @@ public class Shooter extends SubsystemBase {
     hoodMotor.configPID(Constants.Shooter.hoodPID);
     //turretMotor.configPID(Constants.Shooter.turretPID);
     limelight = m_Vision.getLimelight();
+
+    tuningShooterPID = Constants.Shooter.shooterPID;
+    tuningHoodPID = Constants.Shooter.hoodPID;
+
     testing.addNumber("Hood Angle", this::getHoodAngle);
 
 
@@ -148,6 +166,31 @@ public class Shooter extends SubsystemBase {
               setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
           }
           break;
+    }
+
+    if(Constants.tuningMode) {
+      shootRPM.setDouble(this.getShooterRPM());
+      if(shootP.getDouble(0) != Constants.Shooter.shooterPID.kP
+          | shootI.getDouble(0) != Constants.Shooter.shooterPID.kI
+          | shootD.getDouble(0) != Constants.Shooter.shooterPID.kD) {
+        tuningShooterPID = new PIDGains(
+          shootP.getDouble(0), 
+          shootI.getDouble(0), 
+          shootD.getDouble(0), 
+          tuningShooterPID.kFF);
+        shooterMotorParent.configPID(tuningShooterPID);
+      }
+
+      if(hoodP.getDouble(0) != Constants.Shooter.hoodPID.kP
+          | hoodI.getDouble(0) != Constants.Shooter.hoodPID.kI
+          | hoodD.getDouble(0) != Constants.Shooter.hoodPID.kD) {
+        tuningHoodPID = new PIDGains(
+          hoodP.getDouble(0), 
+          hoodI.getDouble(0), 
+          hoodD.getDouble(0), 
+          tuningHoodPID.kFF);
+        hoodMotor.configPID(tuningHoodPID);
+      }
     }
 
     //updateTurret();

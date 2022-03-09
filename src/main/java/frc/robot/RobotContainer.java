@@ -66,6 +66,7 @@ public class RobotContainer {
 
   //Shuffleboard
   private final ShuffleboardTab testing = Shuffleboard.getTab("Testing");
+  private final ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
 
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */

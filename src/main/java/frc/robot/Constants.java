@@ -21,6 +21,8 @@ import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.SwerveTrajectoryWaypoint;
 
 public final class Constants {
+
+    public static final boolean tuningMode = true;
     public static final double stickDeadband = 0.1;
     public static final int PneumaticHubID = 2;
 
