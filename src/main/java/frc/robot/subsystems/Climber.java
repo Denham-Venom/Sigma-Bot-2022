@@ -4,18 +4,26 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.EncoderType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazySparkMAX;
+import frc.lib.math.Conversions;
 import frc.robot.Constants;
 import frc.robot.States;
 
@@ -43,7 +51,7 @@ public class Climber extends SubsystemBase {
       () -> States.retractClimber()
     ));
   }
-
+  
   public static boolean canClimb() {
     return States.climberState != States.ClimberStates.fullClimb;
   }
@@ -87,19 +95,14 @@ public class Climber extends SubsystemBase {
       // climberPiston.set(Value.kForward);
       case extendClimber:
       setClimberPosition(Constants.Climber.extendedCounts);
-      break;
       case retractClimber:
       setClimberPosition(Constants.Climber.retractedCounts);
-      break;
       case extendClimberPiston:
       climberPiston.set(Value.kForward);
-      break;
       case retractClimberPiston:
       climberPiston.set(Value.kReverse);
-      break;
       case disabled:
       climberPiston.set(Value.kOff);
-      break;
     }
     testing.add("Climber Encoder Value", positionEncoder.getCountsPerRevolution());
   }
