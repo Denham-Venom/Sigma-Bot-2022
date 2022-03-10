@@ -4,8 +4,12 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Consumer;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -34,14 +38,14 @@ public class Intaker extends SubsystemBase {
   private DoubleSolenoid intakeExtend;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
-  public Intaker(PneumaticHub m_pHub) {
+  public Intaker(PneumaticHub m_pHub, Consumer<RelativeEncoder> hoodEncoderGetter) {
     testing = Shuffleboard.getTab("Testing");
 
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     //spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
-    
+    hoodEncoderGetter.accept(spinUpMotor.getEncoder(Type.kQuadrature, Constants.Shooter.hoodEncoderCountsPerRev));
     testing.add("Start Intake Motors", new InstantCommand(
       () -> States.feed()
     ));

@@ -59,10 +59,10 @@ public class RobotContainer {
 
   /* Subsystems */
   private final PneumaticHub p_Hub = new PneumaticHub(Constants.PneumaticHubID);
-  private final Intaker m_Intaker = new Intaker(p_Hub);
   private final Vision m_Vision = new Vision();
-  private final Swerve s_Swerve = new Swerve(m_Vision);
   private final Shooter m_Shooter = new Shooter(m_Vision);
+  private final Intaker m_Intaker = new Intaker(p_Hub, m_Shooter.getHoodEncoderConsumer());
+  private final Swerve s_Swerve = new Swerve(m_Vision);
 
   //Shuffleboard
   private final ShuffleboardTab testing = Shuffleboard.getTab("Testing");
