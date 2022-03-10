@@ -4,9 +4,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Consumer;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +32,12 @@ public class Shooter extends SubsystemBase {
   private LazyTalonFX hoodMotor;
   //private LazyTalonFX turretMotor;
   private Limelight limelight;
-
+  private DigitalInput hoodLimit = new DigitalInput(Constants.Shooter.hoodLimitSwitchID);
+  private RelativeEncoder hoodEncoder;
+  private Consumer<RelativeEncoder> encoderGetter = (RelativeEncoder encoder) -> {
+    this.hoodEncoder = encoder;
+    this.hoodEncoder.setPositionConversionFactor(Constants.Shooter.hoodGearRatio);
+  };
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
   private ShuffleboardTab testing = Shuffleboard.getTab("Testing");
@@ -73,8 +82,8 @@ public class Shooter extends SubsystemBase {
 
 
     if (Constants.Shooter.calibrationMode){
-      SmartDashboard.getNumber("Shooter RPM Calib", 0);
-      SmartDashboard.getNumber("Shooter Angle Calib", 0);
+      tuning.add("Shooter RPM Calib", 0);
+      tuning.add("Shooter Angle Calib", 0);
     }
 
     for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
@@ -92,9 +101,13 @@ public class Shooter extends SubsystemBase {
     shooterMotorParent.set(ControlMode.Velocity, falconVelocity);
   }
 
+  public Consumer<RelativeEncoder> getHoodEncoderConsumer() {
+    return this.encoderGetter;
+  }
+
   //getter and setter for the hood
   public double getHoodAngle(){
-    return Conversions.falconToDegrees(hoodMotor.getSelectedSensorPosition(), Constants.Shooter.hoodGearRatio);
+    return hoodEncoder.getPosition();
   }
 
   public void setHoodAngle(double hoodAngle){

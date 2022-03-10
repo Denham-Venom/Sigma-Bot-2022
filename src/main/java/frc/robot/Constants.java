@@ -33,8 +33,8 @@ public final class Constants {
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(17.5);
         public static final double wheelBase = Units.inchesToMeters(17.5);
-        public static final double wheelDiameter = Units.inchesToMeters(3.94);
-        public static final double wheelCircumference = wheelDiameter * Math.PI;
+        public static final double wheelDiameter = Units.inchesToMeters(3.90);
+        public static final double wheelCircumference = wheelDiameter * Math.PI; //0.3110484 m
 
         public static final double openLoopRamp = 0.25;
         public static final double closedLoopRamp = 0.0;
@@ -156,10 +156,10 @@ public final class Constants {
 
     public static final class Shooter {
         public static final TalonConstants parentShooterConstants = 
-            new TalonConstants(9, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(9, talonCurrentLimit.supplyCurLim40, NeutralMode.Coast, InvertType.None); //might need to change invert type
     
         public static final TalonConstants childShooterConstants = 
-            new TalonConstants(10, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(10, talonCurrentLimit.supplyCurLim40, NeutralMode.Coast, InvertType.None); //might need to change invert type
 
         public static final TalonConstants hoodConstants = 
             new TalonConstants(12, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
@@ -194,6 +194,10 @@ public final class Constants {
         };
 
         public static final boolean autoAim = true;
+
+        public static final int hoodEncoderCountsPerRev = 8192;
+
+        public static final int hoodLimitSwitchID = -1;
 
     }
 
