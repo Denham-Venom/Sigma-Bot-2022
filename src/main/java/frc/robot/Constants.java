@@ -156,10 +156,10 @@ public final class Constants {
 
     public static final class Shooter {
         public static final TalonConstants parentShooterConstants = 
-            new TalonConstants(9, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(9, talonCurrentLimit.supplyCurLim40, NeutralMode.Coast, InvertType.None); //might need to change invert type
     
         public static final TalonConstants childShooterConstants = 
-            new TalonConstants(10, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(10, talonCurrentLimit.supplyCurLim40, NeutralMode.Coast, InvertType.None); //might need to change invert type
 
         public static final TalonConstants hoodConstants = 
             new TalonConstants(12, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
