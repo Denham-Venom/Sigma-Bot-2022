@@ -181,6 +181,11 @@ public class Shooter extends SubsystemBase {
           break;
     }
 
+    if (hoodLimit.get()) {
+      setHoodAngle(Constants.Shooter.hoodLowLimit + 1);
+      hoodEncoder.setPosition(0);
+    }
+
     if(Constants.tuningMode) {
       shootRPM.setDouble(this.getShooterRPM());
       if(shootP.getDouble(0) != Constants.Shooter.shooterPID.kP

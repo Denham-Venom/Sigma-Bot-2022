@@ -45,7 +45,7 @@ public class Intaker extends SubsystemBase {
     //spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
-    hoodEncoderGetter.accept(spinUpMotor.getEncoder(Type.kQuadrature, Constants.Shooter.hoodEncoderCountsPerRev));
+    //hoodEncoderGetter.accept(spinUpMotor.getEncoder(Type.kQuadrature, Constants.Shooter.hoodEncoderCountsPerRev));
     testing.add("Start Intake Motors", new InstantCommand(
       () -> States.feed()
     ));

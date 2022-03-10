@@ -197,7 +197,7 @@ public final class Constants {
 
         public static final int hoodEncoderCountsPerRev = 8192;
 
-        public static final int hoodLimitSwitchID = -1;
+        public static final int hoodLimitSwitchID = 4;
 
     }
 
