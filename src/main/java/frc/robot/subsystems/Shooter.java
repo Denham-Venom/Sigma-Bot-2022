@@ -107,6 +107,7 @@ public class Shooter extends SubsystemBase {
 
   //getter and setter for the hood
   public double getHoodAngle(){
+    if(hoodEncoder == null) return 0;
     return hoodEncoder.getPosition();
   }
 

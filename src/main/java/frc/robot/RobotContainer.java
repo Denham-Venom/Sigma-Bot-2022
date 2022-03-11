@@ -44,8 +44,8 @@ public class RobotContainer {
   private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kX.value);
   private final JoystickButton testHood = new JoystickButton(driver, XboxController.Button.kA.value);
   private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final POVButton intakeExtendButton = new POVButton(driver, 180);
-  private final POVButton intakeRetractButton = new POVButton(driver, 0);
+  private final POVButton climbExtendButton = new POVButton(driver, 180); //down
+  private final POVButton climbRetractButton = new POVButton(driver, 0); //up
   private final JoystickButton zeroGyroButton = new JoystickButton(driver, XboxController.Button.kStart.value);
 
   /* Operator Buttons */
@@ -101,7 +101,10 @@ public class RobotContainer {
       () -> States.intake(), 
       () -> States.stopIntake()
     ));
-    outakeButton.whileHeld(new Intake(m_Intaker));
+    outakeButton.whileHeld(new StartEndCommand(
+      () -> States.outtake(),
+      () -> States.stopIntake()
+    ));
 
     // Shooter
     operatorShootButton.toggleWhenPressed(new StartEndCommand(
@@ -121,6 +124,19 @@ public class RobotContainer {
       () -> States.intake(),
       () -> States.stopIntake()
     ));
+
+
+    // Climber
+    climbExtendButton.whileHeld(new StartEndCommand(
+      () -> States.extendClimber(),
+      () -> States.stopClimber()
+    ));
+
+    climbRetractButton.whileHeld(new StartEndCommand(
+      () -> States.retractClimber(),
+      () -> States.stopClimber()
+    ));
+
 
     //Auto command chooser
     // m_chooser.setDefaultOption("Right5Ball", new Right5Ball(s_Swerve));

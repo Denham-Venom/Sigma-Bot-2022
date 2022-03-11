@@ -80,6 +80,10 @@ public class Climber extends SubsystemBase {
     }
   }
 
+  public void setClimberMotor(double demand) {
+    climberMotor.set(demand);
+  }
+
   public void setClimberPiston() {
     climberPiston.set(Value.kOff);
   }
@@ -94,15 +98,18 @@ public class Climber extends SubsystemBase {
       // climberPiston.set(Value.kReverse);
       // climberPiston.set(Value.kForward);
       case extendClimber:
-      setClimberPosition(Constants.Climber.extendedCounts);
+      //setClimberPosition(Constants.Climber.extendedCounts);
+      setClimberMotor(Constants.Climber.ClimberSpeed);
       case retractClimber:
-      setClimberPosition(Constants.Climber.retractedCounts);
+      //setClimberPosition(Constants.Climber.retractedCounts);
+      setClimberMotor(-Constants.Climber.ClimberSpeed);
       case extendClimberPiston:
       climberPiston.set(Value.kForward);
       case retractClimberPiston:
       climberPiston.set(Value.kReverse);
       case disabled:
       climberPiston.set(Value.kOff);
+      setClimberMotor(Constants.Climber.ClimberSpeed);
     }
     testing.add("Climber Encoder Value", positionEncoder.getCountsPerRevolution());
   }

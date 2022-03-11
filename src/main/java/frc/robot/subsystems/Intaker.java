@@ -38,6 +38,7 @@ public class Intaker extends SubsystemBase {
   private DoubleSolenoid intakeExtend;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
+  private boolean useSensors = false;
   public Intaker(PneumaticHub m_pHub, Consumer<RelativeEncoder> hoodEncoderGetter) {
     testing = Shuffleboard.getTab("Testing");
 
@@ -71,25 +72,29 @@ public class Intaker extends SubsystemBase {
     }
     switch(States.intakeState) {
       case intaking:
-      // check if a ball is detected by a sensor (2 total)
-      // if it is, run only the motors with no ball detected
-        if(!intakeSensor.get()) {
-          if(!shooterSensor.get()) {
-            //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
-          } else {
-            spinUpMotor.set(ControlType.kDutyCycle, 0);
+        if(useSensors) {
+          if(!intakeSensor.get()) {
+            if(!shooterSensor.get()) {
+              spinUpMotor.set(ControlType.kDutyCycle, 0);
+            } else {
+              spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+            }
+            indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+            intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
           }
-          indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-        }
-        else if(!shooterSensor.get()) {
-          indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
-          //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
-          intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          else if(!shooterSensor.get()) {
+            indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+            //spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.IntakeSpeed);
+            intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          } else {
+            indexerMotor.set(ControlMode.PercentOutput, 0);
+            //spinUpMotor.set(ControlType.kDutyCycle, 0);
+            intakeMotor.set(ControlMode.PercentOutput, 0);
+          }
         } else {
-          indexerMotor.set(ControlMode.PercentOutput, 0);
-          //spinUpMotor.set(ControlType.kDutyCycle, 0);
-          intakeMotor.set(ControlMode.PercentOutput, 0);
+          spinUpMotor.set(Constants.Intake.IntakeSpeed);
+          indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
+          intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.IntakeSpeed);
         }
         break;
       case outtaking:
