@@ -24,7 +24,6 @@ public final class Constants {
 
     public static final boolean tuningMode = true;
     public static final double stickDeadband = 0.1;
-    public static final int PneumaticHubID = 2;
 
     public static final class Swerve {
         public static final int pigeonID = 1;

@@ -58,7 +58,7 @@ public class RobotContainer {
   private final JoystickButton operatorFeedButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
   /* Subsystems */
-  private final PneumaticHub p_Hub = new PneumaticHub(Constants.PneumaticHubID);
+  private final PneumaticHub p_Hub = new PneumaticHub();
   private final Vision m_Vision = new Vision();
   private final Shooter m_Shooter = new Shooter(m_Vision);
   private final Intaker m_Intaker = new Intaker(p_Hub, m_Shooter.getHoodEncoderConsumer());
