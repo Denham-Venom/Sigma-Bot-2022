@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -24,6 +25,7 @@ import frc.lib.util.InterpolatableTreeMap;
 import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.States.ShooterStates;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -46,16 +48,19 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry shootI = tuning.add("Shoot I", 0).getEntry();
   private NetworkTableEntry shootD = tuning.add("Shoot D", 0).getEntry();
   private NetworkTableEntry shootRPM = tuning.add("Shoot RPM", 0.).getEntry();
+  private NetworkTableEntry setShootRPM = tuning.add("Set Shoot RPM", 0.).getEntry();
   private PIDGains tuningShooterPID;
   private NetworkTableEntry hoodP = tuning.add("Hood P", 0).getEntry();
   private NetworkTableEntry hoodI = tuning.add("Hood I", 0).getEntry();
   private NetworkTableEntry hoodD = tuning.add("Hood D", 0).getEntry();
-  private NetworkTableEntry hoodAng = tuning.add("Hood Ang", 0.).getEntry();
-  private PIDGains tuningHoodPID;
+  private NetworkTableEntry hoodAng = tuning.add("Hood Angle", 0.).getEntry();
+  private NetworkTableEntry setHoodAng = tuning.add("Set Hood Angle", 0.).getEntry();
+  private PIDController hoodController;
+  private ShooterStates state;
   
 
   public Shooter(Vision m_Vision) {
-    shooterMotorParent = new LazyTalonFX(Constants.Shooter.childShooterConstants);
+    shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     hoodMotor = new LazyTalonFX(Constants.Shooter.hoodConstants);
     //turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
@@ -67,10 +72,12 @@ public class Shooter extends SubsystemBase {
     limelight = m_Vision.getLimelight();
 
     tuningShooterPID = Constants.Shooter.shooterPID;
-    tuningHoodPID = Constants.Shooter.hoodPID;
-
-    testing.addNumber("Hood Angle", this::getHoodAngle);
-
+    hoodController = new PIDController(
+      Constants.Shooter.shooterPID.kP, 
+      Constants.Shooter.shooterPID.kI, 
+      Constants.Shooter.shooterPID.kD
+    );
+    hoodController.setTolerance(Constants.Shooter.hoodControllerToleranceDegrees);
 
     testing.add("Start Shooter Motors", new InstantCommand(
       () -> setPower(0.5)
@@ -111,6 +118,8 @@ public class Shooter extends SubsystemBase {
     return hoodEncoder.getPosition();
   }
 
+
+
   public void setHoodAngle(double hoodAngle){
     if (hoodAngle > Constants.Shooter.hoodHighLimit){
       hoodAngle = Constants.Shooter.hoodHighLimit;
@@ -118,7 +127,14 @@ public class Shooter extends SubsystemBase {
     else if (hoodAngle < Constants.Shooter.hoodLowLimit){
       hoodAngle = Constants.Shooter.hoodLowLimit;
     }
-    hoodMotor.set(ControlMode.Position, Conversions.degreesToFalcon(hoodAngle, Constants.Shooter.hoodGearRatio));
+    final double output = hoodController.calculate(
+      Conversions.degreesToRevThroughBore(getHoodAngle(), Constants.Shooter.hoodGearRatio), 
+      Conversions.degreesToRevThroughBore(
+        hoodAngle, 
+        Constants.Shooter.hoodGearRatio
+      )
+    ) + Constants.Shooter.hoodPID.kFF;
+    hoodMotor.set(ControlMode.PercentOutput, output);//Conversions.degreesToFalcon(hoodAngle, Constants.Shooter.hoodGearRatio));
   }
     
 
@@ -161,37 +177,39 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(Climber.canClimb()) {
-      return;
-    }
-    switch(States.shooterState){
-      case disabled:
-          shooterMotorParent.set(ControlMode.PercentOutput, 0);
-          hoodMotor.set(ControlMode.PercentOutput, 0);
-          //turretMotor.set(ControlMode.PercentOutput, 0);
-          break;
-          
-      case preShoot:
-          if (Constants.Shooter.calibrationMode){
-              setShooterRPM(SmartDashboard.getNumber("Shooter RPM Calib", 0));
-              setHoodAngle(SmartDashboard.getNumber("Shooter Angle Calib", 0));
-          } else{
-              setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
-              setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
-          }
-          break;
-    }
-
     if (hoodLimit.get()) {
-      setHoodAngle(Constants.Shooter.hoodLowLimit + 1);
-      hoodEncoder.setPosition(0);
+      hoodEncoder.setPosition(Constants.Shooter.hoodLowLimit);
     }
+    // if(Climber.canClimb()) {
+    //   return;
+    // }
+    if(States.shooterState != state) {
+      state = States.shooterState;
+      switch(States.shooterState){
+        case disabled:
+            shooterMotorParent.set(ControlMode.PercentOutput, 0);
+            hoodMotor.set(ControlMode.PercentOutput, 0);
+            //turretMotor.set(ControlMode.PercentOutput, 0);
+            break;
+            
+        case preShoot:
+            if (Constants.Shooter.calibrationMode){
+                setShooterRPM(SmartDashboard.getNumber("Shooter RPM Calib", 0));
+                setHoodAngle(SmartDashboard.getNumber("Shooter Angle Calib", 0));
+            } else{
+                setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
+                setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
+            }
+          break;
+      }
+    }
+    
 
     if(Constants.tuningMode) {
       shootRPM.setDouble(this.getShooterRPM());
-      if(shootP.getDouble(0) != Constants.Shooter.shooterPID.kP
-          | shootI.getDouble(0) != Constants.Shooter.shooterPID.kI
-          | shootD.getDouble(0) != Constants.Shooter.shooterPID.kD) {
+      if(shootP.getDouble(0) != tuningShooterPID.kP
+          | shootI.getDouble(0) != tuningShooterPID.kI
+          | shootD.getDouble(0) != tuningShooterPID.kD) {
         tuningShooterPID = new PIDGains(
           shootP.getDouble(0), 
           shootI.getDouble(0), 
@@ -199,17 +217,19 @@ public class Shooter extends SubsystemBase {
           tuningShooterPID.kFF);
         shooterMotorParent.configPID(tuningShooterPID);
       }
+      setShooterRPM(setShootRPM.getDouble(0));
 
-      if(hoodP.getDouble(0) != Constants.Shooter.hoodPID.kP
-          | hoodI.getDouble(0) != Constants.Shooter.hoodPID.kI
-          | hoodD.getDouble(0) != Constants.Shooter.hoodPID.kD) {
-        tuningHoodPID = new PIDGains(
+      hoodAng.setDouble(this.getHoodAngle());
+      if(hoodP.getDouble(0) != hoodController.getP()
+          | hoodI.getDouble(0) != hoodController.getI()
+          | hoodD.getDouble(0) != hoodController.getD()) {
+        hoodController.setPID(
           hoodP.getDouble(0), 
           hoodI.getDouble(0), 
-          hoodD.getDouble(0), 
-          tuningHoodPID.kFF);
-        hoodMotor.configPID(tuningHoodPID);
+          hoodD.getDouble(0)
+        );
       }
+      setHoodAngle(setHoodAng.getDouble(0));
     }
 
     //updateTurret();

@@ -28,6 +28,20 @@ public class States {
     public static IntakeExtendStates intakeExtendState = IntakeExtendStates.disabled;
     public static ClimberStates climberState = ClimberStates.disabled;
 
+    public static void toggleIntake() {
+        switch(States.intakeExtendState) {
+            case deployIntake:
+                retractIntake();
+                break;
+            case retractIntake:
+                deployIntake();
+                break;
+            case disabled:
+                deployIntake();
+                break;
+        }
+    }
+
     public static void deployIntake(){
         States.intakeExtendState = IntakeExtendStates.deployIntake;
     }

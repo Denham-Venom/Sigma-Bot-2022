@@ -38,7 +38,7 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   /* Driver Buttons */
-  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton intakePistonButton = new JoystickButton(driver, XboxController.Button.kY.value);
   private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton highLowGearButton = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kX.value);
@@ -46,7 +46,7 @@ public class RobotContainer {
   private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final POVButton climbExtendButton = new POVButton(driver, 180); //down
   private final POVButton climbRetractButton = new POVButton(driver, 0); //up
-  private final JoystickButton zeroGyroButton = new JoystickButton(driver, XboxController.Button.kStart.value);
+  private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
 
   /* Operator Buttons */
   private final JoystickButton operatorShootButton = new JoystickButton(operator, XboxController.Button.kA.value);
@@ -104,6 +104,9 @@ public class RobotContainer {
     outakeButton.whileHeld(new StartEndCommand(
       () -> States.outtake(),
       () -> States.stopIntake()
+    ));
+    intakePistonButton.toggleWhenPressed(new InstantCommand(
+      () -> States.toggleIntake()
     ));
 
     // Shooter
