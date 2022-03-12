@@ -1,7 +1,9 @@
 package frc.Controllers;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.CANSparkMax;
 import frc.lib.math.PIDGains;
@@ -19,20 +21,25 @@ public class LazySparkMAX extends CANSparkMax {
      * 
      * @param intakemotorconstants
      */
-    public LazySparkMAX(SparkConstants intakemotorconstants) {
-        super(intakemotorconstants.deviceId, intakemotorconstants.motorType);
+    public LazySparkMAX(SparkConstants motorConstants) {
+        super(motorConstants.deviceId, motorConstants.motorType);
         super.restoreFactoryDefaults();
-        super.setSmartCurrentLimit(intakemotorconstants.smartCurrentLimit);
+        super.setSmartCurrentLimit(motorConstants.smartCurrentLimit);
         super.enableVoltageCompensation(12);
-        super.setIdleMode(intakemotorconstants.idleMode);
-        super.setInverted(intakemotorconstants.inverted);
+        super.setIdleMode(motorConstants.idleMode);
+        super.setInverted(motorConstants.inverted);
         super.burnFlash();
 
         m_pidController = super.getPIDController();
-        m_encoder = super.getEncoder();
+        if(motorConstants.useAlternateEncoder) {
+            m_encoder = super.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, motorConstants.encoderCountsPerRev);
+        } else {
+            m_encoder = super.getEncoder();
+        }
 
         m_encoder.setPosition(0);
     }
+
     
     public void set(ControlType kdutycycle, double setpoint) {
         m_pidController.setReference(setpoint, kdutycycle);

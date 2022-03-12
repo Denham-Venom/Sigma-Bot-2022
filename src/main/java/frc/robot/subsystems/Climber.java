@@ -26,6 +26,7 @@ import frc.Controllers.LazySparkMAX;
 import frc.lib.math.Conversions;
 import frc.robot.Constants;
 import frc.robot.States;
+import frc.robot.States.ClimberStates;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
@@ -33,6 +34,8 @@ public class Climber extends SubsystemBase {
   private DoubleSolenoid climberPiston;
   private RelativeEncoder positionEncoder;
   private final ShuffleboardTab testing;
+  private ClimberStates state = States.climberState;
+
   public Climber(PneumaticHub m_pHub) {
     testing = Shuffleboard.getTab("Testing");
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
@@ -53,7 +56,7 @@ public class Climber extends SubsystemBase {
   }
   
   public static boolean canClimb() {
-    return States.climberState != States.ClimberStates.fullClimb;
+    return States.climberState != States.ClimberStates.disabled;
   }
 
   public void extendClimber() {
@@ -72,7 +75,7 @@ public class Climber extends SubsystemBase {
   }
 
   public void setClimberPiston(boolean extended) {
-    if(!canClimb()) return;
+    //if(!canClimb()) return;
     if(extended) {
       climberPiston.set(Value.kForward);
     } else {
@@ -91,25 +94,28 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    switch(States.climberState) {
-      case fullClimb:
-      // climberPiston.set(Value.kForward);
-      // climberMotor.set(ControlType.kDutyCycle, Constants.Climber.ClimberSpeed);
-      // climberPiston.set(Value.kReverse);
-      // climberPiston.set(Value.kForward);
-      case extendClimber:
-      //setClimberPosition(Constants.Climber.extendedCounts);
-      setClimberMotor(Constants.Climber.ClimberSpeed);
-      case retractClimber:
-      //setClimberPosition(Constants.Climber.retractedCounts);
-      setClimberMotor(-Constants.Climber.ClimberSpeed);
-      case extendClimberPiston:
-      climberPiston.set(Value.kForward);
-      case retractClimberPiston:
-      climberPiston.set(Value.kReverse);
-      case disabled:
-      climberPiston.set(Value.kOff);
-      setClimberMotor(Constants.Climber.ClimberSpeed);
+    if(States.climberState != state) {
+      state = States.climberState;
+      switch(States.climberState) {
+        case fullClimb:
+        // climberPiston.set(Value.kForward);
+        // climberMotor.set(ControlType.kDutyCycle, Constants.Climber.ClimberSpeed);
+        // climberPiston.set(Value.kReverse);
+        // climberPiston.set(Value.kForward);
+        case extendClimber:
+        //setClimberPosition(Constants.Climber.extendedCounts);
+        setClimberMotor(Constants.Climber.ClimberSpeed);
+        case retractClimber:
+        //setClimberPosition(Constants.Climber.retractedCounts);
+        setClimberMotor(-Constants.Climber.ClimberSpeed);
+        case extendClimberPiston:
+        climberPiston.set(Value.kForward);
+        case retractClimberPiston:
+        climberPiston.set(Value.kReverse);
+        case disabled:
+        climberPiston.set(Value.kOff);
+        setClimberMotor(Constants.Climber.ClimberSpeed);
+      }
     }
     testing.add("Climber Encoder Value", positionEncoder.getCountsPerRevolution());
   }

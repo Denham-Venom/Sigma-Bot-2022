@@ -59,7 +59,7 @@ public final class Constants {
         public static final boolean driveEnableCurrentLimit = true;
 
         /* Angle Motor PID Values */
-        public static final double angleKP = 0.1; //.6
+        public static final double angleKP = 0.2;/*0.1;*/ /*.6*/
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0; //12
         public static final double angleKF = 0.0;
@@ -161,16 +161,17 @@ public final class Constants {
             new TalonConstants(10, talonCurrentLimit.supplyCurLim40, NeutralMode.Coast, InvertType.OpposeMaster); //might need to change invert type
 
         public static final TalonConstants hoodConstants = 
-            new TalonConstants(12, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(12, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.InvertMotorOutput); //might need to change invert type
 
         public static final TalonConstants turretConstants = 
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
         public static final double shooterGearRatio = (1/1);
-        public static final PIDGains shooterPID = new PIDGains(0.1, 0.0, 0.0, 0.046976); // might need to be changed
+        public static final PIDGains shooterPID = new PIDGains(0.1, 0.00001, 0.0, 0.046976); // might need to be changed
 
         public static final double hoodGearRatio = 0;
-        public static final PIDGains hoodPID = new PIDGains(0, 0, 0, 0); //Definetly needs to be changed
+        public static final PIDGains hoodPID = new PIDGains(0, 0, 0, 0.21); //Definetly needs to be changed
+        public static final double hoodControllerToleranceDegrees = 0.5;
 
         public static final double turretGearRatio = 0;
         public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed
@@ -223,9 +224,9 @@ public final class Constants {
 
     public static final class Climber {
         public static final SparkConstants climberMotorConstants = 
-            new SparkConstants(15, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
-        public static final int ClimberSolenoidForwardChannel = 0;
-        public static final int ClimberSolenoidReverseChannel = 1;
+            new SparkConstants(15, MotorType.kBrushless, 35, IdleMode.kBrake, false, false, -1); //might need to change invert type
+        public static final int ClimberSolenoidForwardChannel = 1;
+        public static final int ClimberSolenoidReverseChannel = 3;
         public static final double ClimberSpeed = 0.2;
         public static final int climberEncoderPort = 0;
         public static final double climberHighLimit = 0;
@@ -237,15 +238,18 @@ public final class Constants {
 
     public static final class Intake {
         public static final TalonConstants intakeMotorConstants = 
-            new TalonConstants(11, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
+            new TalonConstants(11, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.InvertMotorOutput);
         public static final TalonConstants indexMotorConstants = 
             new TalonConstants(13, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None);
         public static final SparkConstants spinUpMotorConstants = 
-            new SparkConstants(14, MotorType.kBrushed, 35, IdleMode.kBrake, false); //might need to change invert type
-        public static final double IntakeSpeed = 0;
+            new SparkConstants(14, MotorType.kBrushless, 35, IdleMode.kBrake, false, true, 8192); //might need to change invert type
+        
+        public static final double intakeSpeed = 0.5;
+        public static final double indexSpeed = 0.6;
+        public static final double spinupSpeed = 0.5;
 
         public static final int IntakeSolenoidForwardChannel = 0;
-        public static final int IntakeSolenoidReverseChannel = 1;
+        public static final int IntakeSolenoidReverseChannel = 2;
     }
 
     public static final class talonCurrentLimit {

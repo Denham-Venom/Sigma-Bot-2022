@@ -35,6 +35,7 @@ public class Swerve extends SubsystemBase {
     private Limelight limelight;
     private int currentNeutral = 0;
     private boolean isLowGear = true;
+    private States.ShooterStates shooterState = States.shooterState;
 
     public Swerve(Vision m_Vision) {
         Constants.Swerve.thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -151,19 +152,22 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
 
-        switch(States.shooterState){
-            case disabled:
-                break;
-                
-            case preShoot:
-                if (Constants.Shooter.autoAim){
-                    this.drive(
-                        new Translation2d(), 
-                        Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees()), 
-                        Constants.Swerve.fieldRelative, 
-                        false);
-                }
-                break;
+        if(States.shooterState != this.shooterState) {
+            this.shooterState = States.shooterState;
+            switch(States.shooterState){
+                case disabled:
+                    break;
+                    
+                case preShoot:
+                    if (Constants.Shooter.autoAim){
+                        this.drive(
+                            new Translation2d(), 
+                            Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees()), 
+                            Constants.Swerve.fieldRelative, 
+                            false);
+                    }
+                    break;
+            }
         }
 
         if(Constants.Swerve.coastOnDisable){
