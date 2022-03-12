@@ -12,6 +12,8 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,12 +36,15 @@ public class Shooter extends SubsystemBase {
   private LazyTalonFX hoodMotor;
   //private LazyTalonFX turretMotor;
   private Limelight limelight;
+  private boolean homingDone = false;
   private DigitalInput hoodLimit = new DigitalInput(Constants.Shooter.hoodLimitSwitchID);
-  private RelativeEncoder hoodEncoder;
-  private Consumer<RelativeEncoder> encoderGetter = (RelativeEncoder encoder) -> {
-    this.hoodEncoder = encoder;
-    this.hoodEncoder.setPositionConversionFactor(Constants.Shooter.hoodGearRatio);
-  };
+  // private RelativeEncoder hoodEncoder;
+  // private Consumer<RelativeEncoder> encoderGetter = (RelativeEncoder encoder) -> {
+  //   this.hoodEncoder = encoder;
+  //   this.hoodEncoder.setPositionConversionFactor(Constants.Shooter.hoodGearRatio * 360 /*degrees*/);
+  // };
+  private DutyCycleEncoder hoodEncoderAbsolute = new DutyCycleEncoder(new DigitalInput(Constants.Shooter.hoodEncoderAbsoluteChannel));
+  private Encoder hoodEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
   private ShuffleboardTab testing = Shuffleboard.getTab("Testing");
@@ -55,6 +60,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry hoodD = tuning.add("Hood D", 0).getEntry();
   private NetworkTableEntry hoodAng = tuning.add("Hood Angle", 0.).getEntry();
   private NetworkTableEntry setHoodAng = tuning.add("Set Hood Angle", 0.).getEntry();
+  private NetworkTableEntry hoodPIDOut = tuning.add("HoodPIDOut", 0.).getEntry();
+  private NetworkTableEntry hoodLimitSwitchPressed = tuning.add("HoodLimitPressed", false).getEntry();
   private PIDController hoodController;
   private ShooterStates state;
   
@@ -64,20 +71,21 @@ public class Shooter extends SubsystemBase {
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     hoodMotor = new LazyTalonFX(Constants.Shooter.hoodConstants);
     //turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
-
     shooterMotorParent.configPID(Constants.Shooter.shooterPID);
     shooterMotorChild.follow(shooterMotorParent);
-    hoodMotor.configPID(Constants.Shooter.hoodPID);
+    //hoodMotor.configPID(Constants.Shooter.hoodPID);
     //turretMotor.configPID(Constants.Shooter.turretPID);
     limelight = m_Vision.getLimelight();
 
     tuningShooterPID = Constants.Shooter.shooterPID;
     hoodController = new PIDController(
-      Constants.Shooter.shooterPID.kP, 
-      Constants.Shooter.shooterPID.kI, 
-      Constants.Shooter.shooterPID.kD
+      Constants.Shooter.hoodPID.kP, 
+      Constants.Shooter.hoodPID.kI, 
+      Constants.Shooter.hoodPID.kD
     );
-    hoodController.setTolerance(Constants.Shooter.hoodControllerToleranceDegrees);
+    hoodController.setTolerance(Constants.Shooter.hoodControllerToleranceDegrees, 0.5);
+    hoodEncoder.reset();
+    hoodEncoder.setDistancePerPulse(360. * Constants.Shooter.hoodGearRatio / 2048.); //degrees
 
     testing.add("Start Shooter Motors", new InstantCommand(
       () -> setPower(0.5)
@@ -89,8 +97,8 @@ public class Shooter extends SubsystemBase {
 
 
     if (Constants.Shooter.calibrationMode){
-      tuning.add("Shooter RPM Calib", 0);
-      tuning.add("Shooter Angle Calib", 0);
+      //tuning.add("Shooter RPM Calib", 0);
+      //tuning.add("Shooter Angle Calib", 0);
     }
 
     for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
@@ -108,17 +116,30 @@ public class Shooter extends SubsystemBase {
     shooterMotorParent.set(ControlMode.Velocity, falconVelocity);
   }
 
-  public Consumer<RelativeEncoder> getHoodEncoderConsumer() {
-    return this.encoderGetter;
-  }
+  // public Consumer<RelativeEncoder> getHoodEncoderConsumer() {
+  //   return this.encoderGetter;
+  // }
 
   //getter and setter for the hood
+  // public double getHoodAngle(){
+  //   if(hoodEncoder == null) return Double.MIN_VALUE;
+  //   return hoodEncoder.getPosition();
+  //   return hoodEncoderAbsolute.getAbsolutePosition();
+  // }
+
   public double getHoodAngle(){
-    if(hoodEncoder == null) return 0;
-    return hoodEncoder.getPosition();
+    return hoodEncoder.getDistance() + Constants.Shooter.hoodAngleOffset;
+    // double position = 360 - hoodEncoderAbsolute.get() * 360;
+    // if(position >= Constants.Shooter.hoodEncoderOffset)
+    //   position -= Constants.Shooter.hoodEncoderOffset;
+    // else
+    //   position = position + (360 - Constants.Shooter.hoodEncoderOffset);
+
+    // //position = 360 - position;
+    // //position = position - Constants.Shooter.hoodEncoderOffset;
+    // position = Math.round(position * 100.0) / 100.0; // Rounding to 2 decimal places
+    // return position;
   }
-
-
 
   public void setHoodAngle(double hoodAngle){
     if (hoodAngle > Constants.Shooter.hoodHighLimit){
@@ -127,14 +148,28 @@ public class Shooter extends SubsystemBase {
     else if (hoodAngle < Constants.Shooter.hoodLowLimit){
       hoodAngle = Constants.Shooter.hoodLowLimit;
     }
-    final double output = hoodController.calculate(
-      Conversions.degreesToRevThroughBore(getHoodAngle(), Constants.Shooter.hoodGearRatio), 
-      Conversions.degreesToRevThroughBore(
-        hoodAngle, 
-        Constants.Shooter.hoodGearRatio
-      )
-    ) + Constants.Shooter.hoodPID.kFF;
+    hoodController.setSetpoint(hoodAngle);
+    if(hoodController.atSetpoint()) {
+      hoodMotor.set(ControlMode.PercentOutput, 0);
+      return;
+    }
+    double output = hoodController.calculate(getHoodAngle());// + Constants.Shooter.hoodPID.kFF;
+    if(output < 0) {
+      if(!hoodLimit.get()) output = 0;
+      else output += Constants.Shooter.hoodDownFF;
+    } else if(output > 0) {
+      output += Constants.Shooter.hoodPID.kFF;
+    }
+    hoodPIDOut.setDouble(output);
     hoodMotor.set(ControlMode.PercentOutput, output);//Conversions.degreesToFalcon(hoodAngle, Constants.Shooter.hoodGearRatio));
+  }
+
+  public void setHoodPower(double scale) {
+    hoodMotor.set(ControlMode.PercentOutput, scale * 0.2);//SmartDashboard.getNumber("HoodTestPow", 0));
+  }
+
+  public void stopHood() {
+    hoodMotor.set(ControlMode.PercentOutput, 0);
   }
     
 
@@ -177,36 +212,45 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (hoodLimit.get()) {
-      hoodEncoder.setPosition(Constants.Shooter.hoodLowLimit);
+    
+    boolean hoodDown = !hoodLimit.get();
+    hoodLimitSwitchPressed.setBoolean(hoodDown);
+    if(hoodDown) hoodEncoder.reset();
+    if(!homingDone) {
+      if(hoodDown) homingDone = true;
+      setHoodPower(-1);
+      return;
     }
     // if(Climber.canClimb()) {
     //   return;
     // }
-    if(States.shooterState != state) {
-      state = States.shooterState;
+    //if(States.shooterState != state) {
+    //  state = States.shooterState;
       switch(States.shooterState){
         case disabled:
             shooterMotorParent.set(ControlMode.PercentOutput, 0);
-            hoodMotor.set(ControlMode.PercentOutput, 0);
-            //turretMotor.set(ControlMode.PercentOutput, 0);
+            if(!Constants.tuningMode) {
+              hoodMotor.set(ControlMode.PercentOutput, 0);
+              //turretMotor.set(ControlMode.PercentOutput, 0);
+            }
             break;
             
         case preShoot:
             if (Constants.Shooter.calibrationMode){
-                setShooterRPM(SmartDashboard.getNumber("Shooter RPM Calib", 0));
-                setHoodAngle(SmartDashboard.getNumber("Shooter Angle Calib", 0));
+                setShooterRPM(setShootRPM.getDouble(0));
+                setHoodAngle(setHoodAng.getDouble(0));
             } else{
                 setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
                 setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
             }
           break;
-      }
+      //}
     }
     
 
+    shootRPM.setDouble(this.getShooterRPM());
+    hoodAng.setDouble(this.getHoodAngle());
     if(Constants.tuningMode) {
-      shootRPM.setDouble(this.getShooterRPM());
       if(shootP.getDouble(0) != tuningShooterPID.kP
           | shootI.getDouble(0) != tuningShooterPID.kI
           | shootD.getDouble(0) != tuningShooterPID.kD) {
@@ -219,7 +263,6 @@ public class Shooter extends SubsystemBase {
       }
       setShooterRPM(setShootRPM.getDouble(0));
 
-      hoodAng.setDouble(this.getHoodAngle());
       if(hoodP.getDouble(0) != hoodController.getP()
           | hoodI.getDouble(0) != hoodController.getI()
           | hoodD.getDouble(0) != hoodController.getD()) {

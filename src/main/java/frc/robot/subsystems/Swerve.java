@@ -4,6 +4,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import org.ejml.dense.row.mult.SubmatrixOps_FDRM;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -152,22 +154,21 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
 
-        if(States.shooterState != this.shooterState) {
-            this.shooterState = States.shooterState;
-            switch(States.shooterState){
-                case disabled:
-                    break;
-                    
-                case preShoot:
-                    if (Constants.Shooter.autoAim){
-                        this.drive(
-                            new Translation2d(), 
-                            Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees()), 
-                            Constants.Swerve.fieldRelative, 
-                            false);
-                    }
-                    break;
-            }
+        switch(States.shooterState){
+            case disabled:
+                break;
+                
+            case preShoot:
+                double thetaOut = Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees());
+                SmartDashboard.putNumber("to", thetaOut);
+                if (Constants.Shooter.autoAim){
+                    this.drive(
+                        new Translation2d(), 
+                        thetaOut, 
+                        Constants.Swerve.fieldRelative, 
+                        false);
+                }
+                break;
         }
 
         if(Constants.Swerve.coastOnDisable){

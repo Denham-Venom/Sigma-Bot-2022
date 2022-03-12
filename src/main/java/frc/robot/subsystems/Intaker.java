@@ -43,14 +43,14 @@ public class Intaker extends SubsystemBase {
   private boolean useSensors = false;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
-  public Intaker(PneumaticHub m_pHub, Consumer<RelativeEncoder> hoodEncoderGetter) {
+  public Intaker(PneumaticHub m_pHub){//, Consumer<RelativeEncoder> hoodEncoderGetter) {
     testing = Shuffleboard.getTab("Testing");
 
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
-    hoodEncoderGetter.accept(spinUpMotor.getAlternateEncoder(Type.kQuadrature, Constants.Shooter.hoodEncoderCountsPerRev));
+    //hoodEncoderGetter.accept(spinUpMotor.getAlternateEncoder(Type.kQuadrature, Constants.Shooter.hoodEncoderCountsPerRev));
     testing.add("Start Intake Motors", new InstantCommand(
       () -> States.feed()
     ));

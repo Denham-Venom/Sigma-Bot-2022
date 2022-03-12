@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -22,7 +23,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 
 public final class Constants {
 
-    public static final boolean tuningMode = true;
+    public static final boolean tuningMode = false;
     public static final double stickDeadband = 0.1;
 
     public static final class Swerve {
@@ -167,33 +168,47 @@ public final class Constants {
             new TalonConstants(0, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None); //might need to change invert type
 
         public static final double shooterGearRatio = (1/1);
-        public static final PIDGains shooterPID = new PIDGains(0.1, 0.00001, 0.0, 0.046976); // might need to be changed
+        public static final double shootKs = 0.75347;
+        public static final double shootKv = 0.11309;
+        public static final double shootKa = 0.0073;
+        public static final PIDGains shooterPID = new PIDGains(0.12295, /*0.00001*/0, 0.0, 0.046976); // might need to be changed
+        public static final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(shootKs, shootKv, shootKa);
 
-        public static final double hoodGearRatio = 0;
-        public static final PIDGains hoodPID = new PIDGains(0, 0, 0, 0.21); //Definetly needs to be changed
+        public static final double hoodGearRatio = 18./42;
+        public static final PIDGains hoodPID = new PIDGains(0.05, 0, 0.001, 0.12); //contains up FF
+        public static final double hoodDownFF = -0.05;
         public static final double hoodControllerToleranceDegrees = 0.5;
+        public static final int hoodEncoderAbsoluteChannel = 0;
+        public static final double hoodAngleOffset = 10.;
 
         public static final double turretGearRatio = 0;
         public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed
 
         //high angle = 70 degrees from straight, low angle = 10 degrees from straight up
-        public static final double hoodHighLimit = 0;
-        public static final double hoodLowLimit = 0;
+        public static final double hoodHighLimit = 90;
+        public static final double hoodLowLimit = 10;
 
         //high angle = 270; low angle = 0
         public static final double turretHighLimit = 0;
         public static final double turretLowLimit = 0;
 
-        public static final boolean calibrationMode = false;
+        public static final boolean calibrationMode = true;
 
         /* Shooter Tuned Constants */
         public static final double[][] shooterMap = 
-        // {distance, shooterRPM, shooterAngle}
+        // {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
         {
-            {0, 0, 0}
+            {1.83, 2200, 14.37},
+
+            {2.5, 2350, 22},
+            {3.60, 2850, 26.14},
+            {4.57, 3050, 32.14},
+
         };
 
-        public static final boolean autoAim = true;
+        public static final double[] shooterLowMap = {1.83, 900, 14.00}; //d, s, a
+
+        public static final boolean autoAim = false; //TODO set to true
 
         public static final int hoodEncoderCountsPerRev = 8192;
 
@@ -202,10 +217,10 @@ public final class Constants {
     }
 
     public static final class Vision {
-        public static final double goalHeight = Units.inchesToMeters(81.0 + (17.0 / 2.0));
+        public static final double goalHeight = Units.inchesToMeters(101.375);
 
         public static final double limelightHeight = Units.inchesToMeters(21.0);
-        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(9.0);
+        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(48);
     }
 
     public static final class Turret {
@@ -242,7 +257,7 @@ public final class Constants {
         public static final TalonConstants indexMotorConstants = 
             new TalonConstants(13, talonCurrentLimit.supplyCurLim40, NeutralMode.Brake, InvertType.None);
         public static final SparkConstants spinUpMotorConstants = 
-            new SparkConstants(14, MotorType.kBrushless, 35, IdleMode.kBrake, false, true, 8192); //might need to change invert type
+            new SparkConstants(14, MotorType.kBrushless, 35, IdleMode.kBrake, false, false, -1); //might need to change invert type
         
         public static final double intakeSpeed = 0.5;
         public static final double indexSpeed = 0.6;
@@ -268,7 +283,7 @@ public final class Constants {
     
         public static final double kPXController = 1;
         public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
+        public static final double kPThetaController = 2;
     
         // Constraint for the motion profilied robot angle controller
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =

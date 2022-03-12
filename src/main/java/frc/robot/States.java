@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class States {
 
     /**
@@ -59,10 +61,12 @@ public class States {
     }
 
     public static void activateShooter() {
+        SmartDashboard.putBoolean("preshoot", true);
         States.shooterState = ShooterStates.preShoot;
     }
 
     public static void deactivateShooter() {
+        SmartDashboard.putBoolean("preshoot", false);
         States.shooterState = ShooterStates.disabled;
     }
 

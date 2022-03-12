@@ -42,7 +42,10 @@ public class RobotContainer {
   private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton highLowGearButton = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kX.value);
-  private final JoystickButton testHood = new JoystickButton(driver, XboxController.Button.kA.value);
+  //private final JoystickButton testHoodUp = new JoystickButton(driver, XboxController.Button.kA.value);
+  //private final JoystickButton testHoodDown = new JoystickButton(driver, XboxController.Button.kB.value);
+  private final JoystickButton preshootButton = new JoystickButton(driver, XboxController.Button.kA.value);
+  //private final JoystickButton feedButton = new JoystickButton(driver, XboxController.Button.kB.value);
   private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final POVButton climbExtendButton = new POVButton(driver, 180); //down
   private final POVButton climbRetractButton = new POVButton(driver, 0); //up
@@ -61,7 +64,7 @@ public class RobotContainer {
   private final PneumaticHub p_Hub = new PneumaticHub();
   private final Vision m_Vision = new Vision();
   private final Shooter m_Shooter = new Shooter(m_Vision);
-  private final Intaker m_Intaker = new Intaker(p_Hub, m_Shooter.getHoodEncoderConsumer());
+  private final Intaker m_Intaker = new Intaker(p_Hub);//, m_Shooter.getHoodEncoderConsumer());
   private final Swerve s_Swerve = new Swerve(m_Vision);
 
   //Shuffleboard
@@ -95,7 +98,7 @@ public class RobotContainer {
     /* Driver Buttons */
     zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
     highLowGearButton.whenPressed(new InstantCommand(() -> s_Swerve.switchLowHighGear()));
-
+    
     // Intake
     intakeButton.whileHeld(new StartEndCommand(
       () -> States.intake(), 
@@ -110,6 +113,23 @@ public class RobotContainer {
     ));
 
     // Shooter
+    //SmartDashboard.putNumber("HoodTestPow", 0);
+    preshootButton.toggleWhenPressed(new StartEndCommand(
+      () -> States.activateShooter(),
+      () -> States.deactivateShooter()
+    ));
+    // feedButton.whileHeld(new StartEndCommand(
+    //   () -> States.feed(), 
+    //   () -> States.stopIntake()
+    // ));
+    // testHoodUp.whenHeld(new StartEndCommand(
+    //   () -> m_Shooter.setHoodPower(1), 
+    //   () -> m_Shooter.stopHood()  
+    // ));
+    // testHoodDown.whenHeld(new StartEndCommand(
+    //   () -> m_Shooter.setHoodPower(-1), 
+    //   () -> m_Shooter.stopHood()  
+    // ));
     operatorShootButton.toggleWhenPressed(new StartEndCommand(
       () -> States.activateShooter(),
       () -> States.deactivateShooter()
@@ -119,15 +139,11 @@ public class RobotContainer {
       () -> States.stopIntake()
     ));
 
-    // Test Hood
-    testHood.whenPressed(new InstantCommand(() -> m_Shooter.setHoodAngle(0)));
-  
     /* Operator Buttons */
     operatorIntakeButton.whileHeld( new StartEndCommand(
       () -> States.intake(),
       () -> States.stopIntake()
     ));
-
 
     // Climber
     climbExtendButton.whileHeld(new StartEndCommand(
