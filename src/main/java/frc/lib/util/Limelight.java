@@ -10,6 +10,8 @@ public class Limelight {
     private final Rotation2d limelightAngle;
     private final double targetHeight;
     private MedianFilter distanceMedian;
+    private MedianFilter xMedian;
+    private MedianFilter yMedian;
 
     /**
      * @param limelightHeight Height (in meters) to center of limelight camera from the ground.
@@ -21,17 +23,19 @@ public class Limelight {
         this.limelightAngle = limelightAngle;
         this.targetHeight = targetHeight;
         distanceMedian = new MedianFilter(10);
+        xMedian = new MedianFilter(10);
+        yMedian = new MedianFilter(10);
     }
 
     /**@return Horizontal Offset From Crosshair To Target in degrees
      * (Note: Inverted from standard LL provided angle to be CCW+) */
     public Rotation2d getTx() {
-        return Rotation2d.fromDegrees(-NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0));
+        return Rotation2d.fromDegrees(xMedian.calculate(-NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)));
     }
 
     /**@return Vertical Offset from Crosshair to Target in degrees */
     public Rotation2d getTy() {
-        return Rotation2d.fromDegrees(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0));
+        return Rotation2d.fromDegrees(yMedian.calculate(NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0)));
     }
 
     /**
@@ -41,7 +45,8 @@ public class Limelight {
     public boolean hasTarget(){
         boolean hasTarget = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1;
         if (!hasTarget){
-            distanceMedian.reset();
+            //distanceMedian.reset();
+            resetFilters();
         }
         return hasTarget;
     }
@@ -50,14 +55,16 @@ public class Limelight {
     public Translation2d getDistance(){
         double heightDifference = targetHeight - limelightHeight;
         Rotation2d combinedAngle = limelightAngle.plus(getTy());
-        return new Translation2d(distanceMedian.calculate((heightDifference / combinedAngle.getTan())), 0);
+        return new Translation2d(heightDifference / combinedAngle.getTan(), 0);//distanceMedian.calculate((heightDifference / combinedAngle.getTan())), 0);
     }
 
     /**
      * Needs to be called whenever the Limelight
      */
-    public void resetDistanceFilter(){
-        distanceMedian.reset();
+    public void resetFilters(){
+        //distanceMedian.reset();
+        xMedian.reset();
+        yMedian.reset();
     }
 
     /**@return The pipeline’s latency contribution in seconds  */

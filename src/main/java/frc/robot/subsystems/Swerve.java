@@ -54,9 +54,7 @@ public class Swerve extends SubsystemBase {
     private NetworkTableEntry turnI = tuning.add("Turn I", 0).getEntry();
     private NetworkTableEntry turnD = tuning.add("Turn D", 0).getEntry();
     private NetworkTableEntry turnTol = tuning.add("Turn Tol", 0).getEntry();
-    private NetworkTableEntry turnVelTol = tuning.add("Turn Vel Tol", 0).getEntry();
     private double turnTolVal = Constants.Swerve.thetaTolerance;
-    private double turnVelTolVal = Constants.Swerve.thetaVelTol;
 
     // Feedback Controllers
     public final PIDController xController = new PIDController(
@@ -83,8 +81,7 @@ public class Swerve extends SubsystemBase {
      */
     public Swerve(Vision m_Vision) {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        thetaController.setTolerance(turnTolVal, turnVelTolVal);
-        thetaController.setSetpoint(0);
+        thetaController.setTolerance(turnTolVal);        thetaController.setSetpoint(0);
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -281,21 +278,19 @@ public class Swerve extends SubsystemBase {
         }
 
         //thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getDegrees()): thetaController.calculate(getAngleToTarget().getDegrees());
-        thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getRadians()): thetaController.calculate(getAngelToTargetRel().getRadians());
+        double measurement = limelight.getTx().getRadians();
+        thetaOut = limelight.hasTarget()? thetaController.calculate(measurement): thetaController.calculate(getAngelToTargetRel().getRadians());
         //thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
+        //thetaOut = thetaController.calculate(measurement);
         SmartDashboard.putNumber("theta out", thetaOut);
         SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
-        if(Math.abs(limelight.getTx().getDegrees()) <= Constants.Swerve.thetaTolerance) setTargetRel();
+        //if(Math.abs(limelight.getTx().getDegrees()) <= Constants.Swerve.thetaTolerance) setTargetRel();
         
-        if(thetaController.atSetpoint()) {
+        if(Math.abs(measurement) <= turnTolVal) {
             thetaOut = 0;
-        } else {
-            thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
+            setTargetRel();
         }
-        SmartDashboard.putNumber("theta out", thetaOut);
-        SmartDashboard.putNumber("limelight out", limelight.getTx().getRadians());
 
-        
 
         switch(States.shooterState){
             case disabled:
@@ -339,10 +334,9 @@ public class Swerve extends SubsystemBase {
             }
 
             double tol = turnTol.getDouble(0), velTol = turnTol.getDouble(0);
-            if(tol != turnTolVal || velTol != turnVelTolVal) {
+            if(tol != turnTolVal) {
                 turnTolVal = tol;
-                turnVelTolVal = velTol;
-                thetaController.setTolerance(turnTolVal, turnVelTolVal);
+                thetaController.setTolerance(turnTolVal);
             }
         }
     }

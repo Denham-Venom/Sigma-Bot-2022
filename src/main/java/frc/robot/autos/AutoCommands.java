@@ -50,6 +50,8 @@ public class AutoCommands {
             leftTarmac = true;
             case right:
             leftTarmac = false;
+            default:
+            leftTarmac = false;
         }
     }
 
