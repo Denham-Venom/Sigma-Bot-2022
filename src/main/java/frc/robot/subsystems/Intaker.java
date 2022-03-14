@@ -40,10 +40,10 @@ public class Intaker extends SubsystemBase {
   private boolean useSensors = false;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
-  public Intaker(){//, Consumer<RelativeEncoder> hoodEncoderGetter) {
+  public Intaker(PneumaticHub m_pHub){//, Consumer<RelativeEncoder> hoodEncoderGetter) {
     testing = Shuffleboard.getTab("Testing");
 
-    m_pHub = new PneumaticHub();
+    this.m_pHub = m_pHub;
 
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);

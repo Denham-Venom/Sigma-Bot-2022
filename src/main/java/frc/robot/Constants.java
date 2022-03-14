@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,6 +35,7 @@ public final class Constants {
         /* Behavior constants */
         //whether "forward" for swerve is relative to front of robot (false) or to whole field (true)
         public static final boolean fieldRelative = true;
+        public static final boolean openLoop = true;
 
         /* Device IDs */
         public static final int pigeonID = 1;
