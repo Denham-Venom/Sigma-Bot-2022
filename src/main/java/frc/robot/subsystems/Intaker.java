@@ -36,11 +36,14 @@ public class Intaker extends SubsystemBase {
   private DoubleSolenoid intakeExtend;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
+  private PneumaticHub m_pHub;
   private boolean useSensors = false;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
-  public Intaker(PneumaticHub m_pHub){//, Consumer<RelativeEncoder> hoodEncoderGetter) {
+  public Intaker(){//, Consumer<RelativeEncoder> hoodEncoderGetter) {
     testing = Shuffleboard.getTab("Testing");
+
+    m_pHub = new PneumaticHub();
 
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
@@ -67,6 +70,10 @@ public class Intaker extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(intakeSensor.get() && shooterSensor.get()){
+      States.stopIntake();
+      States.retractIntake();
+    }
     if(States.intakeState != state) {
       state = States.intakeState;
       switch(States.intakeState) {
