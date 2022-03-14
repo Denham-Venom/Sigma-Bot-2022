@@ -68,11 +68,10 @@ public class Swerve extends SubsystemBase {
         Constants.Swerve.yKI, 
         Constants.Swerve.yKD
     );
-    public final ProfiledPIDController thetaController = new ProfiledPIDController(
+    public final PIDController thetaController = new PIDController(
         Constants.Swerve.thetaKP, 
         Constants.Swerve.thetaKI, 
-        Constants.Swerve.thetaKD, 
-        Constants.Swerve.kThetaControllerConstraints
+        Constants.Swerve.thetaKD
     );
     
 
@@ -84,6 +83,7 @@ public class Swerve extends SubsystemBase {
     public Swerve(Vision m_Vision) {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         thetaController.setTolerance(turnTolVal, turnVelTolVal);
+        thetaController.setSetpoint(0);
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -142,7 +142,7 @@ public class Swerve extends SubsystemBase {
      * to current orientation with respect to the field. This was changed for favor of this 
      * being state information managed by the swerve subsystem.
      * @param translation Container for x and y translational velocity in meters per seconds
-     * @param rotation Double value for rotational velocity in TODO find units
+     * @param rotation Double value for rotational velocity in rads/sec
      * @param isOpenLoop Whether to use open loop or feedback control to achieve drive control
      */
     public void drive(Translation2d translation, double rotation, boolean isOpenLoop) {
@@ -267,9 +267,13 @@ public class Swerve extends SubsystemBase {
         }
 
         //thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getDegrees()): thetaController.calculate(getAngleToTarget().getDegrees());
-        thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
+        if(thetaController.atSetpoint()) {
+            thetaOut = 0;
+        } else {
+            thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
+        }
         SmartDashboard.putNumber("theta out", thetaOut);
-        SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
+        SmartDashboard.putNumber("limelight out", limelight.getTx().getRadians());
 
         
 
