@@ -31,11 +31,7 @@ public class LazySparkMAX extends CANSparkMax {
         super.burnFlash();
 
         m_pidController = super.getPIDController();
-        if(motorConstants.useAlternateEncoder) {
-            m_encoder = super.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, motorConstants.encoderCountsPerRev);
-        } else {
-            m_encoder = super.getEncoder();
-        }
+        m_encoder = super.getEncoder();
 
         m_encoder.setPosition(0);
     }

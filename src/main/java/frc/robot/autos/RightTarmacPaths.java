@@ -34,13 +34,13 @@ public class RightTarmacPaths extends SequentialCommandGroup {
 
 
     SwerveTrajectory rightTarmacPaths1 = new SwerveTrajectory(
-      Constants.Swerve.trajectoryConfig,
+      Constants.AutoConstants.trajectoryConfig,
       startPos,
       AutoConstants.rightPoints [waypointIndex]
     );
     
     SwerveTrajectory rightTarmacPaths2 = new SwerveTrajectory(
-      Constants.Swerve.trajectoryConfig,
+      Constants.AutoConstants.trajectoryConfig,
       AutoConstants.rightPoints [waypointIndex++],
       AutoConstants.rightPoints [waypointIndex++],
       AutoConstants.rightPoints [waypointIndex++],
@@ -48,14 +48,14 @@ public class RightTarmacPaths extends SequentialCommandGroup {
     );
     
     SwerveTrajectory rightTarmacPaths3 = new SwerveTrajectory(
-      Constants.Swerve.trajectoryConfig,
+      Constants.AutoConstants.trajectoryConfig,
       AutoConstants.rightPoints [waypointIndex++],
       AutoConstants.rightPoints [waypointIndex++],
       AutoConstants.rightPoints [waypointIndex]
     );
    
     SwerveTrajectory rightTarmacPaths4 = new SwerveTrajectory(
-      Constants.Swerve.trajectoryConfig,
+      Constants.AutoConstants.trajectoryConfig,
       AutoConstants.rightPoints [waypointIndex++],
       AutoConstants.rightPoints [waypointIndex++],
       AutoConstants.rightPoints [waypointIndex++],
@@ -64,7 +64,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
 
     var thetaController =
         new ProfiledPIDController(
-            Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+            Constants.Swerve.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     SwerveControllerCommand swerveControllerCommand1 = 
@@ -72,9 +72,9 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             rightTarmacPaths1.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            new PIDController(Constants.Swerve.xKP, 0, 0),
+            new PIDController(Constants.Swerve.yKP, 0, 0),
+            new ProfiledPIDController(Constants.Swerve.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             rightTarmacPaths1.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
@@ -84,9 +84,9 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             rightTarmacPaths2.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            new PIDController(Constants.Swerve.xKP, 0, 0),
+            new PIDController(Constants.Swerve.yKP, 0, 0),
+            new ProfiledPIDController(Constants.Swerve.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             rightTarmacPaths2.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
@@ -96,9 +96,9 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             rightTarmacPaths3.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            new PIDController(Constants.Swerve.xKP, 0, 0),
+            new PIDController(Constants.Swerve.yKP, 0, 0),
+            new ProfiledPIDController(Constants.Swerve.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             rightTarmacPaths3.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
@@ -108,9 +108,9 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             rightTarmacPaths4.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-            new PIDController(Constants.AutoConstants.kPYController, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            new PIDController(Constants.Swerve.xKP, 0, 0),
+            new PIDController(Constants.Swerve.yKP, 0, 0),
+            new ProfiledPIDController(Constants.Swerve.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             rightTarmacPaths4.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
