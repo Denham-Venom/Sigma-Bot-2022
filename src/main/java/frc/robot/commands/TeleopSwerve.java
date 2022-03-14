@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants;
+import frc.robot.States;
+import frc.robot.States.ShooterStates;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -33,8 +35,22 @@ public class TeleopSwerve extends CommandBase {
         this.openLoop = openLoop;
     }
 
+    public Translation2d getTranslation2d() {
+
+        double yAxis = -controller.getRawAxis(translationAxis);
+        double xAxis = -controller.getRawAxis(strafeAxis);
+
+        /* Deadbands */
+        yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
+        xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
+
+        return new Translation2d(yAxis * s_Swerve.gethighLowGear(), xAxis * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
+    }
+
     @Override
     public void execute() {
+
+        if(States.shooterState == ShooterStates.preShoot) return;
 
         double yAxis = -controller.getRawAxis(translationAxis);
         double xAxis = -controller.getRawAxis(strafeAxis);
@@ -49,4 +65,5 @@ public class TeleopSwerve extends CommandBase {
         rotation = rAxis * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
         s_Swerve.drive(translation, rotation, openLoop);
     }
+
 }

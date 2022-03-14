@@ -24,6 +24,7 @@ import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.SwerveModule;
+import frc.robot.commands.TeleopSwerve;
 
 public class Swerve extends SubsystemBase {
 
@@ -243,7 +244,7 @@ public class Swerve extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         swerveOdometry.update(getYaw(), getStates());  
 
         for(SwerveModule mod : mSwerveMods){
@@ -257,6 +258,7 @@ public class Swerve extends SubsystemBase {
                 break;
                 
             case preShoot:
+                Translation2d t = ((TeleopSwerve)this.getDefaultCommand()).getTranslation2d();
                 double thetaOut;
                 if(limelight.hasTarget()){
                     thetaOut = thetaController.calculate(limelight.getTx().getDegrees());
@@ -269,7 +271,7 @@ public class Swerve extends SubsystemBase {
                 } else {
                     thetaOut = thetaController.calculate(getAngleToTarget().getDegrees());
                 }
-                this.drive(new Translation2d(), thetaOut, false);
+                this.drive(t, thetaOut, false);
                 SmartDashboard.putNumber("theta out", thetaOut);
                 break;
         }
