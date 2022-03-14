@@ -6,6 +6,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -142,6 +143,16 @@ public class Swerve extends SubsystemBase {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
     }
 
+    public Rotation2d getAngleToTarget(){
+        Rotation2d angle;
+        Pose2d robotPose = getPose();
+        Translation2d centerGoal = new Translation2d(8.218, 4.115);
+        Translation2d goalVector = robotPose.getTranslation().minus(centerGoal);
+        //angle = new Rotation2d(goalVector.getX(), goalVector.getY()).minus(robotPose.getRotation());
+        angle = new Rotation2d(goalVector.getX(), goalVector.getY());
+        return angle;
+    }
+
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getStates());  
@@ -157,14 +168,19 @@ public class Swerve extends SubsystemBase {
                 break;
                 
             case preShoot:
-                double thetaOut = Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees());
-                SmartDashboard.putNumber("to", thetaOut);
-                if (Constants.Shooter.autoAim){
-                    this.drive(
-                        new Translation2d(), 
-                        thetaOut, 
-                        Constants.Swerve.fieldRelative, 
-                        false);
+                if(limelight.hasTarget()){
+                    double thetaOut = Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees());
+                    SmartDashboard.putNumber("to", thetaOut);
+                    if (Constants.Shooter.autoAim){
+                        this.drive(
+                            new Translation2d(), 
+                            thetaOut, 
+                            Constants.Swerve.fieldRelative, 
+                            false);
+                    }
+                } else {
+                    double thetaOut = Constants.Swerve.thetaController.calculate(getAngleToTarget().getDegrees());
+                    this.drive(new Translation2d(), thetaOut, true, false);
                 }
                 break;
         }
