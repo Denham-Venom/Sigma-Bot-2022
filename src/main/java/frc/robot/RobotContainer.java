@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,47 +37,63 @@ public class RobotContainer {
   private final int rotationAxis = XboxController.Axis.kRightX.value;
 
   /* Driver Buttons */
-  private final JoystickButton intakePistonButton = new JoystickButton(driver, XboxController.Button.kY.value);
-  private final JoystickButton intakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-  private final JoystickButton highLowGearButton = new JoystickButton(driver, XboxController.Button.kB.value);
-  private final JoystickButton switchShooterState = new JoystickButton(driver,XboxController.Button.kX.value);
-  //private final JoystickButton testHoodUp = new JoystickButton(driver, XboxController.Button.kA.value);
-  //private final JoystickButton testHoodDown = new JoystickButton(driver, XboxController.Button.kB.value);
-  private final JoystickButton preshootButton = new JoystickButton(driver, XboxController.Button.kA.value);
-  //private final JoystickButton feedButton = new JoystickButton(driver, XboxController.Button.kB.value);
-  private final JoystickButton outakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-  private final POVButton climbExtendButton = new POVButton(driver, 180); //down
-  private final POVButton climbRetractButton = new POVButton(driver, 0); //up
+  private final JoystickButton togglePreshoot = new JoystickButton(driver, XboxController.Button.kA.value);
+  private final JoystickButton switchGear = new JoystickButton(driver, XboxController.Button.kB.value);
+  private final JoystickButton feedShooter = new JoystickButton(driver, XboxController.Button.kX.value);
+  private final JoystickButton toggleIntakePiston = new JoystickButton(driver, XboxController.Button.kY.value);
+  private final JoystickButton outtake = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
+  private final JoystickButton toggleFieldRelative = new JoystickButton(driver, XboxController.Button.kBack.value);
+  private final POVButton extendClimber = new POVButton(driver, 0); //up
+  private final POVButton retractClimber = new POVButton(driver, 180); //down
+  private final POVButton extendClimberPiston = new POVButton(driver, 270); //left
+  private final POVButton retractClimberPiston = new POVButton(driver, 90); //right
 
   /* Operator Buttons */
-  private final JoystickButton operatorShootButton = new JoystickButton(operator, XboxController.Button.kA.value);
-  private final JoystickButton shooterActivateButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton shooterDeactivateButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton operatorIntakeButton = new JoystickButton(operator, XboxController.Button.kY.value);
-  private final POVButton operatorIntakeExtendButton = new POVButton(operator, 180);
-  private final POVButton operatorIntakeRetractButton = new POVButton(operator, 0);
-  private final JoystickButton operatorFeedButton = new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton opTogglePreshoot = new JoystickButton(operator, XboxController.Button.kA.value);
+  private final JoystickButton opToggleUseIntakeSensors = new JoystickButton(operator, XboxController.Button.kB.value);
+  private final JoystickButton opFeedShooter = new JoystickButton(operator, XboxController.Button.kX.value);
+  private final JoystickButton opToggleIntakePiston = new JoystickButton(operator, XboxController.Button.kY.value);
+  private final JoystickButton opOuttake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton opIntake = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton opZeroGyro = new JoystickButton(operator, XboxController.Button.kStart.value);
+  private final JoystickButton opToggleFieldRelative = new JoystickButton(operator, XboxController.Button.kStart.value);
+  private final POVButton opExtendClimber = new POVButton(operator, 0); //up
+  private final POVButton opRetractClimber = new POVButton(operator, 180); //down
+  private final POVButton opExtendClimberPiston = new POVButton(driver, 270); //left
+  private final POVButton opRetractClimberPiston = new POVButton(driver, 90); //right
 
   /* Subsystems */
-  private final PneumaticHub p_Hub = new PneumaticHub();
-  private final Vision m_Vision = new Vision();
-  private final Shooter m_Shooter = new Shooter(m_Vision);
-  private final Intaker m_Intaker = new Intaker(p_Hub);//, m_Shooter.getHoodEncoderConsumer());
-  private final Swerve s_Swerve = new Swerve(m_Vision);
-
-  //Shuffleboard
-  private final ShuffleboardTab testing = Shuffleboard.getTab("Testing");
-  private final ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+  private final PneumaticHub m_pHub;
+  private final Vision m_Vision;
+  private final Shooter m_Shooter;
+  private final Intaker m_Intaker;
+  private final Swerve s_Swerve;
+  private final Climber m_Climber;
 
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    boolean fieldRelative = Constants.Swerve.fieldRelative;
-    boolean openLoop = true;
-    s_Swerve.setDefaultCommand(new TeleopSwerve(s_Swerve, driver, translationAxis, strafeAxis, rotationAxis, fieldRelative, openLoop));
+    // Instantiate subsystems
+    m_pHub = new PneumaticHub();
+    m_Vision = new Vision();
+    m_Shooter = new Shooter(m_Vision);
+    m_Intaker = new Intaker(m_pHub);
+    s_Swerve = new Swerve(m_Vision);
+    m_Climber = new Climber(m_pHub);
 
-    // Configure the button bindings
+    
+    s_Swerve.setDefaultCommand(new TeleopSwerve(
+      s_Swerve, 
+      driver, 
+      translationAxis, 
+      strafeAxis, 
+      rotationAxis,  
+      Constants.Swerve.openLoop
+      ));
+      
+    configureShuffleboard();
     configureButtonBindings();
   }
 
@@ -95,78 +110,111 @@ public class RobotContainer {
   SendableChooser<AutoCommands.StartingPosition> m_choosePosition = new SendableChooser<>();
 
   private void configureButtonBindings() {
-    /* Driver Buttons */
-    zeroGyro.whenPressed(new InstantCommand(() -> s_Swerve.zeroGyro()));
-    highLowGearButton.whenPressed(new InstantCommand(() -> s_Swerve.switchLowHighGear()));
+    /* Driver Controller Buttons */
+    // Driving
+    zeroGyro.whenPressed(new InstantCommand(
+      () -> s_Swerve.zeroGyro()
+    ));
+    switchGear.whenPressed(new InstantCommand(
+      () -> s_Swerve.switchLowHighGear()
+    ));
+    toggleFieldRelative.whenPressed(new InstantCommand(
+      () -> s_Swerve.toggleFieldRelative()
+    ));
+
     
     // Intake
-    intakeButton.whileHeld(new StartEndCommand(
+    intake.whileHeld(new StartEndCommand(
       () -> States.intake(), 
       () -> States.stopIntake()
     ));
-    outakeButton.whileHeld(new StartEndCommand(
+    outtake.whileHeld(new StartEndCommand(
       () -> States.outtake(),
       () -> States.stopIntake()
     ));
-    intakePistonButton.toggleWhenPressed(new InstantCommand(
+    toggleIntakePiston.toggleWhenPressed(new InstantCommand(
       () -> States.toggleIntake()
     ));
 
     // Shooter
-    //SmartDashboard.putNumber("HoodTestPow", 0);
-    preshootButton.toggleWhenPressed(new StartEndCommand(
+    togglePreshoot.toggleWhenPressed(new StartEndCommand(
       () -> States.activateShooter(),
       () -> States.deactivateShooter()
-    ));
-    // feedButton.whileHeld(new StartEndCommand(
-    //   () -> States.feed(), 
-    //   () -> States.stopIntake()
-    // ));
-    // testHoodUp.whenHeld(new StartEndCommand(
-    //   () -> m_Shooter.setHoodPower(1), 
-    //   () -> m_Shooter.stopHood()  
-    // ));
-    // testHoodDown.whenHeld(new StartEndCommand(
-    //   () -> m_Shooter.setHoodPower(-1), 
-    //   () -> m_Shooter.stopHood()  
-    // ));
-    operatorShootButton.toggleWhenPressed(new StartEndCommand(
-      () -> States.activateShooter(),
-      () -> States.deactivateShooter()
-    ));
-    operatorFeedButton.whileHeld(new StartEndCommand(
-      () -> States.feed(), 
-      () -> States.stopIntake()
-    ));
-
-    /* Operator Buttons */
-    operatorIntakeButton.whileHeld( new StartEndCommand(
-      () -> States.intake(),
-      () -> States.stopIntake()
     ));
 
     // Climber
-    climbExtendButton.whileHeld(new StartEndCommand(
+    extendClimber.whileHeld(new StartEndCommand(
       () -> States.extendClimber(),
       () -> States.stopClimber()
     ));
-
-    climbRetractButton.whileHeld(new StartEndCommand(
+    retractClimber.whileHeld(new StartEndCommand(
       () -> States.retractClimber(),
       () -> States.stopClimber()
     ));
+    extendClimberPiston.whenPressed(new InstantCommand(
+      () -> States.extendClimberPiston()
+    ));
+    retractClimberPiston.whenPressed(new InstantCommand(
+      () -> States.retractClimberPiston()
+    ));
 
+
+    /* Operator Controller Buttons */
+    // Driving
+    opToggleFieldRelative.whenPressed(new InstantCommand(
+      () -> s_Swerve.toggleFieldRelative()
+    ));
+
+    // Intake
+    opIntake.whileHeld( new StartEndCommand(
+      () -> States.intake(),
+      () -> States.stopIntake()
+    ));
+    opOuttake.whileHeld(new StartEndCommand(
+      () -> States.outtake(),
+      () -> States.stopIntake()
+    ));
+    opFeedShooter.whileHeld(new StartEndCommand(
+      () -> States.feed(), 
+      () -> States.stopIntake()
+    ));
+    opToggleUseIntakeSensors.whenPressed(new InstantCommand(
+      () -> m_Intaker.toggleUseSensors()
+    ));
+    opToggleIntakePiston.whenPressed(new InstantCommand(
+      () -> States.toggleIntake()
+    ));
+
+    // Shooter
+    opTogglePreshoot.toggleWhenPressed(new StartEndCommand(
+      () -> States.activateShooter(),
+      () -> States.deactivateShooter()
+    ));
+
+    // Climber
+    opExtendClimber.whileHeld(new StartEndCommand(
+      () -> States.extendClimber(),
+      () -> States.stopClimber()
+    ));
+    opRetractClimber.whileHeld(new StartEndCommand(
+      () -> States.retractClimber(),
+      () -> States.stopClimber()
+    ));
+    opExtendClimberPiston.whenPressed(new InstantCommand(
+      () -> States.extendClimberPiston()
+    ));
+    opRetractClimberPiston.whenPressed(new InstantCommand(
+      () -> States.retractClimberPiston()
+    ));
+
+  };
+
+  private void configureShuffleboard() {
+    //Instatiate tabs
+    Shuffleboard.getTab("Testing");
+    Shuffleboard.getTab("Tuning");
 
     //Auto command chooser
-    // m_chooser.setDefaultOption("Right5Ball", new Right5Ball(s_Swerve));
-    // m_chooser.addOption("Right4Ball", new Right4Ball(s_Swerve));
-    // m_chooser.addOption("Right3Ball", new Right4Ball(s_Swerve));
-    // m_chooser.addOption("Right2Ball", new Right4Ball(s_Swerve));
-    // m_chooser.addOption("Left5Ball", new Right4Ball(s_Swerve));
-    // m_chooser.addOption("Left4Ball", new Right4Ball(s_Swerve));
-    // m_chooser.addOption("Left3Ball", new Right4Ball(s_Swerve));
-    // m_chooser.addOption("Left2Ball", new Right4Ball(s_Swerve));
-
     m_chooseBall.setDefaultOption("2 Balls", AutoCommands.NumberOfBalls.two);
     m_chooseBall.addOption("3 Balls", AutoCommands.NumberOfBalls.three);
     m_chooseBall.addOption("4 Balls", AutoCommands.NumberOfBalls.four);
@@ -183,7 +231,7 @@ public class RobotContainer {
     SmartDashboard.putData("Auto # Balls", m_chooseBall);
     SmartDashboard.putData("Auto Choose Position", m_choosePosition);
     SmartDashboard.putData("Auto Choose Tarmac", m_chooseTarmac);
-  };
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

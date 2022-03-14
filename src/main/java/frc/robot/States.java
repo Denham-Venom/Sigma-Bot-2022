@@ -22,7 +22,7 @@ public class States {
     }
 
     public static enum ClimberStates {
-        disabled, extendClimberPiston, retractClimberPiston, extendClimber, retractClimber, fullClimb
+        disabled, extendClimberPiston, retractClimberPiston, extendClimber, retractClimber
     }
 
     public static ShooterStates shooterState = ShooterStates.disabled;
@@ -98,10 +98,6 @@ public class States {
 
     public static void retractClimber() {
         States.climberState = ClimberStates.retractClimber;
-    }
-
-    public static void fullClimb() {
-        States.climberState = ClimberStates.fullClimb;
     }
 
 }

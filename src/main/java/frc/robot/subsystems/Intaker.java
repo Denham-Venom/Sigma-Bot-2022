@@ -4,17 +4,13 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.Consumer;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.SparkMaxAlternateEncoder.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -43,14 +39,15 @@ public class Intaker extends SubsystemBase {
   private boolean useSensors = false;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
-  public Intaker(PneumaticHub m_pHub){//, Consumer<RelativeEncoder> hoodEncoderGetter) {
-    testing = Shuffleboard.getTab("Testing");
-
+  public Intaker(PneumaticHub m_pHub){
+    //Instantiate devices
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
-    //hoodEncoderGetter.accept(spinUpMotor.getAlternateEncoder(Type.kQuadrature, Constants.Shooter.hoodEncoderCountsPerRev));
+    
+    //Configure shuffleboard
+    testing = Shuffleboard.getTab("Testing");
     testing.add("Start Intake Motors", new InstantCommand(
       () -> States.feed()
     ));
@@ -65,13 +62,27 @@ public class Intaker extends SubsystemBase {
       () -> States.retractIntake()
     ));
 
-
   }
+
+  /**
+   * Toggles the use of beam break sensors to frontload balls and auto retract intake
+   */
+  public void toggleUseSensors() {
+    useSensors = !useSensors;
+  }
+
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    if(States.intakeState != state) {
+    
+    // Retract intake when full
+    if(useSensors && intakeSensor.get() && shooterSensor.get()){
+      States.stopIntake();
+      States.retractIntake();
+    }
+
+    // Check for state update or if intaking
+    if(States.intakeState != state || state == States.IntakeStates.intaking) {
       state = States.intakeState;
       switch(States.intakeState) {
         case intaking:

@@ -4,26 +4,17 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.revrobotics.EncoderType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazySparkMAX;
-import frc.lib.math.Conversions;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.States.ClimberStates;
@@ -32,15 +23,25 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private LazySparkMAX climberMotor;
   private DoubleSolenoid climberPiston;
-  private RelativeEncoder positionEncoder;
+  private Encoder positionEncoder;
   private final ShuffleboardTab testing;
+  private final NetworkTableEntry encoderVal;
   private ClimberStates state = States.climberState;
 
   public Climber(PneumaticHub m_pHub) {
-    testing = Shuffleboard.getTab("Testing");
+    // Devices
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
     climberPiston = m_pHub.makeDoubleSolenoid(Constants.Climber.ClimberSolenoidForwardChannel, Constants.Climber.ClimberSolenoidReverseChannel);
-    positionEncoder = climberMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature, 8192);// Rev throughbore encoder //new DutyCycleEncoder(new DigitalInput(Constants.Climber.climberEncoderPort));
+    positionEncoder = new Encoder(
+      Constants.Climber.climberEncoderRelativeChannels[0],
+      Constants.Climber.climberEncoderRelativeChannels[1], 
+      Constants.Climber.climberEncoderInverted, 
+      Encoder.EncodingType.k4X
+    );
+    positionEncoder.reset();
+      
+    // Shuffleboard
+    testing = Shuffleboard.getTab("Testing");
     testing.add("Climber Extend Piston", new InstantCommand(
       () -> States.extendClimberPiston()
     ));
@@ -53,12 +54,18 @@ public class Climber extends SubsystemBase {
     testing.add("Climber Retract Motor", new InstantCommand(
       () -> States.retractClimber()
     ));
+    encoderVal = testing.add("Climber Encoder Value", positionEncoder.get()).getEntry();
   }
   
+  /**
+   * Checks if the climber is in a climbing state
+   * @return
+   */
   public static boolean canClimb() {
     return States.climberState != States.ClimberStates.disabled;
   }
 
+  
   public void extendClimber() {
     setClimberPosition(Constants.Climber.extendedCounts);
   }
@@ -83,8 +90,25 @@ public class Climber extends SubsystemBase {
     }
   }
 
-  public void setClimberMotor(double demand) {
+  private void setClimberMotor(double demand) {
     climberMotor.set(demand);
+  }
+
+  public void setClimberMotorSafe(double demand) {
+    double finalDemand = 0;
+    if(positionEncoder.get() >= Constants.Climber.climberHighLimit) {
+      if(demand < 0) {
+        finalDemand = demand;
+      }
+    } else if(positionEncoder.get() <= Constants.Climber.climberLowLimit) {
+      if(demand > 0) {
+        finalDemand = demand;
+      }
+    } else {
+      finalDemand = demand;
+    }
+
+    setClimberMotor(finalDemand);
   }
 
   public void setClimberPiston() {
@@ -97,27 +121,20 @@ public class Climber extends SubsystemBase {
     if(States.climberState != state) {
       state = States.climberState;
       switch(States.climberState) {
-        case fullClimb:
-        // climberPiston.set(Value.kForward);
-        // climberMotor.set(ControlType.kDutyCycle, Constants.Climber.ClimberSpeed);
-        // climberPiston.set(Value.kReverse);
-        // climberPiston.set(Value.kForward);
         case extendClimber:
-        //setClimberPosition(Constants.Climber.extendedCounts);
-        setClimberMotor(Constants.Climber.ClimberSpeed);
+        setClimberMotorSafe(Constants.Climber.ClimberSpeed);
         case retractClimber:
-        //setClimberPosition(Constants.Climber.retractedCounts);
-        setClimberMotor(-Constants.Climber.ClimberSpeed);
+        setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
         case extendClimberPiston:
         climberPiston.set(Value.kForward);
         case retractClimberPiston:
         climberPiston.set(Value.kReverse);
         case disabled:
         climberPiston.set(Value.kOff);
-        setClimberMotor(Constants.Climber.ClimberSpeed);
+        setClimberMotor(0);
       }
     }
-    testing.add("Climber Encoder Value", positionEncoder.getCountsPerRevolution());
+    encoderVal.setNumber(positionEncoder.get());
   }
 }
 
