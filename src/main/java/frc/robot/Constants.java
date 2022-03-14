@@ -34,7 +34,7 @@ public final class Constants {
 
         /* Behavior constants */
         //whether "forward" for swerve is relative to front of robot (false) or to whole field (true)
-        public static final boolean fieldRelative = true;
+        //public static final boolean fieldRelative = true;
         public static final boolean openLoop = true;
 
         /* Device IDs */
@@ -190,6 +190,7 @@ public final class Constants {
         private static final int hoodID = 12;
         public static final int hoodEncoderAbsoluteChannel = 0;
         public static final int[] hoodEncoderRelativeChannels = {1, 2};
+        public static final boolean hoodEncoderInverted = true;
         public static final int hoodLimitSwitchID = 4;
 
         /* Motor constants */
@@ -275,7 +276,9 @@ public final class Constants {
         private static final int climberMotorID = 15;
         public static final int ClimberSolenoidForwardChannel = 1;
         public static final int ClimberSolenoidReverseChannel = 3;
-        public static final int climberEncoderPort = 0;
+        public static final int climberEncoderAbsoluteChannel = -1;
+        public static final int[] climberEncoderRelativeChannels = {-1, -1};
+        public static final boolean climberEncoderInverted = false;
 
         /* Motor constants */
         public static final SparkConstants climberMotorConstants = new SparkConstants(

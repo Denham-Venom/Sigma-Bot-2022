@@ -44,9 +44,11 @@ public class RobotContainer {
   private final JoystickButton outtake = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
   private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
-  private final JoystickButton toggleFieldRelative = new JoystickButton(driver, XboxController.Button.kStart.value);
-  private final POVButton extendClimber = new POVButton(driver, 180);
-  private final POVButton retractClimber = new POVButton(driver, 0);
+  private final JoystickButton toggleFieldRelative = new JoystickButton(driver, XboxController.Button.kBack.value);
+  private final POVButton extendClimber = new POVButton(driver, 0); //up
+  private final POVButton retractClimber = new POVButton(driver, 180); //down
+  private final POVButton extendClimberPiston = new POVButton(driver, 270); //left
+  private final POVButton retractClimberPiston = new POVButton(driver, 90); //right
 
   /* Operator Buttons */
   private final JoystickButton opTogglePreshoot = new JoystickButton(operator, XboxController.Button.kA.value);
@@ -57,8 +59,10 @@ public class RobotContainer {
   private final JoystickButton opIntake = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton opZeroGyro = new JoystickButton(operator, XboxController.Button.kStart.value);
   private final JoystickButton opToggleFieldRelative = new JoystickButton(operator, XboxController.Button.kStart.value);
-  private final POVButton opExtendClimber = new POVButton(operator, 180);
-  private final POVButton opRetractClimber = new POVButton(operator, 0);
+  private final POVButton opExtendClimber = new POVButton(operator, 0); //up
+  private final POVButton opRetractClimber = new POVButton(operator, 180); //down
+  private final POVButton opExtendClimberPiston = new POVButton(driver, 270); //left
+  private final POVButton opRetractClimberPiston = new POVButton(driver, 90); //right
 
   /* Subsystems */
   private final PneumaticHub m_pHub;
@@ -85,8 +89,7 @@ public class RobotContainer {
       driver, 
       translationAxis, 
       strafeAxis, 
-      rotationAxis, 
-      Constants.Swerve.fieldRelative, 
+      rotationAxis,  
       Constants.Swerve.openLoop
       ));
       
@@ -114,6 +117,9 @@ public class RobotContainer {
     ));
     switchGear.whenPressed(new InstantCommand(
       () -> s_Swerve.switchLowHighGear()
+    ));
+    toggleFieldRelative.whenPressed(new InstantCommand(
+      () -> s_Swerve.toggleFieldRelative()
     ));
 
     
@@ -145,10 +151,19 @@ public class RobotContainer {
       () -> States.retractClimber(),
       () -> States.stopClimber()
     ));
+    extendClimberPiston.whenPressed(new InstantCommand(
+      () -> States.extendClimberPiston()
+    ));
+    retractClimberPiston.whenPressed(new InstantCommand(
+      () -> States.retractClimberPiston()
+    ));
 
 
     /* Operator Controller Buttons */
     // Driving
+    opToggleFieldRelative.whenPressed(new InstantCommand(
+      () -> s_Swerve.toggleFieldRelative()
+    ));
 
     // Intake
     opIntake.whileHeld( new StartEndCommand(
@@ -177,7 +192,20 @@ public class RobotContainer {
     ));
 
     // Climber
-
+    opExtendClimber.whileHeld(new StartEndCommand(
+      () -> States.extendClimber(),
+      () -> States.stopClimber()
+    ));
+    opRetractClimber.whileHeld(new StartEndCommand(
+      () -> States.retractClimber(),
+      () -> States.stopClimber()
+    ));
+    opExtendClimberPiston.whenPressed(new InstantCommand(
+      () -> States.extendClimberPiston()
+    ));
+    opRetractClimberPiston.whenPressed(new InstantCommand(
+      () -> States.retractClimberPiston()
+    ));
 
   };
 

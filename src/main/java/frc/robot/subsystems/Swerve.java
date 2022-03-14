@@ -35,8 +35,12 @@ public class Swerve extends SubsystemBase {
     private Limelight limelight;
     private int currentNeutral = 0;
     private boolean isLowGear = true;
-    private States.ShooterStates shooterState = States.shooterState;
+    private boolean fieldRelative = true;
 
+    /**
+     * Create a new swerve subsystem.
+     * @param m_Vision The limelight to use for target acquisition.
+     */
     public Swerve(Vision m_Vision) {
         Constants.Swerve.thetaController.enableContinuousInput(-Math.PI, Math.PI);
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
@@ -64,14 +68,25 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("robotAng_swerve_odo", 0);
     }
 
-    public void switchLowHighGear() {
+    //TODO - make high/low gear mangaged internally in swerve, not in teleopswerve command
+    /**
+     * Switches between high and low gear (soft switch).
+     * @return True if now in low gear, false if in high.
+     */
+    public boolean switchLowHighGear() {
         if(isLowGear) {
             isLowGear = false;
         } else {
             isLowGear = true;
         }
+        return isLowGear;
     }
 
+    /**
+     * Get gear of robot.
+     * @return Double value representing multiplier to use for inputted speed 
+     * values. 
+     */
     public double gethighLowGear() {
         if(isLowGear) {
             return Constants.Swerve.lowGearValue;
@@ -80,7 +95,16 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    /**
+     * Function used to move the swerve drive. Formerly took in fieldRelative parameter 
+     * representing whether the translational velocity was relative to current orientation or 
+     * to current orientation with respect to the field. This was changed for favor of this 
+     * being state information managed by the swerve subsystem.
+     * @param translation Container for x and y translational velocity in meters per seconds
+     * @param rotation Double value for rotational velocity in TODO find units
+     * @param isOpenLoop Whether to use open loop or feedback control to achieve drive control
+     */
+    public void drive(Translation2d translation, double rotation, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -110,20 +134,37 @@ public class Swerve extends SubsystemBase {
         }
     }    
 
+    /**
+     * Gets pose of drivetrain
+     * @return Pose2d pose with x and y in meters
+     */
     public Pose2d getPose() {
         return swerveOdometry.getPoseMeters();
     }
 
+    /**
+     * Resets odometry of the drivetrain to a specified pose
+     * @param pose The target pose to set robot odom to with x and y in meters
+     */
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(pose, getYaw());
     }
 
+    /**
+     * Sets the neutral mode for the sweve modules.
+     * @param neutral CTRE Phoenix Library NeutralMode enum value.
+     */
     public void setNeutral(NeutralMode neutral){
         for(var mod : mSwerveMods){
             mod.setNeutral(neutral);
         }
     }
 
+    /**
+     * Gets the states of the swerve modules.
+     * @return 1D array of length 4 containing SwerveModuleState objects 
+     * for each module at the position corresponding to the number of the module.
+     */
     public SwerveModuleState[] getStates(){
         SwerveModuleState[] states = new SwerveModuleState[4];
         for(SwerveModule mod : mSwerveMods){
@@ -132,16 +173,27 @@ public class Swerve extends SubsystemBase {
         return states;
     }
 
+    /**
+     * Zero robot gyro, resetting the orientation the robot uses for field relative control.  
+     */
     public void zeroGyro(){
         gyro.setYaw(0);
     }
 
+    /**
+     * Get yaw of robot, which is the direction the robot is facing.
+     * @return Rotation2d representation of yaw.
+     */
     public Rotation2d getYaw() {
         double[] ypr = new double[3];
         gyro.getYawPitchRoll(ypr);
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
     }
 
+    /**
+     * Finds the angle to the field vision targets from the robots current orientation.
+     * @return Rotation2d representing the rotation required to center on the target.
+     */
     public Rotation2d getAngleToTarget(){
         Rotation2d angle;
         Pose2d robotPose = getPose();
@@ -150,6 +202,17 @@ public class Swerve extends SubsystemBase {
         //angle = new Rotation2d(goalVector.getX(), goalVector.getY()).minus(robotPose.getRotation());
         angle = new Rotation2d(goalVector.getX(), goalVector.getY());
         return angle;
+    }
+
+    /**
+     * Toggles whether the robot uses field relative (default true) control, 
+     * which determines whether the robot moves translationally relative to 
+     * its current orientation or relative to what it thinks the fields orientation is.
+     * @return The new value of field relative
+     */
+    public boolean toggleFieldRelative() {
+        fieldRelative = !fieldRelative;
+        return fieldRelative;
     }
 
     @Override
@@ -174,12 +237,11 @@ public class Swerve extends SubsystemBase {
                         this.drive(
                             new Translation2d(), 
                             thetaOut, 
-                            Constants.Swerve.fieldRelative, 
                             false);
                     }
                 } else {
                     double thetaOut = Constants.Swerve.thetaController.calculate(getAngleToTarget().getDegrees());
-                    this.drive(new Translation2d(), thetaOut, true, false);
+                    this.drive(new Translation2d(), thetaOut, false);
                 }
                 break;
         }
