@@ -38,9 +38,11 @@ public class Swerve extends SubsystemBase {
     // State Variables
     public SwerveDriveOdometry swerveOdometry;
     private int currentNeutral = 0;
-    double thetaOut;
+    private double thetaOut;
     private boolean isLowGear = true;
     private boolean fieldRelative = true;
+    public Translation2d goalRelTranslation;
+    private Pose2d lastShot;
     
     // Network Table Variables
     public NetworkTable table;
@@ -245,6 +247,20 @@ public class Swerve extends SubsystemBase {
         return angle;
     }
 
+    public Rotation2d getAngelToTargetRel(){
+        Rotation2d angle;
+        Pose2d robotPose = getPose();
+        Translation2d centerGoal = goalRelTranslation;
+        Translation2d goalVector = robotPose.getTranslation().minus(centerGoal);
+        //angle = new Rotation2d(goalVector.getX(), goalVector.getY()).minus(robotPose.getRotation());
+        angle = new Rotation2d(goalVector.getX(), goalVector.getY());
+        return angle;
+    }
+
+    public void setTargetRel(){
+        lastShot = getPose();
+        goalRelTranslation = limelight.getDistance().rotateBy(getPose().getRotation()).plus(getPose().getTranslation());
+    }
     /**
      * Toggles whether the robot uses field relative (default true) control, 
      * which determines whether the robot moves translationally relative to 
@@ -267,9 +283,11 @@ public class Swerve extends SubsystemBase {
         }
 
         //thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getDegrees()): thetaController.calculate(getAngleToTarget().getDegrees());
-        thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
+        thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getRadians()): thetaController.calculate(getAngelToTargetRel().getRadians());
+        //thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
         SmartDashboard.putNumber("theta out", thetaOut);
         SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
+        if(Math.abs(limelight.getTx().getDegrees()) <= Constants.Swerve.thetaTolerance) setTargetRel();
 
         
 
