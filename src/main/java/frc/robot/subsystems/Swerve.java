@@ -18,6 +18,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Limelight;
@@ -36,6 +38,7 @@ public class Swerve extends SubsystemBase {
     // State Variables
     public SwerveDriveOdometry swerveOdometry;
     private int currentNeutral = 0;
+    double thetaOut;
     private boolean isLowGear = true;
     private boolean fieldRelative = true;
     
@@ -45,6 +48,14 @@ public class Swerve extends SubsystemBase {
     public NetworkTableEntry xEntry;
     public NetworkTableEntry yEntry;
     public NetworkTableEntry headingEntry;
+    private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+    private NetworkTableEntry turnP = tuning.add("Turn P", 0).getEntry();
+    private NetworkTableEntry turnI = tuning.add("Turn I", 0).getEntry();
+    private NetworkTableEntry turnD = tuning.add("Turn D", 0).getEntry();
+    private NetworkTableEntry turnTol = tuning.add("Turn Tol", 0).getEntry();
+    private NetworkTableEntry turnVelTol = tuning.add("Turn Vel Tol", 0).getEntry();
+    private double turnTolVal = Constants.Swerve.thetaTolerance;
+    private double turnVelTolVal = Constants.Swerve.thetaVelTol;
 
     // Feedback Controllers
     public final PIDController xController = new PIDController(
@@ -63,6 +74,7 @@ public class Swerve extends SubsystemBase {
         Constants.Swerve.thetaKD, 
         Constants.Swerve.kThetaControllerConstraints
     );
+    
 
 
     /**
@@ -71,6 +83,7 @@ public class Swerve extends SubsystemBase {
      */
     public Swerve(Vision m_Vision) {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController.setTolerance(turnTolVal, turnVelTolVal);
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -253,26 +266,20 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
 
+        //thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getDegrees()): thetaController.calculate(getAngleToTarget().getDegrees());
+        thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
+        SmartDashboard.putNumber("theta out", thetaOut);
+        SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
+
+        
+
         switch(States.shooterState){
             case disabled:
                 break;
                 
             case preShoot:
                 Translation2d t = ((TeleopSwerve)this.getDefaultCommand()).getTranslation2d();
-                double thetaOut;
-                if(limelight.hasTarget()){
-                    thetaOut = thetaController.calculate(limelight.getTx().getDegrees());
-                    if (Constants.Shooter.autoAim){
-                        this.drive(
-                            new Translation2d(), 
-                            thetaOut, 
-                            false);
-                    }
-                } else {
-                    thetaOut = thetaController.calculate(getAngleToTarget().getDegrees());
-                }
                 this.drive(t, thetaOut, false);
-                SmartDashboard.putNumber("theta out", thetaOut);
                 break;
         }
 
@@ -298,5 +305,21 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("robotX_swerve_odo", x);
         SmartDashboard.putNumber("robotY_swerve_odo", y);
         SmartDashboard.putNumber("robotAng_swerve_odo", ang);
+
+        if(Constants.tuningMode) {
+            double p = turnP.getDouble(0), i = turnI.getDouble(0), d = turnD.getDouble(0);
+            if(p != thetaController.getP()
+                    || i != thetaController.getI()
+                    || d != thetaController.getD()) {
+                thetaController.setPID(p, i, d);   
+            }
+
+            double tol = turnTol.getDouble(0), velTol = turnTol.getDouble(0);
+            if(tol != turnTolVal || velTol != turnVelTolVal) {
+                turnTolVal = tol;
+                turnVelTolVal = velTol;
+                thetaController.setTolerance(turnTolVal, turnVelTolVal);
+            }
+        }
     }
 }

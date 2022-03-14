@@ -32,13 +32,14 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     if(States.shooterState != this.shooterState) {
       this.shooterState = States.shooterState;
-      if (States.shooterState == ShooterStates.preShoot || Constants.Shooter.calibrationMode){
+      if (States.shooterState == ShooterStates.preShoot){
         limelight.ledState(ledStates.on);
       }
       else{
         limelight.ledState(ledStates.off);
       }
     }
+    if(Constants.Shooter.calibrationMode) limelight.ledState(ledStates.on);
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("LLDistance",limelight.getDistance().getNorm());
   }

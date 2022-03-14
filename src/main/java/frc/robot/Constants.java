@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.function.FloatConsumer;
 import frc.Controllers.SparkConstants;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
@@ -24,7 +25,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 public final class Constants {
 
     /* General constants */
-    public static final boolean tuningMode = false;
+    public static final boolean tuningMode = true;
     public static final double stickDeadband = 0.1;
 
 
@@ -112,7 +113,7 @@ public final class Constants {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 1;
             public static final int canCoderID = 1;
-            public static final double angleOffset = 48.3398;
+            public static final double angleOffset = 48.33984375;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -122,7 +123,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 2;
-            public static final double angleOffset = 73.3887;
+            public static final double angleOffset = 73.212890625;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -132,7 +133,7 @@ public final class Constants {
             public static final int driveMotorID = 6;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 3;
-            public static final double angleOffset = 40.0781;
+            public static final double angleOffset = 38.144;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -142,18 +143,18 @@ public final class Constants {
             public static final int driveMotorID = 8;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 4;
-            public static final double angleOffset = 297.9492;
+            public static final double angleOffset = 297.421875;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Translation PID */
         public static final double xKP = 1;
-        public static final double xKI = 1;
-        public static final double xKD = 1;
+        public static final double xKI = 0;
+        public static final double xKD = 0;
         public static final double yKP = 1;
-        public static final double yKI = 1;
-        public static final double yKD = 1;
+        public static final double yKI = 0;
+        public static final double yKD = 0;
 
         /* Rotational PID */
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
@@ -162,9 +163,12 @@ public final class Constants {
             kMaxAngularSpeedRadiansPerSecond, 
             kMaxAngularSpeedRadiansPerSecondSquared
         );
-        public static final double thetaKP = 2.0;
+        public static final double thetaKP = .3;
         public static final double thetaKI = 0.0;
-        public static final double thetaKD = 0.0;
+        public static final double thetaKD = 0;
+
+        public static double thetaTolerance = 3;
+        public static double thetaVelTol = 0.1;
 
     }
 
@@ -272,14 +276,14 @@ public final class Constants {
         public static final int ClimberSolenoidForwardChannel = 1;
         public static final int ClimberSolenoidReverseChannel = 3;
         public static final int climberEncoderAbsoluteChannel = -1;
-        public static final int[] climberEncoderRelativeChannels = {-1, -1};
+        public static final int[] climberEncoderRelativeChannels = {6, 7};
         public static final boolean climberEncoderInverted = false;
 
         /* Motor constants */
         public static final SparkConstants climberMotorConstants = new SparkConstants(
             climberMotorID, 
             MotorType.kBrushless, 
-            35, 
+            sparkCurrentLimit.sparkCurLimit40, 
             IdleMode.kBrake, 
             false
         );

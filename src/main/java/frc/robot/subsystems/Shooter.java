@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -109,7 +110,7 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterRPM(double shooterRPM){
     double falconVelocity = Conversions.RPMToFalcon(shooterRPM, Constants.Shooter.shooterGearRatio);
-    shooterMotorParent.set(ControlMode.Velocity, falconVelocity);
+    shooterMotorParent.set(ControlMode.Velocity, falconVelocity, DemandType.ArbitraryFeedForward, Constants.Shooter.shooterFF.calculate(falconVelocity));
   }
 
   // public Consumer<RelativeEncoder> getHoodEncoderConsumer() {
@@ -247,26 +248,20 @@ public class Shooter extends SubsystemBase {
     shootRPM.setDouble(this.getShooterRPM());
     hoodAng.setDouble(this.getHoodAngle());
     if(Constants.tuningMode) {
-      if(shootP.getDouble(0) != tuningShooterPID.kP
-          | shootI.getDouble(0) != tuningShooterPID.kI
-          | shootD.getDouble(0) != tuningShooterPID.kD) {
-        tuningShooterPID = new PIDGains(
-          shootP.getDouble(0), 
-          shootI.getDouble(0), 
-          shootD.getDouble(0), 
-          tuningShooterPID.kFF);
+      double p = shootP.getDouble(0), i = shootI.getDouble(0), d = shootD.getDouble(0);
+      if(p != tuningShooterPID.kP
+          || i != tuningShooterPID.kI
+          || d != tuningShooterPID.kD) {
+        tuningShooterPID = new PIDGains(p, i, d, tuningShooterPID.kFF);
         shooterMotorParent.configPID(tuningShooterPID);
       }
       setShooterRPM(setShootRPM.getDouble(0));
 
-      if(hoodP.getDouble(0) != hoodController.getP()
-          | hoodI.getDouble(0) != hoodController.getI()
-          | hoodD.getDouble(0) != hoodController.getD()) {
-        hoodController.setPID(
-          hoodP.getDouble(0), 
-          hoodI.getDouble(0), 
-          hoodD.getDouble(0)
-        );
+      p = hoodP.getDouble(0); i = hoodI.getDouble(0); d = hoodD.getDouble(0);
+      if(p != hoodController.getP()
+          || i != hoodController.getI()
+          || d != hoodController.getD()) {
+        hoodController.setPID(p, i, d);
       }
       setHoodAngle(setHoodAng.getDouble(0));
     }
