@@ -1,8 +1,53 @@
 {
+  "HALProvider": {
+    "RoboRIO": {
+      "6V Rail": {
+        "open": true
+      },
+      "RoboRIO Input": {
+        "open": true
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Auto # Balls": "String Chooser"
+      "/LiveWindow/Climber": "Subsystem",
+      "/LiveWindow/Intaker": "Subsystem",
+      "/LiveWindow/Shooter": "Subsystem",
+      "/LiveWindow/Swerve": "Subsystem",
+      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[4]": "Digital Input",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Vision": "Subsystem",
+      "/Shuffleboard/Testing/Climber Extend Motor": "Command",
+      "/Shuffleboard/Testing/Climber Extend Piston": "Command",
+      "/Shuffleboard/Testing/Climber Retract Motor": "Command",
+      "/Shuffleboard/Testing/Climber Retract Piston": "Command",
+      "/Shuffleboard/Testing/Extend Intaker": "Command",
+      "/Shuffleboard/Testing/Retract Intaker": "Command",
+      "/Shuffleboard/Testing/Start Intake Motors": "Command",
+      "/Shuffleboard/Testing/Start Shooter Motors": "Command",
+      "/Shuffleboard/Testing/Stop Intake Motors": "Command",
+      "/Shuffleboard/Testing/Stop Shooter Motors": "Command",
+      "/SmartDashboard/Auto # Balls": "String Chooser",
+      "/SmartDashboard/Auto Choose Position": "String Chooser",
+      "/SmartDashboard/Auto Choose Tarmac": "String Chooser"
+    }
+  },
+  "NetworkTables": {
+    "SmartDashboard": {
+      "Auto # Balls": {
+        "open": true
+      },
+      "Auto Choose Position": {
+        "open": true
+      },
+      "open": true
     }
   }
 }
