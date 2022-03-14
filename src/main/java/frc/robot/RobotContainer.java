@@ -50,7 +50,7 @@ public class RobotContainer {
 
   /* Operator Buttons */
   private final JoystickButton opTogglePreshoot = new JoystickButton(operator, XboxController.Button.kA.value);
-  private final JoystickButton opSwitchGear = new JoystickButton(operator, XboxController.Button.kB.value);
+  private final JoystickButton opToggleUseIntakeSensors = new JoystickButton(operator, XboxController.Button.kB.value);
   private final JoystickButton opFeedShooter = new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton opToggleIntakePiston = new JoystickButton(operator, XboxController.Button.kY.value);
   private final JoystickButton opOuttake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
@@ -155,9 +155,19 @@ public class RobotContainer {
       () -> States.intake(),
       () -> States.stopIntake()
     ));
+    opOuttake.whileHeld(new StartEndCommand(
+      () -> States.outtake(),
+      () -> States.stopIntake()
+    ));
     opFeedShooter.whileHeld(new StartEndCommand(
       () -> States.feed(), 
       () -> States.stopIntake()
+    ));
+    opToggleUseIntakeSensors.whenPressed(new InstantCommand(
+      () -> m_Intaker.toggleUseSensors()
+    ));
+    opToggleIntakePiston.whenPressed(new InstantCommand(
+      () -> States.toggleIntake()
     ));
 
     // Shooter
