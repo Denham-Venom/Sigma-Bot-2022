@@ -122,9 +122,11 @@ public class Climber extends SubsystemBase {
       state = States.climberState;
       switch(States.climberState) {
         case extendClimber:
-        setClimberMotorSafe(Constants.Climber.ClimberSpeed);
+        //setClimberMotorSafe(Constants.Climber.ClimberSpeed);
+        setClimberMotor(Constants.Climber.ClimberSpeed);
         case retractClimber:
-        setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
+        //setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
+        setClimberMotor(-Constants.Climber.ClimberSpeed);
         case extendClimberPiston:
         climberPiston.set(Value.kForward);
         case retractClimberPiston:

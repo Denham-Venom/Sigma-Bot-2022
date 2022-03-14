@@ -162,12 +162,11 @@ public final class Constants {
             kMaxAngularSpeedRadiansPerSecond, 
             kMaxAngularSpeedRadiansPerSecondSquared
         );
-        public static final double thetaKP = .3;
+        public static final double thetaKP = -5.0;
         public static final double thetaKI = 0.0;
-        public static final double thetaKD = 0;
+        public static final double thetaKD = -0.1;
 
-        public static double thetaTolerance = 3;
-        public static double thetaVelTol = 0.1;
+        public static double thetaTolerance = 0.07;
 
     }
 

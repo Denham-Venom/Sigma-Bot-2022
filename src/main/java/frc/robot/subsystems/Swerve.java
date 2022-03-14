@@ -55,7 +55,6 @@ public class Swerve extends SubsystemBase {
     private NetworkTableEntry turnI = tuning.add("Turn I", 0).getEntry();
     private NetworkTableEntry turnD = tuning.add("Turn D", 0).getEntry();
     private NetworkTableEntry turnTol = tuning.add("Turn Tol", 0).getEntry();
-    private NetworkTableEntry turnVelTol = tuning.add("Turn Vel Tol", 0).getEntry();
     private double turnTolVal = Constants.Swerve.thetaTolerance;
 
     // Feedback Controllers
