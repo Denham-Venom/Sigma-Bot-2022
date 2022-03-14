@@ -63,6 +63,8 @@ public class AutoCommands {
             position = "Mid";
             case right:
             position = "Right";
+            default:
+            position = "Left";
         }
     }
 
@@ -76,6 +78,8 @@ public class AutoCommands {
             numBalls = 4;
             case five:
             numBalls = 5;
+            default:
+            numBalls = 2;
         }
     }
 
