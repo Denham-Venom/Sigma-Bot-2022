@@ -41,8 +41,7 @@ public class Swerve extends SubsystemBase {
     private double thetaOut;
     private boolean isLowGear = true;
     private boolean fieldRelative = true;
-    public Translation2d goalRelTranslation;
-    private Pose2d lastShot;
+    public Translation2d goalRelTranslation = new Translation2d();
     
     // Network Table Variables
     public NetworkTable table;
@@ -251,15 +250,14 @@ public class Swerve extends SubsystemBase {
         Rotation2d angle;
         Pose2d robotPose = getPose();
         Translation2d centerGoal = goalRelTranslation;
-        Translation2d goalVector = robotPose.getTranslation().minus(centerGoal);
+        Translation2d goalVector = centerGoal.minus(robotPose.getTranslation());
         //angle = new Rotation2d(goalVector.getX(), goalVector.getY()).minus(robotPose.getRotation());
-        angle = new Rotation2d(goalVector.getX(), goalVector.getY());
+        angle = new Rotation2d(goalVector.getX(), goalVector.getY()).plus(Rotation2d.fromDegrees(180));
         return angle;
     }
 
     public void setTargetRel(){
-        lastShot = getPose();
-        goalRelTranslation = limelight.getDistance().rotateBy(getPose().getRotation()).plus(getPose().getTranslation());
+        goalRelTranslation = limelight.getDistance().rotateBy(getPose().getRotation().plus(Rotation2d.fromDegrees(180))).plus(getPose().getTranslation());
     }
     /**
      * Toggles whether the robot uses field relative (default true) control, 
