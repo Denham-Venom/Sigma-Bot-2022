@@ -198,15 +198,16 @@ public final class Constants {
         public static final double[][] shooterMap = 
         // {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
         {
-            {1.83, 2200, 14.37},
-
-            {2.5, 2350, 22},
-            {3.60, 2850, 26.14},
-            {4.57, 3050, 32.14},
-
+            {1.84, 2200, 14.6},
+            {1.95, 2400, 21},
+            {2.84, 2500, 25},
+            {3.75, 2700, 27},
+            {4.71, 3200, 32}            
         };
 
-        public static final double[] shooterLowMap = {1.83, 900, 14.00}; //d, s, a
+        public static final double[] shooterLowMap = 
+        // distance, shooter speed, shooter angle
+        {1.83, 900, 14.00};
 
         public static final boolean autoAim = false; //TODO set to true
 

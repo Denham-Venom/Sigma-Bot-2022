@@ -110,6 +110,11 @@ public class Intaker extends SubsystemBase {
           spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
           intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
           break;
+        case reverseFeeding:
+          indexerMotor.set(ControlMode.PercentOutput, -Constants.Intake.indexSpeed);
+          spinUpMotor.set(ControlType.kDutyCycle, -Constants.Intake.spinupSpeed);
+          intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.intakeSpeed);
+          break;
         case disabled:
         // Stops all intake/indexer motors
           indexerMotor.set(ControlMode.PercentOutput, 0);
