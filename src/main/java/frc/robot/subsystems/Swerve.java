@@ -4,6 +4,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,25 +26,50 @@ import frc.robot.States;
 import frc.robot.SwerveModule;
 
 public class Swerve extends SubsystemBase {
-    public SwerveDriveOdometry swerveOdometry;
+
+    // Device Refs
     public SwerveModule[] mSwerveMods;
     public PigeonIMU gyro;
+    private Limelight limelight;
+
+    // State Variables
+    public SwerveDriveOdometry swerveOdometry;
+    private int currentNeutral = 0;
+    private boolean isLowGear = true;
+    private boolean fieldRelative = true;
+    
+    // Network Table Variables
     public NetworkTable table;
     public NetworkTableInstance inst;
     public NetworkTableEntry xEntry;
     public NetworkTableEntry yEntry;
     public NetworkTableEntry headingEntry;
-    private Limelight limelight;
-    private int currentNeutral = 0;
-    private boolean isLowGear = true;
-    private boolean fieldRelative = true;
+
+    // Feedback Controllers
+    public final PIDController xController = new PIDController(
+        Constants.Swerve.xKP, 
+        Constants.Swerve.xKI, 
+        Constants.Swerve.xKD
+    );
+    public final PIDController yController = new PIDController(
+        Constants.Swerve.yKP, 
+        Constants.Swerve.yKI, 
+        Constants.Swerve.yKD
+    );
+    public final ProfiledPIDController thetaController = new ProfiledPIDController(
+        Constants.Swerve.thetaKP, 
+        Constants.Swerve.thetaKI, 
+        Constants.Swerve.thetaKD, 
+        Constants.Swerve.kThetaControllerConstraints
+    );
+
 
     /**
      * Create a new swerve subsystem.
      * @param m_Vision The limelight to use for target acquisition.
      */
     public Swerve(Vision m_Vision) {
-        Constants.Swerve.thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
@@ -230,9 +257,9 @@ public class Swerve extends SubsystemBase {
                 break;
                 
             case preShoot:
+                double thetaOut;
                 if(limelight.hasTarget()){
-                    double thetaOut = Constants.Swerve.thetaController.calculate(limelight.getTx().getDegrees());
-                    SmartDashboard.putNumber("to", thetaOut);
+                    thetaOut = thetaController.calculate(limelight.getTx().getDegrees());
                     if (Constants.Shooter.autoAim){
                         this.drive(
                             new Translation2d(), 
@@ -240,9 +267,10 @@ public class Swerve extends SubsystemBase {
                             false);
                     }
                 } else {
-                    double thetaOut = Constants.Swerve.thetaController.calculate(getAngleToTarget().getDegrees());
-                    this.drive(new Translation2d(), thetaOut, false);
+                    thetaOut = thetaController.calculate(getAngleToTarget().getDegrees());
                 }
+                this.drive(new Translation2d(), thetaOut, false);
+                SmartDashboard.putNumber("theta out", thetaOut);
                 break;
         }
 

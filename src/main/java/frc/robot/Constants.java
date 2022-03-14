@@ -165,12 +165,6 @@ public final class Constants {
         public static final double thetaKP = 2.0;
         public static final double thetaKI = 0.0;
         public static final double thetaKD = 0.0;
-        public static final ProfiledPIDController thetaController = new ProfiledPIDController(
-            thetaKP, 
-            thetaKI, 
-            thetaKD, 
-            kThetaControllerConstraints
-        );
 
     }
 
