@@ -15,7 +15,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.function.FloatConsumer;
 import frc.Controllers.SparkConstants;
 import frc.Controllers.TalonConstants;
 import frc.lib.math.PIDGains;
