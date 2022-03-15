@@ -31,32 +31,24 @@ public class RightTarmacPaths extends SequentialCommandGroup {
 
 
     SwerveTrajectory rightTarmacPaths1 = new SwerveTrajectory(
-      Constants.AutoConstants.trajectoryConfig,
-      startPos,
-      AutoConstants.rightPoints [waypointIndex++]
+      Constants.AutoConstants.trajectoryConfig, 
+      startPos, //start
+      AutoConstants.rightPoints [waypointIndex++] //ball1 & shoot
     );
     
     SwerveTrajectory rightTarmacPaths2 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.rightPoints [waypointIndex++],
-      AutoConstants.rightPoints [waypointIndex++],
-      AutoConstants.rightPoints [waypointIndex++],
-      AutoConstants.rightPoints [waypointIndex]
+      AutoConstants.rightPoints [waypointIndex++], //start from ball1
+      AutoConstants.rightPoints [waypointIndex++], //ball2
+      AutoConstants.rightPoints [waypointIndex++], //ball3
+      AutoConstants.rightPoints [waypointIndex++] //shoot pos
     );
     
     SwerveTrajectory rightTarmacPaths3 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.rightPoints [waypointIndex++],
-      AutoConstants.rightPoints [waypointIndex++],
-      AutoConstants.rightPoints [waypointIndex]
-    );
-   
-    SwerveTrajectory rightTarmacPaths4 = new SwerveTrajectory(
-      Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.rightPoints [waypointIndex++],
-      //AutoConstants.rightPoints [waypointIndex++],
-      //AutoConstants.rightPoints [waypointIndex++],
-      AutoConstants.rightPoints [waypointIndex]
+      AutoConstants.rightPoints [waypointIndex++], //start shoot pos
+      AutoConstants.rightPoints [waypointIndex++], //ball4
+      AutoConstants.rightPoints [waypointIndex++] //end final shoot pos
     );
 
     var thetaController =
@@ -97,18 +89,6 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             new PIDController(Constants.Swerve.yKP, 0, 0),
             new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
             rightTarmacPaths3.getAngleSupplier(),
-            s_Swerve::setModuleStates,
-            s_Swerve);
-            
-    SwerveControllerCommand swerveControllerCommand4 = 
-        new SwerveControllerCommand(
-            rightTarmacPaths4.getTrajectory(),
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            rightTarmacPaths4.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
             
@@ -159,10 +139,6 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       //Picks up ball 4
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand3,
-      new InstantCommand(() -> States.stopIntake()),
-
-      //Turns to the goal
-      swerveControllerCommand4,
 
       //Activated the shooter and shoots the ball
       new InstantCommand(() -> States.activateShooter()),
