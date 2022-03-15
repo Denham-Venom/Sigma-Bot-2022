@@ -275,8 +275,8 @@ public final class Constants {
 
         /* Motor and device IDs */
         private static final int climberMotorID = 15;
-        public static final int ClimberSolenoidForwardChannel = 1;
-        public static final int ClimberSolenoidReverseChannel = 3;
+        public static final int ClimberSolenoidForwardChannel = 3;
+        public static final int ClimberSolenoidReverseChannel = 2;
         public static final int climberEncoderAbsoluteChannel = -1;
         public static final int[] climberEncoderRelativeChannels = {6, 7};
         public static final boolean climberEncoderInverted = false;
@@ -309,7 +309,7 @@ public final class Constants {
         private static final int indexID = 13;
         private static final int spinupID = 14;
         public static final int IntakeSolenoidForwardChannel = 0;
-        public static final int IntakeSolenoidReverseChannel = 2;
+        public static final int IntakeSolenoidReverseChannel = 1;
 
         /* Motor constants */
         public static final TalonConstants intakeMotorConstants = new TalonConstants(
