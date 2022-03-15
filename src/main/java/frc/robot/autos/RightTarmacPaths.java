@@ -117,7 +117,10 @@ public class RightTarmacPaths extends SequentialCommandGroup {
     if(numBalls == 4 || numBalls == 5) {
       addCommands(
       //Picks up ball 2 and 3
-      new InstantCommand(() -> States.intake()),
+      new InstantCommand(() -> {
+        States.deployIntake();
+        States.intake();
+      }),
       swerveControllerCommand2,
     
       new InstantCommand(() -> States.stopIntake()),
@@ -137,7 +140,10 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       if(numBalls == 5) {
       addCommands(
       //Picks up ball 4
-      new InstantCommand(() -> States.intake()),
+      new InstantCommand(() -> {
+        States.deployIntake();
+        States.intake();
+      }),
       swerveControllerCommand3,
 
       //Activated the shooter and shoots the ball
