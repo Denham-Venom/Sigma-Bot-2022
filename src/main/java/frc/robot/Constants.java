@@ -367,7 +367,7 @@ public final class Constants {
             kMaxAccelerationMetersPerSecondSquared
         ).setKinematics(Constants.Swerve.swerveKinematics);
 
-        public static final double thetaKP = 1.;
+        public static final double thetaKP = 3.;
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = Swerve.kThetaControllerConstraints;
 
         /* Autonomous waypoints */
@@ -383,13 +383,14 @@ public final class Constants {
             //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
         public static final SwerveTrajectoryWaypoint[] rightPoints = 
         {
-            new SwerveTrajectoryWaypoint(7.553, 0.94, -1.578, -1.578),
-            new SwerveTrajectoryWaypoint(7.271, 1.383, 2.67, 2.67),
-            new SwerveTrajectoryWaypoint(4.2, 1.854, -3.134, -3.134),
-            new SwerveTrajectoryWaypoint(1.617, 1.697, -2.372, -2.372),
-            new SwerveTrajectoryWaypoint(1.645, 2.082, 0.778, 0.778),
-            new SwerveTrajectoryWaypoint(4.839, 6.047, 0.998, 0.998),
-            new SwerveTrajectoryWaypoint(5.287, 5.748, 2.556, 2.556)
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end - ball1 
+            new SwerveTrajectoryWaypoint(7.553, 0.94, -1.578, 2.636), //part2 start - ball1
+            new SwerveTrajectoryWaypoint(5.485, 1.602, 2.568, 2.826), //part2 interior - ball2
+            new SwerveTrajectoryWaypoint(1.483, 1.592, -2.319, -2.319), //part2 end - ball3
+            new SwerveTrajectoryWaypoint(0, 0, 0, 0), //part3 start - ball3
+            new SwerveTrajectoryWaypoint(1, 1, 0, 0), //part3 end - ball4
+            new SwerveTrajectoryWaypoint(2, 2, 0, 0), //part4 start - ball4
+            new SwerveTrajectoryWaypoint(3, 3, 0, 0) //part4 end - shoot pos
         };
 
         public static final SwerveTrajectoryWaypoint[] leftPoints = 

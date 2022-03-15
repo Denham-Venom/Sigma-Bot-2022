@@ -38,6 +38,13 @@ public class States {
     public static ClimberStates climberState = ClimberStates.disabled;
     public static boolean climbAllowed = false;
     
+    public static void reset() {
+        shooterState = ShooterStates.disabled;
+        intakeState = IntakeStates.disabled;
+        intakeExtendState = IntakeExtendStates.disabled;
+        climberState = ClimberStates.disabled;
+        climbAllowed = false;
+    }
 
     public static void toggleIntake() {
         switch(States.intakeExtendState) {
