@@ -82,7 +82,8 @@ public class Swerve extends SubsystemBase {
      */
     public Swerve(Vision m_Vision) {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        thetaController.setTolerance(turnTolVal);        thetaController.setSetpoint(0);
+        thetaController.setTolerance(turnTolVal);        
+        thetaController.setSetpoint(0);
         gyro = new PigeonIMU(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
