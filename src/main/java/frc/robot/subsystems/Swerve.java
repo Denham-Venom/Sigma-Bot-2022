@@ -293,6 +293,7 @@ public class Swerve extends SubsystemBase {
         //SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
         //if(Math.abs(limelight.getTx().getDegrees()) <= Constants.Swerve.thetaTolerance) setTargetRel();
         if(limelight.hasTarget()) {
+            thetaOut = thetaController.calculate(measurement);
             if(Math.abs(measurement) <= turnTolVal) {
                 thetaOut = 0;
                 setTargetRel();
