@@ -25,7 +25,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 public final class Constants {
 
     /* General constants */
-    public static final boolean tuningMode = true;
+    public static final boolean tuningMode = false;
     public static final double stickDeadband = 0.1;
     public static final String driverTab = "Drivers";
 
@@ -243,14 +243,22 @@ public final class Constants {
         public static final double[][] shooterMap = 
         // {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
         {
-            {1.84, 2200, 14.6},
-            {1.95, 2400, 21},
-            {2.11, 2275, 22},
-            {2.84, 2500, 25},
-            {3.75, 2700, 27},
-            {4.19, 2900, 29}, //tentative - TODO
-            {4.71, 3200, 32}
-            //{-1, 3300, 35}            
+            // {1.84, 2200, 14.6},
+            // {1.95, 2400, 21},
+            // {2.11, 2275, 22},
+            // {2.84, 2500, 25},
+            // {3.75, 2700, 27},
+            // {4.19, 2900, 29}, //tentative - TODO
+            // {4.71, 3200, 32}
+            // //{-1, 3300, 35}    
+            
+            {1.18, 2250, 16.3},
+            {1.68, 2200, 17},
+            {2.16, 2300, 23},
+            {2.61, 2425, 24},
+            {3.17, 2550, 25},
+            {3.63, 2700, 26.5},
+            {4.2, 3100, 28.9}
         };
 
         public static final double[] shooterLowMap = 

@@ -231,7 +231,7 @@ public class Shooter extends SubsystemBase {
         case disabled:
           shooterMotorParent.set(ControlMode.PercentOutput, 0); 
           if(!Constants.tuningMode) {
-            hoodMotor.set(ControlMode.PercentOutput, 0);
+            setHoodAngle(10);
             //turretMotor.set(ControlMode.PercentOutput, 0);
           }
           break;
