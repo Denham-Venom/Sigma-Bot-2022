@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -67,7 +68,8 @@ public class RobotContainer {
   private final POVButton opRetractClimberPiston = new POVButton(operator, 90); //right
 
   /* Subsystems */
-  private final PneumaticHub m_pHub;
+  //private final PneumaticHub m_pHub;
+  //private final PneumaticsControlModule m_pHub;
   private final Vision m_Vision;
   private final Shooter m_Shooter;
   private final Intaker m_Intaker;
@@ -78,7 +80,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Instantiate subsystems
-    m_pHub = new PneumaticHub();
+    //m_pHub = new PneumaticHub();
+    //m_pHub = new PneumaticsControlModule();
     m_Vision = new Vision();
     m_Shooter = new Shooter(m_Vision);
     m_Intaker = new Intaker();
