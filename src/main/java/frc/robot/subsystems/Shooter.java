@@ -228,21 +228,21 @@ public class Shooter extends SubsystemBase {
     //  state = States.shooterState;
       switch(States.shooterState){
         case disabled:
-            shooterMotorParent.set(ControlMode.PercentOutput, 0); 
-            if(!Constants.tuningMode) {
-              hoodMotor.set(ControlMode.PercentOutput, 0);
-              //turretMotor.set(ControlMode.PercentOutput, 0);
-            }
-            break;
+          shooterMotorParent.set(ControlMode.PercentOutput, 0); 
+          if(!Constants.tuningMode) {
+            hoodMotor.set(ControlMode.PercentOutput, 0);
+            //turretMotor.set(ControlMode.PercentOutput, 0);
+          }
+          break;
             
         case preShoot:
-            if (Constants.Shooter.calibrationMode){
-                setShooterRPM(setShootRPM.getDouble(0));
-                setHoodAngle(setHoodAng.getDouble(0));
-            } else{
-                setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
-                setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
-            }
+          if (Constants.Shooter.calibrationMode){
+              setShooterRPM(setShootRPM.getDouble(0));
+              setHoodAngle(setHoodAng.getDouble(0));
+          } else{
+              setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
+              setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
+          }
           break;
       //}
     }
