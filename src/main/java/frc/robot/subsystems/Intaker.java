@@ -48,8 +48,11 @@ public class Intaker extends SubsystemBase {
   public Intaker(PneumaticHub m_pHub){
     //Instantiate devices
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
+    indexerMotor.setStatusFrames(255);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
+    spinUpMotor.setStatusFrames(1000);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
+    intakeMotor.setStatusFrames(255);
     intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
     intakeSensor = new DigitalInput(6);
     shooterSensor = new DigitalInput(5);

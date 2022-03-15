@@ -117,6 +117,13 @@ public class LazySparkMAX extends CANSparkMax {
         m_encoder.setVelocityConversionFactor(360 / gearRatio);
     }
 
+    public void setStatusFrames(int period){
+        period = period > 65535 ? 65535 : period;
+        super.setPeriodicFramePeriod(PeriodicFrame.kStatus1, period);
+        super.setPeriodicFramePeriod(PeriodicFrame.kStatus2, period);
+        super.setPeriodicFramePeriod(PeriodicFrame.kStatus3, period);
+    }
+
 
 
     

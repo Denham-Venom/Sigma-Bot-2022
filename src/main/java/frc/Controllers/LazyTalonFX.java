@@ -1,5 +1,6 @@
 package frc.Controllers;
 
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import frc.lib.math.PIDGains;
@@ -38,6 +39,15 @@ public class LazyTalonFX extends TalonFX {
         super.configNominalOutputReverse(0);
         super.configPeakOutputForward(pidGains.kMaxForward);
         super.configPeakOutputReverse(pidGains.kMaxReverse);
+    }
+
+    public void setStatusFrames(int period){
+        period = period > 255 ? 255 : period;
+        for(int i = 0; i < 16; i++){
+            super.setStatusFramePeriod(i, period);
+
+        }
+
     }
     
 }

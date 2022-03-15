@@ -29,6 +29,7 @@ public class Climber extends SubsystemBase {
   public Climber(PneumaticHub m_pHub) {
     // Devices
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
+    climberMotor.setStatusFrames(1000);
     climberPiston = m_pHub.makeDoubleSolenoid(Constants.Climber.ClimberSolenoidForwardChannel, Constants.Climber.ClimberSolenoidReverseChannel);
       
     // Shuffleboard

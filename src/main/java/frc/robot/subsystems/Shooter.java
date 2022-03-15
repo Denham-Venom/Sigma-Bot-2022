@@ -69,6 +69,7 @@ public class Shooter extends SubsystemBase {
   public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
+    shooterMotorChild.setStatusFrames(255); //check for performance
     hoodMotor = new LazyTalonFX(Constants.Shooter.hoodConstants);
     //turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
     shooterMotorParent.configPID(Constants.Shooter.shooterPID);
