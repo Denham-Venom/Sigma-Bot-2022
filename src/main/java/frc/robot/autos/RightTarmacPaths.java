@@ -75,7 +75,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             new PIDController(Constants.Swerve.xKP, 0, 0),
             new PIDController(Constants.Swerve.yKP, 0, 0),
             new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            //rightTarmacPaths1.getAngleSupplier(),
+            rightTarmacPaths1.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
 
@@ -87,7 +87,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             new PIDController(Constants.Swerve.xKP, 0, 0),
             new PIDController(Constants.Swerve.yKP, 0, 0),
             new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            //rightTarmacPaths2.getAngleSupplier(),
+            rightTarmacPaths2.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
 
@@ -99,7 +99,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             new PIDController(Constants.Swerve.xKP, 0, 0),
             new PIDController(Constants.Swerve.yKP, 0, 0),
             new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            //rightTarmacPaths3.getAngleSupplier(),
+            rightTarmacPaths3.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
             
@@ -111,7 +111,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             new PIDController(Constants.Swerve.xKP, 0, 0),
             new PIDController(Constants.Swerve.yKP, 0, 0),
             new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
-            //rightTarmacPaths4.getAngleSupplier(),
+            rightTarmacPaths4.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
             

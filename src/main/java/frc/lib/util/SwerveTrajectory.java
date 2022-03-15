@@ -29,7 +29,7 @@ public class SwerveTrajectory {
 
         trajectory = TrajectoryGenerator.generateTrajectory(pts, config);
 
-        SwerveCommandRotation2dSupplierGenerator.generateSwerveCommandRotation2dSupplier(trajectory, List.of(waypoints));
+        this.angleSupplier = SwerveCommandRotation2dSupplierGenerator.generateSwerveCommandRotation2dSupplier(trajectory, List.of(waypoints));
     }
 
     public Trajectory getTrajectory() {

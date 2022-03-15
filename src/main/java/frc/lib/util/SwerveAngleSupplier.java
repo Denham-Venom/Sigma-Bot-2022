@@ -52,8 +52,11 @@ public class SwerveAngleSupplier implements Supplier<Rotation2d> {
       double curTime = timer.get();
       while(curTime >= times.get(i)) {
         i++;
+        if(i >= numTimes) {
+          i = numTimes-1;
+          break;
+        }
       }
-      if(i >= numTimes) i = numTimes-1;
       return pts.get(i).getRotation();
     }
 }
