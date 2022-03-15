@@ -9,7 +9,7 @@ public class Limelight {
     private final double limelightHeight;
     private final Rotation2d limelightAngle;
     private final double targetHeight;
-    private MedianFilter distanceMedian;
+    private MedianFilter distanceMedian; //TODO determine if should reinstate
     private MedianFilter xMedian;
     private MedianFilter yMedian;
 

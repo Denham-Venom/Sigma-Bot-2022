@@ -244,7 +244,7 @@ public class Swerve extends SubsystemBase {
         return angle;
     }
 
-    public Rotation2d getAngelToTargetRel(){
+    public Rotation2d getAngleToTargetRel(){
         Rotation2d angle;
         Pose2d robotPose = getPose();
         Translation2d centerGoal = goalRelTranslation;
@@ -255,7 +255,13 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setTargetRel(){
-        goalRelTranslation = limelight.getDistance().rotateBy(getPose().getRotation().plus(Rotation2d.fromDegrees(180))).plus(getPose().getTranslation());
+        // Translation2d llx = limelight.getDistance(); //t2d with x as dist from robot to target
+        // Pose2d curPos = getPose(); //cur robot odom
+        // Rotation2d curRot = curPos.getRotation(); //rot from odom
+        // Rotation2d curLLRot = curRot.plus(new Rotation2d(Math.PI)); //rot of LL (back of robot) from odom
+        // Translation2d llxFR = llx.rotateBy(curLLRot); //rot LL dist from robot to goal vector to be pointed in the correct direction relative to field coords
+        // Translation2d goalPos = curPos.getTranslation().plus(llxFR); //get final goal pos by adding vector from field origin to robot to vector from robot to target
+        goalRelTranslation = limelight.getDistance().rotateBy(getPose().getRotation().plus(Rotation2d.fromDegrees(180))).plus(getPose().getTranslation()); //store value
     }
     /**
      * Toggles whether the robot uses field relative (default true) control, 
@@ -280,7 +286,7 @@ public class Swerve extends SubsystemBase {
 
         //thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getDegrees()): thetaController.calculate(getAngleToTarget().getDegrees());
         double measurement = limelight.getTx().getRadians();
-        thetaOut = limelight.hasTarget()? thetaController.calculate(measurement): thetaController.calculate(getAngelToTargetRel().getRadians());
+        thetaOut = limelight.hasTarget()? thetaController.calculate(measurement): thetaController.calculate(getAngleToTargetRel().getRadians());
         //thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
         //thetaOut = thetaController.calculate(measurement);
         //SmartDashboard.putNumber("theta out", thetaOut);
