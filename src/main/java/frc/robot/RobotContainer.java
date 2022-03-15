@@ -81,9 +81,9 @@ public class RobotContainer {
     m_pHub = new PneumaticHub();
     m_Vision = new Vision();
     m_Shooter = new Shooter(m_Vision);
-    m_Intaker = new Intaker(m_pHub);
+    m_Intaker = new Intaker();
     s_Swerve = new Swerve(m_Vision);
-    m_Climber = new Climber(m_pHub);
+    m_Climber = new Climber();
 
     
     s_Swerve.setDefaultCommand(new TeleopSwerve(

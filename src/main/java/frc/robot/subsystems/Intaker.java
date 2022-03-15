@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,7 +46,7 @@ public class Intaker extends SubsystemBase {
   private boolean useSensors = true;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
-  public Intaker(PneumaticHub m_pHub){
+  public Intaker(){
     //Instantiate devices
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     indexerMotor.setStatusFrames(255);
@@ -53,7 +54,7 @@ public class Intaker extends SubsystemBase {
     spinUpMotor.setStatusFrames(1000);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
     intakeMotor.setStatusFrames(255);
-    intakeExtend = m_pHub.makeDoubleSolenoid(Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
+    intakeExtend = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
     intakeSensor = new DigitalInput(6);
     shooterSensor = new DigitalInput(5);
 
