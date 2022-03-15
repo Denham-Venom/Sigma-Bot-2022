@@ -245,7 +245,7 @@ public final class Constants {
         {
             {1.84, 2200, 14.6},
             {1.95, 2400, 21},
-            {2.18, 2275, 22},
+            {2.11, 2275, 22},
             {2.84, 2500, 25},
             {3.75, 2700, 27},
             {4.19, 2900, 29}, //tentative - TODO
@@ -386,8 +386,8 @@ public final class Constants {
         {
             new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end - ball1 
             new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.912), //part2 start - ball1
-            new SwerveTrajectoryWaypoint(5.452, 1.534, 2.053, 2.989), //part2 interior - ball2
-            new SwerveTrajectoryWaypoint(1.559, 1.592, 2.280, 2.280), //part2 interior - ball3
+            new SwerveTrajectoryWaypoint(5.452, 1.534, 2.989, 2.989), //part2 interior - ball2
+            new SwerveTrajectoryWaypoint(1.483, 1.557, -2.452, 2.286), //part2 interior - ball3
             new SwerveTrajectoryWaypoint(3.496, 2.619, 0.318 + Math.PI, 0.318), //part2 end - shoot pos
             new SwerveTrajectoryWaypoint(3.496, 2.619, 0.314, 0), //part3 start - shoot pos
             new SwerveTrajectoryWaypoint(4.636, 5.682, 0.983, 0), //part3 interior - ball4
