@@ -36,27 +36,27 @@ public class AutoCommands {
     private static Map<String, SwerveTrajectoryWaypoint> startPositions = Map.ofEntries(
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "LeftLeft",
-            new SwerveTrajectoryWaypoint(6.764, 5.712, 2.035, 2.035)
+            new SwerveTrajectoryWaypoint(6.764, 5.712, 2.035, 2.035) //TODO
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "LeftMid",
-            new SwerveTrajectoryWaypoint(7.022, 4.814, 2.775, 2.775)
+            new SwerveTrajectoryWaypoint(7.022, 4.814, 2.775, 2.775) //TODO
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "LeftRight",
-            new SwerveTrajectoryWaypoint(5.962, 3.958, 3.141, 3.141)
+            new SwerveTrajectoryWaypoint(5.962, 3.958, 3.141, 3.141) //TODO
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "RightLeft",
-            new SwerveTrajectoryWaypoint(8.439, 1.876, -1.561, -1.561)
+            new SwerveTrajectoryWaypoint(8.439, 1.876, -1.561, -1.561) //TODO
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "RightMid",
-            new SwerveTrajectoryWaypoint(7.566, 2.903, -1.878, -1.878)
+            new SwerveTrajectoryWaypoint(7.716, 2.903, -1.911, -1.911) //fixed
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "RightRight",
-            new SwerveTrajectoryWaypoint(6.601, 2.546, -2.283, -2.283)
+            new SwerveTrajectoryWaypoint(6.601, 2.546, -2.283, -2.283) //TODO
         )
     );
     // shuffleboard value for number of balls, starting Position, left/right tarmac
