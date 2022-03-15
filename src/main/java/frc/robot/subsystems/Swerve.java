@@ -245,17 +245,6 @@ public class Swerve extends SubsystemBase {
         return angle;
     }
 
-    public Rotation2d getAngleToTargetRel(){
-        Rotation2d angle;
-        Pose2d robotPose = getPose();
-        Translation2d centerGoal = goalRelTranslation;
-        Translation2d goalVector = centerGoal.minus(robotPose.getTranslation());
-        //angle = new Rotation2d(goalVector.getX(), goalVector.getY()).minus(robotPose.getRotation());
-        angle = new Rotation2d(goalVector.getX(), goalVector.getY()).plus(Rotation2d.fromDegrees(180));
-        SmartDashboard.putNumber("estimated Angle to Target", angle.getDegrees());
-        return angle;
-    }
-
     public void setTargetRel(){
         Translation2d llx = limelight.getDistance(); //t2d with x as dist from robot to target
         Pose2d curPos = getPose(); //cur robot odom
@@ -265,6 +254,18 @@ public class Swerve extends SubsystemBase {
         Translation2d goalRelTranslation = curPos.getTranslation().plus(llxFR); //get final goal pos by adding vector from field origin to robot to vector from robot to target
         //goalRelTranslation = limelight.getDistance().rotateBy(getPose().getRotation().plus(Rotation2d.fromDegrees(180))).plus(getPose().getTranslation()); //store value
     }
+
+    public Rotation2d getAngleToTargetRel(){
+        Rotation2d angle;
+        Pose2d robotPose = getPose();
+        Translation2d goalVector = goalRelTranslation.minus(robotPose.getTranslation());
+        //angle = new Rotation2d(goalVector.getX(), goalVector.getY()).minus(robotPose.getRotation());
+        angle = new Rotation2d(goalVector.getX(), goalVector.getY()).plus(Rotation2d.fromDegrees(180));
+        SmartDashboard.putNumber("estimated Angle to Target", angle.getDegrees());
+        return angle;
+    }
+
+    
     /**
      * Toggles whether the robot uses field relative (default true) control, 
      * which determines whether the robot moves translationally relative to 
