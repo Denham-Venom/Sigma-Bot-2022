@@ -286,16 +286,19 @@ public class Swerve extends SubsystemBase {
 
         //thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getDegrees()): thetaController.calculate(getAngleToTarget().getDegrees());
         double measurement = limelight.getTx().getRadians();
-        thetaOut = limelight.hasTarget()? thetaController.calculate(measurement): thetaController.calculate(getAngleToTargetRel().getRadians());
+        //thetaOut = limelight.hasTarget()? thetaController.calculate(measurement): thetaController.calculate(getAngleToTargetRel().getRadians());
         //thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
         //thetaOut = thetaController.calculate(measurement);
         //SmartDashboard.putNumber("theta out", thetaOut);
         //SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
         //if(Math.abs(limelight.getTx().getDegrees()) <= Constants.Swerve.thetaTolerance) setTargetRel();
-        
-        if(Math.abs(measurement) <= turnTolVal) {
-            thetaOut = 0;
-            setTargetRel();
+        if(limelight.hasTarget()) {
+            if(Math.abs(measurement) <= turnTolVal) {
+                thetaOut = 0;
+                setTargetRel();
+            }
+        } else {
+            thetaOut = thetaController.calculate(getAngleToTargetRel().getRadians());
         }
 
 
