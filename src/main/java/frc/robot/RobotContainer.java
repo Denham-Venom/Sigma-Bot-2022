@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autos.*;
@@ -55,8 +57,8 @@ public class RobotContainer {
   private final JoystickButton opToggleUseIntakeSensors = new JoystickButton(operator, XboxController.Button.kB.value);
   private final JoystickButton opFeedShooter = new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton opToggleIntakePiston = new JoystickButton(operator, XboxController.Button.kY.value);
-  // private final JoystickButton opExtendClimber = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  // private final JoystickButton opRetractClimber = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton opSpins1 = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton opSpins2 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton opAllowClimb = new JoystickButton(operator, XboxController.Button.kStart.value);
   private final JoystickButton opDisallowClimb = new JoystickButton(operator, XboxController.Button.kBack.value);
   private final POVButton opExtendClimber = new POVButton(operator, 0); //up
@@ -165,6 +167,13 @@ public class RobotContainer {
 
 
     /* Operator Controller Buttons */
+    // Swerve
+    opSpins1.and(opSpins2).whenActive(new SequentialCommandGroup(
+      new WaitCommand(1),
+      new VictorySpins(s_Swerve)
+    ));
+
+    // Intake
     opFeedShooter.whileHeld(new StartEndCommand(
       () -> States.feed(), 
       () -> States.stopIntake()
