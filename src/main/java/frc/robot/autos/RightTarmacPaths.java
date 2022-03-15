@@ -53,7 +53,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
 
     var thetaController =
         new ProfiledPIDController(
-            Constants.Swerve.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+            Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     SwerveControllerCommand swerveControllerCommand1 = 
@@ -63,7 +63,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.Swerve.xKP, 0, 0),
             new PIDController(Constants.Swerve.yKP, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            thetaController,
             rightTarmacPaths1.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
@@ -75,7 +75,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.Swerve.xKP, 0, 0),
             new PIDController(Constants.Swerve.yKP, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            thetaController,
             rightTarmacPaths2.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
@@ -87,7 +87,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             Constants.Swerve.swerveKinematics,
             new PIDController(Constants.Swerve.xKP, 0, 0),
             new PIDController(Constants.Swerve.yKP, 0, 0),
-            new ProfiledPIDController(Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints),
+            thetaController,
             rightTarmacPaths3.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
