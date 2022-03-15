@@ -1,8 +1,15 @@
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class States {
+
+    private static final ShuffleboardTab driver = Shuffleboard.getTab(Constants.driverTab);
+    private static final NetworkTableEntry preshoot = driver.add("Preshoot", false).getEntry();
+    private static final NetworkTableEntry canClimb = driver.add("Can Climb", false).getEntry();
 
     /**
      * Shooter States:
@@ -63,12 +70,12 @@ public class States {
     }
 
     public static void activateShooter() {
-        SmartDashboard.putBoolean("preshoot", true);
+        preshoot.setBoolean(true);
         States.shooterState = ShooterStates.preShoot;
     }
 
     public static void deactivateShooter() {
-        SmartDashboard.putBoolean("preshoot", false);
+        preshoot.setBoolean(false);
         States.shooterState = ShooterStates.disabled;
     }
 
@@ -84,6 +91,16 @@ public class States {
 
     public static void stopClimber() {
         States.climberState = ClimberStates.disabled;
+    }
+
+    public static void allowClimb() {
+        canClimb.setBoolean(true);
+        climbAllowed = true;
+    }
+
+    public static void disallowClimb() {
+        canClimb.setBoolean(false);
+        climbAllowed = false;
     }
 
     public static void extendClimberPiston() {

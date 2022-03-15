@@ -27,7 +27,7 @@ public final class Constants {
     /* General constants */
     public static final boolean tuningMode = false;
     public static final double stickDeadband = 0.1;
-
+    public static final String driverTab = "Drivers";
 
 
     /* Container for swerve subsystem constants */

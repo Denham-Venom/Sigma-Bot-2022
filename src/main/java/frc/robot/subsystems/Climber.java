@@ -91,27 +91,30 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(!States.climbAllowed) {
+      States.stopClimber();
+    }
     if(States.climberState != state) {
       state = States.climberState;
       switch(States.climberState) {
         case extendClimber:
-        //setClimberMotorSafe(Constants.Climber.ClimberSpeed);
-        setClimberMotor(Constants.Climber.ClimberSpeed);
-        break;
+          //setClimberMotorSafe(Constants.Climber.ClimberSpeed);
+          setClimberMotor(Constants.Climber.ClimberSpeed);
+          break;
         case retractClimber:
-        //setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
-        setClimberMotor(-Constants.Climber.ClimberSpeed);
-        break;
+          //setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
+          setClimberMotor(-Constants.Climber.ClimberSpeed);
+          break;
         case extendClimberPiston:
-        climberPiston.set(Value.kForward);
-        break;
+          climberPiston.set(Value.kForward);
+          break;
         case retractClimberPiston:
-        climberPiston.set(Value.kReverse);
-        break;
+          climberPiston.set(Value.kReverse);
+          break;
         case disabled:
-        climberPiston.set(Value.kOff);
-        setClimberMotor(0);
-        break;
+          climberPiston.set(Value.kOff);
+          setClimberMotor(0);
+          break;
       }
     }
   }
