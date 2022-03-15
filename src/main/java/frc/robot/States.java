@@ -29,6 +29,8 @@ public class States {
     public static IntakeStates intakeState = IntakeStates.disabled;
     public static IntakeExtendStates intakeExtendState = IntakeExtendStates.disabled;
     public static ClimberStates climberState = ClimberStates.disabled;
+    public static boolean climbAllowed = false;
+    
 
     public static void toggleIntake() {
         switch(States.intakeExtendState) {
@@ -85,18 +87,22 @@ public class States {
     }
 
     public static void extendClimberPiston() {
+        deployIntake();
         States.climberState = ClimberStates.extendClimberPiston;
     }
 
     public static void retractClimberPiston() {
+        deployIntake();
         States.climberState = ClimberStates.retractClimberPiston;
     }
 
     public static void extendClimber() {
+        deployIntake();
         States.climberState = ClimberStates.extendClimber;
     }
 
     public static void retractClimber() {
+        deployIntake();
         States.climberState = ClimberStates.retractClimber;
     }
 

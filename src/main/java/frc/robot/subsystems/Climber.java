@@ -23,22 +23,13 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private LazySparkMAX climberMotor;
   private DoubleSolenoid climberPiston;
-  private Encoder positionEncoder;
   private final ShuffleboardTab testing;
-  private final NetworkTableEntry encoderVal;
   private ClimberStates state = States.climberState;
 
   public Climber(PneumaticHub m_pHub) {
     // Devices
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
     climberPiston = m_pHub.makeDoubleSolenoid(Constants.Climber.ClimberSolenoidForwardChannel, Constants.Climber.ClimberSolenoidReverseChannel);
-    positionEncoder = new Encoder(
-      Constants.Climber.climberEncoderRelativeChannels[0],
-      Constants.Climber.climberEncoderRelativeChannels[1], 
-      Constants.Climber.climberEncoderInverted, 
-      Encoder.EncodingType.k4X
-    );
-    positionEncoder.reset();
       
     // Shuffleboard
     testing = Shuffleboard.getTab("Testing");
@@ -54,7 +45,6 @@ public class Climber extends SubsystemBase {
     testing.add("Climber Retract Motor", new InstantCommand(
       () -> States.retractClimber()
     ));
-    encoderVal = testing.add("Climber Encoder Value", positionEncoder.get()).getEntry();
   }
   
   /**
@@ -94,23 +84,6 @@ public class Climber extends SubsystemBase {
     climberMotor.set(demand);
   }
 
-  public void setClimberMotorSafe(double demand) {
-    double finalDemand = 0;
-    if(positionEncoder.get() >= Constants.Climber.climberHighLimit) {
-      if(demand < 0) {
-        finalDemand = demand;
-      }
-    } else if(positionEncoder.get() <= Constants.Climber.climberLowLimit) {
-      if(demand > 0) {
-        finalDemand = demand;
-      }
-    } else {
-      finalDemand = demand;
-    }
-
-    setClimberMotor(finalDemand);
-  }
-
   public void setClimberPiston() {
     climberPiston.set(Value.kOff);
   }
@@ -124,19 +97,23 @@ public class Climber extends SubsystemBase {
         case extendClimber:
         //setClimberMotorSafe(Constants.Climber.ClimberSpeed);
         setClimberMotor(Constants.Climber.ClimberSpeed);
+        break;
         case retractClimber:
         //setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
         setClimberMotor(-Constants.Climber.ClimberSpeed);
+        break;
         case extendClimberPiston:
         climberPiston.set(Value.kForward);
+        break;
         case retractClimberPiston:
         climberPiston.set(Value.kReverse);
+        break;
         case disabled:
         climberPiston.set(Value.kOff);
         setClimberMotor(0);
+        break;
       }
     }
-    encoderVal.setNumber(positionEncoder.get());
   }
 }
 

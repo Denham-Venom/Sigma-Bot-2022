@@ -17,6 +17,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.Controllers.SparkConstants;
 import frc.Controllers.TalonConstants;
+import frc.lib.math.Conversions;
 import frc.lib.math.PIDGains;
 import frc.lib.util.SwerveModuleConstants;
 import frc.lib.util.SwerveTrajectoryWaypoint;
@@ -24,7 +25,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 public final class Constants {
 
     /* General constants */
-    public static final boolean tuningMode = true;
+    public static final boolean tuningMode = false;
     public static final double stickDeadband = 0.1;
 
 
@@ -176,7 +177,7 @@ public final class Constants {
     public static final class Shooter {
 
         /* Shooter behavior constants */
-        public static final boolean calibrationMode = true;
+        public static final boolean calibrationMode = false;
         public static final boolean autoAim = false; //TODO set to true
 
 
@@ -215,17 +216,6 @@ public final class Constants {
             InvertType.None
         ); //might need to change invert type
         
-        /* Shooter characterization and tuning values */
-        public static final double shootKs = 0.75347;
-        public static final double shootKv = 0.11309;
-        public static final double shootKa = 0.0073;
-        public static final PIDGains shooterPID = new PIDGains(0.12295, /*0.00001*/0, 0.0, 0.046976); // might need to be changed
-        public static final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(shootKs, shootKv, shootKa);
-        public static final PIDGains hoodPID = new PIDGains(0.05, 0, 0.001, 0.12); //contains up FF
-        public static final double hoodDownFF = -0.05;
-        public static final double hoodControllerToleranceDegrees = 0.5;
-        public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed
-        
         /* Mechanism properties */
         public static final double shooterGearRatio = (1/1);
         public static final double hoodGearRatio = 18./42;
@@ -237,6 +227,18 @@ public final class Constants {
         public static final double turretLowLimit = 0;
         public static final double turretHighLimit = 0;
 
+        /* Shooter characterization and tuning values */
+        public static final double shootKs = 0.75347;
+        public static final double shootKv = 0.11309;
+        public static final double shootKa = 0.0073;
+        public static final PIDGains shooterPID = new PIDGains(0.15, 0.00001, 0.0, 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio));//0.046976); // might need to be changed
+        public static final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(shootKs, shootKv, shootKa);
+        public static final PIDGains hoodPID = new PIDGains(0.05, 0,
+         0.001, 0.12); //contains up FF
+        public static final double hoodDownFF = -0.05;
+        public static final double hoodControllerToleranceDegrees = 0.5;
+        public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed  
+
         /* Shooter Calibration Values */
         public static final double[][] shooterMap = 
         // {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
@@ -245,7 +247,9 @@ public final class Constants {
             {1.95, 2400, 21},
             {2.84, 2500, 25},
             {3.75, 2700, 27},
-            {4.71, 3200, 32}            
+            {4.19, 2900, 29}, //tentative - TODO
+            {4.71, 3200, 32}
+            //{-1, 3300, 35}            
         };
 
         public static final double[] shooterLowMap = 
@@ -287,7 +291,7 @@ public final class Constants {
         );
         
         /* Tuned values */
-        public static final double ClimberSpeed = 0.2;
+        public static final double ClimberSpeed = 0.65;
 
         /* Mechanism properties */
         public static final double climberHighLimit = 0;
@@ -363,6 +367,7 @@ public final class Constants {
             kMaxAccelerationMetersPerSecondSquared
         ).setKinematics(Constants.Swerve.swerveKinematics);
 
+        public static final double thetaKP = 1.;
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = Swerve.kThetaControllerConstraints;
 
         /* Autonomous waypoints */

@@ -55,14 +55,14 @@ public class RobotContainer {
   private final JoystickButton opToggleUseIntakeSensors = new JoystickButton(operator, XboxController.Button.kB.value);
   private final JoystickButton opFeedShooter = new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton opToggleIntakePiston = new JoystickButton(operator, XboxController.Button.kY.value);
-  private final JoystickButton opOuttake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton opIntake = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton opZeroGyro = new JoystickButton(operator, XboxController.Button.kStart.value);
-  private final JoystickButton opToggleFieldRelative = new JoystickButton(operator, XboxController.Button.kStart.value);
-  private final POVButton opExtendClimber = new POVButton(operator, 0); //up
-  private final POVButton opRetractClimber = new POVButton(operator, 180); //down
-  private final POVButton opExtendClimberPiston = new POVButton(driver, 270); //left
-  private final POVButton opRetractClimberPiston = new POVButton(driver, 90); //right
+  private final JoystickButton opExtendClimber = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton opRetractClimber = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton opExtendClimberPiston = new JoystickButton(operator, XboxController.Button.kStart.value);
+  private final JoystickButton opRetractClimberPiston = new JoystickButton(operator, XboxController.Button.kBack.value);
+  //private final POVButton opExtendClimber = new POVButton(driver, 0); //up
+  //private final POVButton opRetractClimber = new POVButton(driver, 180); //down
+  //private final POVButton opExtendClimberPiston = new POVButton(driver, 270); //left
+  //private final POVButton opRetractClimberPiston = new POVButton(driver, 90); //right
 
   /* Subsystems */
   private final PneumaticHub m_pHub;
@@ -110,6 +110,7 @@ public class RobotContainer {
   SendableChooser<AutoCommands.StartingPosition> m_choosePosition = new SendableChooser<>();
 
   private void configureButtonBindings() {
+
     /* Driver Controller Buttons */
     // Driving
     zeroGyro.whenPressed(new InstantCommand(
@@ -134,6 +135,10 @@ public class RobotContainer {
     ));
     toggleIntakePiston.toggleWhenPressed(new InstantCommand(
       () -> States.toggleIntake()
+    ));
+    feedShooter.whileHeld(new StartEndCommand(
+      () -> States.feed(),
+      () -> States.stopIntake()
     ));
 
     // Shooter
@@ -160,20 +165,6 @@ public class RobotContainer {
 
 
     /* Operator Controller Buttons */
-    // Driving
-    opToggleFieldRelative.whenPressed(new InstantCommand(
-      () -> s_Swerve.toggleFieldRelative()
-    ));
-
-    // Intake
-    opIntake.whileHeld( new StartEndCommand(
-      () -> States.intake(),
-      () -> States.stopIntake()
-    ));
-    opOuttake.whileHeld(new StartEndCommand(
-      () -> States.outtake(),
-      () -> States.stopIntake()
-    ));
     opFeedShooter.whileHeld(new StartEndCommand(
       () -> States.feed(), 
       () -> States.stopIntake()

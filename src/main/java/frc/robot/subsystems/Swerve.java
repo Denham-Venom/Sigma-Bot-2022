@@ -54,6 +54,7 @@ public class Swerve extends SubsystemBase {
     private NetworkTableEntry turnI = tuning.add("Turn I", 0).getEntry();
     private NetworkTableEntry turnD = tuning.add("Turn D", 0).getEntry();
     private NetworkTableEntry turnTol = tuning.add("Turn Tol", 0).getEntry();
+    private NetworkTableEntry tuneSwerve = tuning.add("Tune Swerve", false).getEntry();
     private double turnTolVal = Constants.Swerve.thetaTolerance;
 
     // Feedback Controllers
@@ -273,8 +274,8 @@ public class Swerve extends SubsystemBase {
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
 
         //thetaOut = limelight.hasTarget()? thetaController.calculate(limelight.getTx().getDegrees()): thetaController.calculate(getAngleToTarget().getDegrees());
@@ -282,8 +283,8 @@ public class Swerve extends SubsystemBase {
         thetaOut = limelight.hasTarget()? thetaController.calculate(measurement): thetaController.calculate(getAngelToTargetRel().getRadians());
         //thetaOut = thetaController.calculate(limelight.getTx().getRadians()); //Constants.Swerve.thetaTolerance >= limelight.getTx().getDegrees() && limelight.getTx().getDegrees() >= -Constants.Swerve.thetaTolerance ? 0 : -thetaController.calculate(limelight.getTx().getRadians());
         //thetaOut = thetaController.calculate(measurement);
-        SmartDashboard.putNumber("theta out", thetaOut);
-        SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
+        //SmartDashboard.putNumber("theta out", thetaOut);
+        //SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
         //if(Math.abs(limelight.getTx().getDegrees()) <= Constants.Swerve.thetaTolerance) setTargetRel();
         
         if(Math.abs(measurement) <= turnTolVal) {
@@ -321,11 +322,11 @@ public class Swerve extends SubsystemBase {
         yEntry.setDouble(y);
         headingEntry.setDouble(ang);
 
-        SmartDashboard.putNumber("robotX_swerve_odo", x);
-        SmartDashboard.putNumber("robotY_swerve_odo", y);
-        SmartDashboard.putNumber("robotAng_swerve_odo", ang);
+        //SmartDashboard.putNumber("robotX_swerve_odo", x);
+        //SmartDashboard.putNumber("robotY_swerve_odo", y);
+        //SmartDashboard.putNumber("robotAng_swerve_odo", ang);
 
-        if(Constants.tuningMode) {
+        if(Constants.tuningMode && tuneSwerve.getBoolean(false)) {
             double p = turnP.getDouble(0), i = turnI.getDouble(0), d = turnD.getDouble(0);
             if(p != thetaController.getP()
                     || i != thetaController.getI()

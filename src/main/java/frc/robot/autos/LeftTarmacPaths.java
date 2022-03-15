@@ -52,10 +52,10 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
       AutoConstants.leftPoints [waypointIndex++],
       AutoConstants.leftPoints [waypointIndex]
     );
-        var thetaController =
-            new ProfiledPIDController(
-              Constants.Swerve.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    var thetaController =
+        new ProfiledPIDController(
+          Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     SwerveControllerCommand swerveControllerCommand = 
       new SwerveControllerCommand(
