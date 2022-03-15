@@ -25,7 +25,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 public final class Constants {
 
     /* General constants */
-    public static final boolean tuningMode = false;
+    public static final boolean tuningMode = true;
     public static final double stickDeadband = 0.1;
     public static final String driverTab = "Drivers";
 
@@ -385,10 +385,10 @@ public final class Constants {
         public static final SwerveTrajectoryWaypoint[] rightPoints = 
         {
             new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end - ball1 
-            new SwerveTrajectoryWaypoint(7.553, 0.94, -1.578, 2.636), //part2 start - ball1
-            new SwerveTrajectoryWaypoint(5.485, 1.602, 2.568, 2.826), //part2 interior - ball2
-            new SwerveTrajectoryWaypoint(1.483, 1.592, -2.319, -2.319), //part2 interior - ball3
-            new SwerveTrajectoryWaypoint(3.496, 2.619, 0.318, 0.318), //part2 end - shoot pos
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.912), //part2 start - ball1
+            new SwerveTrajectoryWaypoint(5.452, 1.534, 2.053, 2.989), //part2 interior - ball2
+            new SwerveTrajectoryWaypoint(1.559, 1.592, 2.280, 2.280), //part2 interior - ball3
+            new SwerveTrajectoryWaypoint(3.496, 2.619, 0.318 + Math.PI, 0.318), //part2 end - shoot pos
             new SwerveTrajectoryWaypoint(3.496, 2.619, 0.314, 0), //part3 start - shoot pos
             new SwerveTrajectoryWaypoint(4.636, 5.682, 0.983, 0), //part3 interior - ball4
             new SwerveTrajectoryWaypoint(5.626, 6.013, -0.628, 0) //part3 end - final shoot pos
