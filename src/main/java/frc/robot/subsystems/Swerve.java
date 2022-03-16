@@ -256,7 +256,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setTarget(){
-        Translation2d llDistance = limelight.getDistance();
+        Translation2d llDistance = limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0));
         Pose2d curPos = getPose();
         Rotation2d llx = limelight.getTx();
         Rotation2d opHeading = curPos.getRotation().plus(new Rotation2d(Math.PI));//rotate poseheading to reflect direction of limelight

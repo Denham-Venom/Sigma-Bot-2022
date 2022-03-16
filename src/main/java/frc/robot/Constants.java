@@ -272,6 +272,7 @@ public final class Constants {
     /* Container for vision subsystem constants */
     public static final class Vision {
         public static final double goalHeight = Units.inchesToMeters(101.375);
+        public static final double goalDiameter = Units.feetToMeters(4);
 
         public static final double limelightHeight = Units.inchesToMeters(21.0);
         public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(48);
