@@ -117,6 +117,10 @@ public class Shooter extends SubsystemBase {
     shooterMotorParent.set(ControlMode.Velocity, falconVelocity);//, DemandType.ArbitraryFeedForward, Constants.Shooter.shooterFF.calculate(falconVelocity));
   }
 
+  public void resetHood() {
+    homingDone = false;
+  }
+
   // public Consumer<RelativeEncoder> getHoodEncoderConsumer() {
   //   return this.encoderGetter;
   // }

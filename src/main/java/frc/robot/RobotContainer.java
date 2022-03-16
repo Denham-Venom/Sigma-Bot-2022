@@ -58,8 +58,8 @@ public class RobotContainer {
   private final JoystickButton opToggleUseIntakeSensors = new JoystickButton(operator, XboxController.Button.kB.value);
   private final JoystickButton opFeedShooter = new JoystickButton(operator, XboxController.Button.kX.value);
   private final JoystickButton opToggleIntakePiston = new JoystickButton(operator, XboxController.Button.kY.value);
-  private final JoystickButton opSpins1 = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton opSpins2 = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+  private final JoystickButton opOuttake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton opHomeHood = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton opAllowClimb = new JoystickButton(operator, XboxController.Button.kStart.value);
   private final JoystickButton opDisallowClimb = new JoystickButton(operator, XboxController.Button.kBack.value);
   private final POVButton opExtendClimber = new POVButton(operator, 0); //up
@@ -170,12 +170,6 @@ public class RobotContainer {
 
 
     /* Operator Controller Buttons */
-    // Swerve
-    opSpins1.and(opSpins2).whenActive(new SequentialCommandGroup(
-      new WaitCommand(1),
-      new VictorySpins(s_Swerve)
-    ));
-
     // Intake
     opFeedShooter.whileHeld(new StartEndCommand(
       () -> States.feed(), 
@@ -187,11 +181,18 @@ public class RobotContainer {
     opToggleIntakePiston.whenPressed(new InstantCommand(
       () -> States.toggleIntake()
     ));
+    opOuttake.whileHeld(new StartEndCommand(
+      () -> States.outtake(),
+      () -> States.stopIntake()
+    ));
 
     // Shooter
     opTogglePreshoot.toggleWhenPressed(new StartEndCommand(
       () -> States.activateShooter(),
       () -> States.deactivateShooter()
+    ));
+    opHomeHood.whenPressed(new InstantCommand(
+      () -> m_Shooter.resetHood()
     ));
 
     // Climber
