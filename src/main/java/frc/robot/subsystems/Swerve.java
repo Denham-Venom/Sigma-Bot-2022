@@ -251,8 +251,18 @@ public class Swerve extends SubsystemBase {
         Rotation2d curRot = curPos.getRotation(); //rot from odom
         Rotation2d curLLRot = curRot.plus(new Rotation2d(Math.PI)); //rot of LL (back of robot) from odom
         Translation2d llxFR = llx.rotateBy(curLLRot); //rot LL dist from robot to goal vector to be pointed in the correct direction relative to field coords
-        Translation2d goalRelTranslation = curPos.getTranslation().plus(llxFR); //get final goal pos by adding vector from field origin to robot to vector from robot to target
+        goalRelTranslation = curPos.getTranslation().plus(llxFR); //get final goal pos by adding vector from field origin to robot to vector from robot to target
         //goalRelTranslation = limelight.getDistance().rotateBy(getPose().getRotation().plus(Rotation2d.fromDegrees(180))).plus(getPose().getTranslation()); //store value
+    }
+
+    public void setTarget(){
+        Translation2d llDistance = limelight.getDistance();
+        Pose2d curPos = getPose();
+        Rotation2d llx = limelight.getTx();
+        Rotation2d opHeading = curPos.getRotation().plus(new Rotation2d(Math.PI));//rotate poseheading to reflect direction of limelight
+        Rotation2d goalAngle = opHeading.plus(llx);
+        Translation2d goalVector = llDistance.rotateBy(goalAngle);
+        goalRelTranslation = curPos.getTranslation().plus(goalVector);
     }
 
     public Rotation2d getAngleToTargetRel(){
@@ -260,7 +270,7 @@ public class Swerve extends SubsystemBase {
         Pose2d robotPose = getPose();
         Translation2d goalVector = goalRelTranslation.minus(robotPose.getTranslation());
         //angle = new Rotation2d(goalVector.getX(), goalVector.getY()).minus(robotPose.getRotation());
-        angle = new Rotation2d(goalVector.getX(), goalVector.getY()).plus(Rotation2d.fromDegrees(180));
+        angle = new Rotation2d(goalVector.getX(), goalVector.getY()).plus(Rotation2d.fromDegrees(180)).minus(robotPose.getRotation());
         SmartDashboard.putNumber("estimated Angle to Target", angle.getDegrees());
         return angle;
     }
@@ -297,10 +307,11 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("limelight out", limelight.getTx().getDegrees());
         //if(Math.abs(limelight.getTx().getDegrees()) <= Constants.Swerve.thetaTolerance) setTargetRel();
         if(limelight.hasTarget()) {
+            setTarget();
             thetaOut = thetaController.calculate(measurement);
             if(Math.abs(measurement) <= turnTolVal) {
                 thetaOut = 0;
-                setTargetRel();
+                //setTargetRel();
             }
         } else {
             thetaOut = thetaController.calculate(getAngleToTargetRel().getRadians());
