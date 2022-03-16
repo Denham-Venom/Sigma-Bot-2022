@@ -92,7 +92,7 @@ public class Intaker extends SubsystemBase {
     // SmartDashboard.putBoolean("shootSensor", shooterSensor.get());
     
     // Retract intake when full
-    if(useSensors && !intakeSensor.get() && !shooterSensor.get()){
+    if(useSensors && !intakeSensor.get() && !shooterSensor.get() && States.intakeState != States.IntakeStates.outtaking){
       States.retractIntake();
     }
 
@@ -134,7 +134,7 @@ public class Intaker extends SubsystemBase {
         // Runs all intake/indexer motors
           spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
           CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
-            new WaitCommand(0.2),
+            new WaitCommand(0.5),
             new InstantCommand(() -> indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed))
           ));
           //intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);

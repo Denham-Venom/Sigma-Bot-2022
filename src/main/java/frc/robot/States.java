@@ -89,11 +89,13 @@ public class States {
     public static void intake() {
         if(States.intakeState != IntakeStates.feeding)
             States.intakeState = IntakeStates.intaking;
+            States.intakeExtendState = IntakeExtendStates.deployIntake;
     }
 
     public static void outtake() {
-        States.intakeState = IntakeStates.outtaking;
+        //States.intakeState = IntakeStates.outtaking;
         States.intakeState = IntakeStates.reverseFeeding;
+        States.intakeExtendState = IntakeExtendStates.deployIntake;
     }
 
     public static void stopClimber() {
