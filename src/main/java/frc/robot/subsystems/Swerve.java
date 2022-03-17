@@ -318,13 +318,12 @@ public class Swerve extends SubsystemBase {
         }
 
 
-        switch(States.shooterState){
-            case disabled:
-                break;
-                
+        switch(States.shooterState){    
             case preShoot:
                 Translation2d t = ((TeleopSwerve)this.getDefaultCommand()).getTranslation2d();
                 this.drive(t, thetaOut, false);
+                break;
+            default:
                 break;
         }
 

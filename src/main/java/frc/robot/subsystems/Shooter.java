@@ -250,6 +250,17 @@ public class Shooter extends SubsystemBase {
           }
           break;
       //}
+        case lowPreShoot:
+          if(Constants.Shooter.calibrationMode) {
+            setShooterRPM(setShootRPM.getDouble(0));
+            setHoodAngle(setHoodAng.getDouble(0));
+          } else {
+            setShooterRPM(Constants.Shooter.shooterLowMap[1]);
+            setHoodAngle(Constants.Shooter.shooterLowMap[2]);
+          }
+          break;
+        default:
+          break;
     }
     
     if(Constants.tuningMode || Constants.Shooter.calibrationMode) {

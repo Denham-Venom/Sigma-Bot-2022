@@ -17,7 +17,7 @@ public class States {
      * </p> preShoot: Drivetrain Auto Aim, Shooter SpinUp, Shooter Tilt to angle
      */
     public static enum ShooterStates {
-        disabled, preShoot
+        disabled, preShoot, lowPreShoot
     }
 
     public static enum IntakeStates {
@@ -79,6 +79,11 @@ public class States {
     public static void activateShooter() {
         preshoot.setBoolean(true);
         States.shooterState = ShooterStates.preShoot;
+    }
+
+    public static void activateShooterLow() {
+        preshoot.setBoolean(true);
+        States.shooterState = ShooterStates.lowPreShoot;
     }
 
     public static void deactivateShooter() {

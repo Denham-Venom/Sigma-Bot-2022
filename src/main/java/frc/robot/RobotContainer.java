@@ -48,10 +48,10 @@ public class RobotContainer {
   private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton toggleFieldRelative = new JoystickButton(driver, XboxController.Button.kBack.value);
-  private final POVButton extendClimber = new POVButton(driver, 0); //up
-  private final POVButton retractClimber = new POVButton(driver, 180); //down
-  private final POVButton extendClimberPiston = new POVButton(driver, 270); //left
-  private final POVButton retractClimberPiston = new POVButton(driver, 90); //right
+  //private final POVButton preShootOn = new POVButton(driver, 0); //up
+  private final POVButton preShootOff = new POVButton(driver, 180); //down
+  private final POVButton lowPreShootOn = new POVButton(driver, 270); //left
+  private final POVButton preShootOn = new POVButton(driver, 90); //right
 
   /* Operator Buttons */
   private final JoystickButton opTogglePreshoot = new JoystickButton(operator, XboxController.Button.kA.value);
@@ -151,21 +151,14 @@ public class RobotContainer {
       () -> States.activateShooter(),
       () -> States.deactivateShooter()
     ));
-
-    // Climber
-    extendClimber.whileHeld(new StartEndCommand(
-      () -> States.extendClimber(),
-      () -> States.stopClimber()
+    preShootOn.whenPressed(new InstantCommand(
+      () -> States.activateShooter()
     ));
-    retractClimber.whileHeld(new StartEndCommand(
-      () -> States.retractClimber(),
-      () -> States.stopClimber()
+    preShootOff.whenPressed(new InstantCommand(
+      () -> States.deactivateShooter()
     ));
-    extendClimberPiston.whenPressed(new InstantCommand(
-      () -> States.extendClimberPiston()
-    ));
-    retractClimberPiston.whenPressed(new InstantCommand(
-      () -> States.retractClimberPiston()
+    lowPreShootOn.whenPressed(new InstantCommand(
+      () -> States.activateShooterLow()
     ));
 
 
