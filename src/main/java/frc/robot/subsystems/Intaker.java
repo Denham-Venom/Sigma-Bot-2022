@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 
 import org.ejml.dense.row.mult.SubmatrixOps_FDRM;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -46,6 +47,12 @@ public class Intaker extends SubsystemBase {
   private boolean useSensors = true;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
+
+  ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
+  NetworkTableEntry useIntakeSensors = Drivers.add("Use Sensors", false).getEntry();
+  NetworkTableEntry intakeSensorValue = Drivers.add("intakeSensor", false).getEntry();
+  NetworkTableEntry shooterSensorValue = Drivers.add("shooterSensor", false).getEntry();
+  
   public Intaker(){
     //Instantiate devices
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
@@ -81,15 +88,17 @@ public class Intaker extends SubsystemBase {
    */
   public void toggleUseSensors() {
     useSensors = !useSensors;
+    useIntakeSensors.setBoolean(useSensors);
   }
 
 
   @Override
   public void periodic() {
 
-    SmartDashboard.putBoolean("useIntakeSensor", useSensors);
-    // SmartDashboard.putBoolean("intakeSensor", intakeSensor.get());
-    // SmartDashboard.putBoolean("shootSensor", shooterSensor.get());
+    intakeSensorValue.setBoolean(!intakeSensor.get());
+    shooterSensorValue.setBoolean(!shooterSensor.get());
+
+    
     
     // Retract intake when full
     if(useSensors && !intakeSensor.get() && !shooterSensor.get() && States.intakeState != States.IntakeStates.outtaking){

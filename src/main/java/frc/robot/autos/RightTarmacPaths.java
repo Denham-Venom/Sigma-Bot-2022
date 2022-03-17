@@ -101,7 +101,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       //Picks up ball 1  
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand1,
-      new InstantCommand(() -> States.stopIntake()),
+      // new InstantCommand(() -> States.stopIntake()),
 
       //Activates the shooter and shoots the 2 balls
       new InstantCommand(() -> States.activateShooter()),

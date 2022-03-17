@@ -7,7 +7,9 @@ package frc.robot.autos;
 import java.util.AbstractMap;
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.lib.util.SwerveTrajectoryWaypoint;
 import frc.robot.subsystems.Swerve;
 
@@ -23,7 +25,7 @@ public class AutoCommands {
     };
 
     public enum NumberOfBalls {
-        two, three, four, five
+        zero, two, three, four, five
     };
 
     static boolean leftTarmac;
@@ -48,15 +50,16 @@ public class AutoCommands {
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "RightLeft",
-            new SwerveTrajectoryWaypoint(8.439, 1.876, -1.561, -1.561) //TODO
+            new SwerveTrajectoryWaypoint(8.48, 1.833, -1.561, -2.561) //TODO test
+            
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "RightMid",
-            new SwerveTrajectoryWaypoint(7.716, 2.811, -1.920, -1.920) //fixed
+            new SwerveTrajectoryWaypoint(7.716, 2.811, -1.920, -1.920) //tested
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "RightRight",
-            new SwerveTrajectoryWaypoint(6.601, 2.546, -2.283, -2.283)
+            new SwerveTrajectoryWaypoint(6.506, 2.56, -2.283, -1.097) //TODO test
         )
     );
     // shuffleboard value for number of balls, starting Position, left/right tarmac
@@ -113,16 +116,36 @@ public class AutoCommands {
             case five:
                 numBalls = 5;
                 break;
+            case zero:
+                numBalls = 0;
+                break;
             default:
-                numBalls = 2;
+                numBalls = 0;
                 break;
         }
     }
 
     public static Command getSelectedAuto(Swerve swerve) {
+        
         if (leftTarmac) {
+            if (numBalls == 0){
+                return new InstantCommand(
+                    () -> {
+                        var start = getStartingPose("Left" + position);
+                        swerve.resetOdometry(new Pose2d(start.getTranslation(), start.getOrientation()));
+                    }
+                );
+            }
             return new LeftTarmacPaths(swerve, position, numBalls);
         } else {
+            if (numBalls == 0){
+                return new InstantCommand(
+                    () -> {
+                        var start = getStartingPose("Right" + position);
+                        swerve.resetOdometry(new Pose2d(start.getTranslation(), start.getOrientation()));
+                    }
+                );
+            }
             return new RightTarmacPaths(swerve, position, numBalls);
         }
     }

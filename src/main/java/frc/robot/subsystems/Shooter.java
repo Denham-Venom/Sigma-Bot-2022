@@ -96,6 +96,18 @@ public class Shooter extends SubsystemBase {
       () -> setPower(0)
     ));
 
+    testing.add("UP Hood Motor", new InstantCommand(
+      () -> hoodMotor.set (ControlMode.PercentOutput, 0.15)
+    ));
+
+    testing.add("DOWN Hood Motor", new InstantCommand(
+      () -> hoodMotor.set (ControlMode.PercentOutput, -0.15)
+    ));
+
+    testing.add("STOP Hood Motor", new InstantCommand(
+      () -> hoodMotor.set (ControlMode.PercentOutput, 0)
+    ));
+
 
     if (Constants.Shooter.calibrationMode){
       //tuning.add("Shooter RPM Calib", 0);

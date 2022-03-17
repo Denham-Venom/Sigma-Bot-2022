@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Limelight;
@@ -12,8 +15,11 @@ import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.States.ShooterStates;
 
+
 public class Vision extends SubsystemBase {
   private Limelight limelight;
+  ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
+  NetworkTableEntry LLDist = Drivers.add("LLDist", 0).getEntry();
   private ShooterStates shooterState = States.shooterState;
   /** Creates a new Vision. */
   public Vision() {
@@ -41,6 +47,6 @@ public class Vision extends SubsystemBase {
     }
     if(Constants.Shooter.calibrationMode) limelight.ledState(ledStates.on);
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("LLDistance",limelight.getDistance().getNorm());
+    LLDist.setDouble(limelight.getDistance().getNorm());
   }
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.States.ShooterStates;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -49,7 +52,7 @@ public class RobotContainer {
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton toggleFieldRelative = new JoystickButton(driver, XboxController.Button.kBack.value);
   //private final POVButton preShootOn = new POVButton(driver, 0); //up
-  private final POVButton preShootOff = new POVButton(driver, 180); //down
+  //private final POVButton preShootOff = new POVButton(driver, 180); //down
   private final POVButton lowPreShootOn = new POVButton(driver, 270); //left
   private final POVButton preShootOn = new POVButton(driver, 90); //right
 
@@ -152,13 +155,10 @@ public class RobotContainer {
       () -> States.deactivateShooter()
     ));
     preShootOn.whenPressed(new InstantCommand(
-      () -> States.activateShooter()
-    ));
-    preShootOff.whenPressed(new InstantCommand(
-      () -> States.deactivateShooter()
+      () -> States.setActiveShooterMode(ShooterStates.preShoot)
     ));
     lowPreShootOn.whenPressed(new InstantCommand(
-      () -> States.activateShooterLow()
+      () -> States.setActiveShooterMode(ShooterStates.lowPreShoot)
     ));
 
 
@@ -216,10 +216,12 @@ public class RobotContainer {
     //Instatiate tabs
     Shuffleboard.getTab("Testing");
     Shuffleboard.getTab("Tuning");
+    ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
 
     //Auto command chooser
     m_chooseBall.setDefaultOption("2 Balls", AutoCommands.NumberOfBalls.two);
     m_chooseBall.addOption("3 Balls", AutoCommands.NumberOfBalls.three);
+    m_chooseBall.addOption("0 Balls", AutoCommands.NumberOfBalls.zero);
     m_chooseBall.addOption("4 Balls", AutoCommands.NumberOfBalls.four);
     m_chooseBall.addOption("5 Balls", AutoCommands.NumberOfBalls.five);
 
@@ -231,9 +233,9 @@ public class RobotContainer {
     m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
     // Puts the chooser on the dashboard
     //SmartDashboard.putData("auto", m_chooser);
-    SmartDashboard.putData("Auto # Balls", m_chooseBall);
-    SmartDashboard.putData("Auto Choose Position", m_choosePosition);
-    SmartDashboard.putData("Auto Choose Tarmac", m_chooseTarmac);
+    Drivers.add("Auto # Balls", m_chooseBall);
+    Drivers.add("Auto Choose Position", m_choosePosition);
+    Drivers.add("Auto Choose Tarmac", m_chooseTarmac);
   }
 
   /**

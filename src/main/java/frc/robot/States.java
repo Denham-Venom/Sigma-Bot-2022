@@ -4,11 +4,13 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.Shooter;
 
 public class States {
 
     private static final ShuffleboardTab driver = Shuffleboard.getTab(Constants.driverTab);
     private static final NetworkTableEntry preshoot = driver.add("Preshoot", false).getEntry();
+    private static final NetworkTableEntry preshootMode = driver.add("Preshoot Mode", ShooterStates.preShoot.label).getEntry();
     private static final NetworkTableEntry canClimb = driver.add("Can Climb", false).getEntry();
 
     /**
@@ -17,7 +19,12 @@ public class States {
      * </p> preShoot: Drivetrain Auto Aim, Shooter SpinUp, Shooter Tilt to angle
      */
     public static enum ShooterStates {
-        disabled, preShoot, lowPreShoot
+        disabled("disabled"), preShoot("high goal"), lowPreShoot("low goal");
+
+        public final String label;
+        private ShooterStates(String label) {
+            this.label = label;
+        }
     }
 
     public static enum IntakeStates {
@@ -37,6 +44,7 @@ public class States {
     public static IntakeExtendStates intakeExtendState = IntakeExtendStates.disabled;
     public static ClimberStates climberState = ClimberStates.disabled;
     public static boolean climbAllowed = false;
+    private static ShooterStates activeShooterMode = ShooterStates.preShoot;
     
     public static void reset() {
         shooterState = ShooterStates.disabled;
@@ -76,14 +84,14 @@ public class States {
         States.intakeState = IntakeStates.disabled;
     }
 
-    public static void activateShooter() {
-        preshoot.setBoolean(true);
-        States.shooterState = ShooterStates.preShoot;
+    public static void setActiveShooterMode(ShooterStates state) {
+        preshootMode.setString(state.label);
+        activeShooterMode = state;
     }
 
-    public static void activateShooterLow() {
+    public static void activateShooter() {
         preshoot.setBoolean(true);
-        States.shooterState = ShooterStates.lowPreShoot;
+        States.shooterState = activeShooterMode;//ShooterStates.preShoot;
     }
 
     public static void deactivateShooter() {

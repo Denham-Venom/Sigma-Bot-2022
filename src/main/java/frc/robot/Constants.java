@@ -98,7 +98,7 @@ public final class Constants {
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
         public static final NeutralMode driveNeutralMode = NeutralMode.Brake;
-        public static final boolean coastOnDisable = false;
+        public static final boolean coastOnDisable = true;
 
         /* Motor Inverts */
         public static final boolean driveMotorInvert = false;
@@ -231,7 +231,7 @@ public final class Constants {
         public static final double shootKs = 0.75347;
         public static final double shootKv = 0.11309;
         public static final double shootKa = 0.0073;
-        public static final PIDGains shooterPID = new PIDGains(0.15, 0.00001, 0.0, 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio));//0.046976); // might need to be changed
+        public static final PIDGains shooterPID = new PIDGains(0.15, 0, 1.0, 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio));//0.046976); // might need to be changed
         public static final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(shootKs, shootKv, shootKa);
         public static final PIDGains hoodPID = new PIDGains(0.05, 0,
          0.001, 0.12); //contains up FF
@@ -253,11 +253,11 @@ public final class Constants {
             // //{-1, 3300, 35}    
             
             {1.18, 2250, 16.3},
-            {1.68, 2200, 17},
-            {2.16, 2300, 23},
+            {1.75, 2200, 18.5},
+            {2.16, 2250, 23},
             {2.61, 2425, 24},
-            {3.17, 2550, 25},
-            {3.63, 2700, 26.5},
+            {3.17, 2500, 25},
+            {3.64, 2700, 26.5},
             {4.2, 3100, 28.9}
         };
 
@@ -369,7 +369,7 @@ public final class Constants {
     public static final class AutoConstants {
 
         /* Autonomous routine movement constraints */
-        public static final double kMaxSpeedMetersPerSecond = 1.5;
+        public static final double kMaxSpeedMetersPerSecond = 3;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     
         public static final TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
