@@ -64,7 +64,7 @@ public class Intaker extends SubsystemBase {
     //Configure shuffleboard
     testing = Shuffleboard.getTab("Testing");
     testing.add("Start Intake Motors", new InstantCommand(
-      () -> States.feed()
+      () -> States.intakeAndFeed()
     ));
     testing.add("Stop Intake Motors", new InstantCommand(
       () -> States.stopIntake()
