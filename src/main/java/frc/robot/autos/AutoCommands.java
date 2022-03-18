@@ -37,7 +37,7 @@ public class AutoCommands {
     // So the above example would be the Right Tarmac in the Middle Position
     private static Map<String, SwerveTrajectoryWaypoint> startPositions = Map.ofEntries(
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "LeftLeft",
+            "LeftRight",
             new SwerveTrajectoryWaypoint(6.764, 5.712, 2.035, 2.035) //TODO
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
@@ -45,11 +45,11 @@ public class AutoCommands {
             new SwerveTrajectoryWaypoint(7.022, 4.814, 2.775, 2.775) //TODO
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "LeftRight",
+            "LeftLeft",
             new SwerveTrajectoryWaypoint(5.962, 3.958, 3.141, 3.141) //TODO
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "RightLeft",
+            "RightRight",
             new SwerveTrajectoryWaypoint(8.48, 1.833, -1.561, -2.561) //TODO test
             
         ),
@@ -58,7 +58,7 @@ public class AutoCommands {
             new SwerveTrajectoryWaypoint(7.716, 2.811, -1.920, -1.920) //tested
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "RightRight",
+            "RightLeft",
             new SwerveTrajectoryWaypoint(6.506, 2.56, -2.283, -1.097) //TODO test
         )
     );
