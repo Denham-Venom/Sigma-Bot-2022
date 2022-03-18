@@ -138,6 +138,7 @@ public class Intaker extends SubsystemBase {
         case outtaking:
         // reverses the intake motor
           intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.intakeSpeed);
+          States.deployIntake();
           break;
         case feeding: 
         // Runs all intake/indexer motors
