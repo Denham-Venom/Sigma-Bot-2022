@@ -301,7 +301,7 @@ public final class Constants {
         );
         
         /* Tuned values */
-        public static final double ClimberSpeed = 0.65;
+        public static final double ClimberSpeed = 0.80;
 
         /* Mechanism properties */
         public static final double climberHighLimit = 0;
