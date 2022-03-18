@@ -55,6 +55,8 @@ public class Swerve extends SubsystemBase {
     private NetworkTableEntry turnTol = tuning.add("Turn Tol", 0).getEntry();
     private NetworkTableEntry tuneSwerve = tuning.add("Tune Swerve", false).getEntry();
     private double turnTolVal = Constants.Swerve.thetaTolerance;
+    private ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
+    private NetworkTableEntry swerveReady = Drivers.add("Swerve Ready" , false).getEntry();
 
     // Feedback Controllers
     public final PIDController xController = new PIDController(
@@ -311,9 +313,15 @@ public class Swerve extends SubsystemBase {
             if(Math.abs(measurement) <= turnTolVal) {
                 thetaOut = 0;
                 //setTargetRel();
+                swerveReady.setBoolean(true);
+                
+            }
+            else {
+                swerveReady.setBoolean(false);
             }
         } else {
             thetaOut = thetaController.calculate(getAngleToTargetRel().getRadians());
+            swerveReady.setBoolean(false);
         }
 
 

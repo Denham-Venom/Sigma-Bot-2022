@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.sql.Driver;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -61,6 +63,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry tuneHood = tuning.add("Tune Hood", false).getEntry();
   private NetworkTableEntry hoodPIDOut = tuning.add("HoodPIDOut", 0.).getEntry();
   private NetworkTableEntry hoodLimitSwitchPressed = tuning.add("HoodLimitPressed", false).getEntry();
+  private ShuffleboardTab drivers = Shuffleboard.getTab("Drivers");
+  private NetworkTableEntry hoodReady = drivers.add("Hood Ready", false).getEntry();
   private PIDController hoodController;
   private ShooterStates state;
   
@@ -167,8 +171,11 @@ public class Shooter extends SubsystemBase {
     hoodController.setSetpoint(hoodAngle);
     if(hoodController.atSetpoint()) {
       hoodMotor.set(ControlMode.PercentOutput, 0);
+      hoodReady.setBoolean(true);
       return;
     }
+      hoodReady.setBoolean(false);
+      
     double output = hoodController.calculate(getHoodAngle());// + Constants.Shooter.hoodPID.kFF;
     if(output < 0) {
       if(!hoodLimit.get()) output = 0;

@@ -97,7 +97,7 @@ public class Intaker extends SubsystemBase {
     
     
     // Retract intake when full
-    if(useSensors && !intakeSensor.get() && !shooterSensor.get() && States.intakeState != States.IntakeStates.outtaking){
+    if(useSensors && !intakeSensor.get() && !shooterSensor.get() && States.intakeState != States.IntakeStates.outtaking && States.intakeState != States.IntakeStates.intakeAndFeed){
       States.retractIntake();
     }
 
