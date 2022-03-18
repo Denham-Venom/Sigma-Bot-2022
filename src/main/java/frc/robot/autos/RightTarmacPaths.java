@@ -114,7 +114,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.stopIntake()),
       new InstantCommand(() -> States.deactivateShooter())
     );
-    if(numBalls == 4 || numBalls == 5) {
+    if(numBalls == 4) {
       addCommands(
       //Picks up ball 2 and 3
       new InstantCommand(() -> {
@@ -137,27 +137,53 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.stopIntake())
       );
     }
-      if(numBalls == 5) {
+    else if(numBalls == 5) {
       addCommands(
-      //Picks up ball 4
+      //Picks up ball 2 and 3
       new InstantCommand(() -> {
         States.deployIntake();
         States.intake();
       }),
-      swerveControllerCommand3,
+      swerveControllerCommand2,
+    
+      new InstantCommand(() -> States.stopIntake()),
 
-      //Activated the shooter and shoots the ball
-      new InstantCommand(() -> States.activateShooter()),
+      //Activates the shooter and shoots the 2 balls
+      new InstantCommand(() -> {
+        States.activateShooter();
+        States.deployIntake();
+      }),
       new WaitCommand(1.0), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
-        new InstantCommand(() -> States.feed())),
+        new WaitCommand(5),
+        new InstantCommand(() -> States.intakeAndFeed())),
 
       new InstantCommand(() -> States.deactivateShooter()),
       new InstantCommand(() -> States.stopIntake())
       );
     }
+    // if(numBalls == 5) {
+    //   addCommands(
+    //   //Picks up ball 4
+    //   new InstantCommand(() -> {
+    //     States.deployIntake();
+    //     States.intake();
+    //   }),
+    //   swerveControllerCommand3,
+
+    //   //Activated the shooter and shoots the ball
+    //   new InstantCommand(() -> States.activateShooter()),
+    //   new WaitCommand(1.0), 
+      
+    //   new ParallelDeadlineGroup(
+    //     new WaitCommand(1),
+    //     new InstantCommand(() -> States.feed())),
+
+    //   new InstantCommand(() -> States.deactivateShooter()),
+    //   new InstantCommand(() -> States.stopIntake())
+    //   );
+    // }
   }
 }
 

@@ -156,6 +156,14 @@ public class Intaker extends SubsystemBase {
           spinUpMotor.set(ControlType.kDutyCycle, 0);
           intakeMotor.set(ControlMode.PercentOutput, 0);
           break;
+        case intakeAndFeed:
+          spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
+          CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
+            new WaitCommand(0.5),
+            new InstantCommand(() -> indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed))
+          ));
+          intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
+          break;
       }
     }
 

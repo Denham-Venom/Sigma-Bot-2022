@@ -26,7 +26,7 @@ public class States {
     }
 
     public static enum IntakeStates {
-        disabled, intaking, outtaking, feeding, reverseFeeding
+        disabled, intaking, outtaking, feeding, reverseFeeding, intakeAndFeed
     }
 
     public static enum IntakeExtendStates {
@@ -76,6 +76,10 @@ public class States {
 
     public static void feed() {
         States.intakeState = IntakeStates.feeding;
+    }
+
+    public static void intakeAndFeed() {
+        States.intakeState = States.IntakeStates.intakeAndFeed;
     }
 
     public static void stopIntake() {
