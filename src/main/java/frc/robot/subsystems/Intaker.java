@@ -156,7 +156,7 @@ public class Intaker extends SubsystemBase {
           spinUpMotor.set(ControlType.kDutyCycle, 0);
           intakeMotor.set(ControlMode.PercentOutput, 0);
           break;
-        case intakeAndFeed:
+        case intakeAndFeed: //TODO maybe add auto intake deploy here
           spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
           CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
             new WaitCommand(0.5),
