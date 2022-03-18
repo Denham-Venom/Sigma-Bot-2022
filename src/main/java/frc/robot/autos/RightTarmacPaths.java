@@ -94,7 +94,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             
     addCommands(
       //Gets the initial pose
-      new InstantCommand(() -> s_Swerve.resetOdometry(rightTarmacPaths1.getInitialPose())),
+      new InstantCommand(() -> s_Swerve.resetOdometry(startPos.getPositionAndOrientation())),
       //Deploys the intake
       new InstantCommand(() -> States.deployIntake()),
 

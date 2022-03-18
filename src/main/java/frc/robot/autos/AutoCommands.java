@@ -132,7 +132,7 @@ public class AutoCommands {
                 return new InstantCommand(
                     () -> {
                         var start = getStartingPose("Left" + position);
-                        swerve.resetOdometry(new Pose2d(start.getTranslation(), start.getOrientation()));
+                        swerve.resetOdometry(start.getPositionAndOrientation());
                     }
                 );
             }
@@ -142,7 +142,7 @@ public class AutoCommands {
                 return new InstantCommand(
                     () -> {
                         var start = getStartingPose("Right" + position);
-                        swerve.resetOdometry(new Pose2d(start.getTranslation(), start.getOrientation()));
+                        swerve.resetOdometry(start.getPositionAndOrientation());
                     }
                 );
             }
