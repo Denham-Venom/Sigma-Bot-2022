@@ -9,17 +9,20 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.States.ShooterStates;
 import frc.robot.autos.*;
@@ -51,6 +54,7 @@ public class RobotContainer {
   private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton toggleFieldRelative = new JoystickButton(driver, XboxController.Button.kBack.value);
+  private final Trigger shootLow = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
   //private final POVButton preShootOn = new POVButton(driver, 0); //up
   //private final POVButton preShootOff = new POVButton(driver, 180); //down
   private final POVButton lowPreShootOn = new POVButton(driver, 270); //left
@@ -65,6 +69,7 @@ public class RobotContainer {
   private final JoystickButton opHomeHood = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton opAllowClimb = new JoystickButton(operator, XboxController.Button.kStart.value);
   private final JoystickButton opDisallowClimb = new JoystickButton(operator, XboxController.Button.kBack.value);
+  private final Trigger opShootLow = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
   private final POVButton opExtendClimber = new POVButton(operator, 0); //up
   private final POVButton opRetractClimber = new POVButton(operator, 180); //down
   private final POVButton opExtendClimberPiston = new POVButton(operator, 270); //left
@@ -160,6 +165,9 @@ public class RobotContainer {
     lowPreShootOn.whenPressed(new InstantCommand(
       () -> States.setActiveShooterMode(ShooterStates.lowPreShoot)
     ));
+    shootLow.whileActiveContinuous( //TODO make sure this works right
+      new LowShoot()
+    );
 
 
     /* Operator Controller Buttons */
@@ -187,6 +195,9 @@ public class RobotContainer {
     opHomeHood.whenPressed(new InstantCommand(
       () -> m_Shooter.resetHood()
     ));
+    opShootLow.whileActiveContinuous( //TODO make sure this works right
+      new LowShoot()
+    );
 
     // Climber
     opExtendClimber.whileHeld(new StartEndCommand(
