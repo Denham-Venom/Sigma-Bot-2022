@@ -343,7 +343,7 @@ public final class Constants {
         );
         
         /* Tuned speed constants */
-        public static final double intakeSpeed = 0.5;
+        public static final double intakeSpeed = 0.4;
         public static final double indexSpeed = 0.6;
         public static final double spinupSpeed = 0.5;
 

@@ -157,9 +157,9 @@ public class RobotContainer {
     lowPreShootOn.whenPressed(new InstantCommand(
       () -> States.setActiveShooterMode(ShooterStates.lowPreShoot)
     ));
-    shootLow.whileActiveContinuous( //TODO make sure this works right
-      new LowShoot()
-    );
+    // shootLow.whileActiveContinuous( //TODO make sure this works right
+    //   new LowShoot()
+    // );
 
 
     /* Operator Controller Buttons */
@@ -187,9 +187,8 @@ public class RobotContainer {
     opHomeHood.whenPressed(new InstantCommand(
       () -> m_Shooter.resetHood()
     ));
-    opShootLow.whileActiveContinuous( //TODO make sure this works right
-      new LowShoot()
-    );
+    // 
+    
 
     // Climber
     opExtendClimber.whileHeld(new StartEndCommand(

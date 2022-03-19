@@ -151,7 +151,6 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       //Activates the shooter and shoots the 2 balls
       new InstantCommand(() -> {
         States.activateShooter();
-        States.deployIntake();
       }),
       new WaitCommand(1.0), 
       
