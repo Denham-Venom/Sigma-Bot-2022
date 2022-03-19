@@ -44,12 +44,12 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       AutoConstants.rightPoints [waypointIndex++] //shoot pos
     );
     
-    SwerveTrajectory rightTarmacPaths3 = new SwerveTrajectory(
-      Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.rightPoints [waypointIndex++], //start shoot pos
-      AutoConstants.rightPoints [waypointIndex++], //ball4
-      AutoConstants.rightPoints [waypointIndex++] //end final shoot pos
-    );
+    // SwerveTrajectory rightTarmacPaths3 = new SwerveTrajectory(
+    //   Constants.AutoConstants.trajectoryConfig,
+    //   AutoConstants.rightPoints [waypointIndex++], //start shoot pos
+    //   AutoConstants.rightPoints [waypointIndex++], //ball4
+    //   AutoConstants.rightPoints [waypointIndex++] //end final shoot pos
+    // );
 
     var thetaController =
         new ProfiledPIDController(
@@ -80,17 +80,17 @@ public class RightTarmacPaths extends SequentialCommandGroup {
             s_Swerve::setModuleStates,
             s_Swerve);
 
-    SwerveControllerCommand swerveControllerCommand3 = 
-        new SwerveControllerCommand(
-            rightTarmacPaths3.getTrajectory(),
-            s_Swerve::getPose,
-            Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
-            thetaController,
-            rightTarmacPaths3.getAngleSupplier(),
-            s_Swerve::setModuleStates,
-            s_Swerve);
+    // SwerveControllerCommand swerveControllerCommand3 = 
+    //     new SwerveControllerCommand(
+    //         rightTarmacPaths3.getTrajectory(),
+    //         s_Swerve::getPose,
+    //         Constants.Swerve.swerveKinematics,
+    //         new PIDController(Constants.Swerve.xKP, 0, 0),
+    //         new PIDController(Constants.Swerve.yKP, 0, 0),
+    //         thetaController,
+    //         rightTarmacPaths3.getAngleSupplier(),
+    //         s_Swerve::setModuleStates,
+    //         s_Swerve);
             
     addCommands(
       //Gets the initial pose
@@ -161,6 +161,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.deactivateShooter()),
       new InstantCommand(() -> States.stopIntake())
       );
+      new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.rightPoints [waypointIndex-1].getPositionAndOrientation()));
     }
     // if(numBalls == 5) {
     //   addCommands(
