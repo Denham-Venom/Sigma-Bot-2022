@@ -47,17 +47,22 @@ public class TeleopSwerve extends CommandBase {
     public Translation2d getTranslation2d() {
 
         double yAxis = -controller.getRawAxis(translationAxis);
+        double yAxisAbs = Math.abs(yAxis);
         double xAxis = -controller.getRawAxis(strafeAxis);
+        double xAxis = Math.abs(xAxis);
 
         /* Deadbands */
-        yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
-        xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
+        yAxis = (yAxisAbs < Constants.stickDeadband) ? 0 : yAxis;
+        xAxis = (xAxisAbs < Constants.stickDeadband) ? 0 : xAxis;
 
         /* Squaring Inputs */
-        yAxis *= Math.abs(yAxis);
-        xAxis *= Math.abs(xAxis);
+        yAxis *= yAxisAbs;
+        xAxis *= xAxisAbs;
 
-        return new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
+        return new Translation2d(
+            yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), 
+            xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()
+        ).times(Constants.Swerve.maxSpeed);
     }
 
     @Override
@@ -65,18 +70,20 @@ public class TeleopSwerve extends CommandBase {
 
         if(States.shooterState != ShooterStates.preShoot){
         
-        double yAxis = -controller.getRawAxis(translationAxis);
-        double xAxis = -controller.getRawAxis(strafeAxis);
-        double rAxis = -controller.getRawAxis(rotationAxis);       
+        //double yAxis = -controller.getRawAxis(translationAxis);
+        //double xAxis = -controller.getRawAxis(strafeAxis);
+        double rAxis = -controller.getRawAxis(rotationAxis);
+        double rAxisAbs = Math.abs(rAxis);
+        
         /* Deadbands */
-        yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
-        xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
-        rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
+        //yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
+        //xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
+        rAxis = (rAxisAbs < Constants.stickDeadband) ? 0 : rAxis;
 
         /* Squaring Inputs */ 
-        yAxis *= Math.abs(yAxis);
-        xAxis *= Math.abs(xAxis);
-        rAxis *= Math.abs(rAxis);
+        //yAxis *= Math.abs(yAxis);
+        //xAxis *= Math.abs(xAxis);
+        rAxis *= rAxisAbs;
 
         if(Constants.tuningMode) {
             yAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
@@ -84,7 +91,7 @@ public class TeleopSwerve extends CommandBase {
             rAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
         }
 
-        translation = new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
+        translation = getTranslation2d();//new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
         rotation = rAxisFilter.calculate(rAxis) * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
         s_Swerve.drive(translation, rotation, openLoop);
         }
