@@ -83,9 +83,9 @@ public class RobotContainer {
     //m_pHub = new PneumaticHub();
     //m_pHub = new PneumaticsControlModule();
     m_Vision = new Vision();
-    m_Shooter = new Shooter(m_Vision);
     m_Intaker = new Intaker();
     s_Swerve = new Swerve(m_Vision);
+    m_Shooter = new Shooter(m_Vision, s_Swerve);
     m_Climber = new Climber();
 
     
