@@ -89,9 +89,15 @@ public class TeleopSwerve extends CommandBase {
         rAxis *= rAxisAbs;
 
         if(Constants.tuningMode) {
-            yAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-            xAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-            rAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
+            double y = Swerve.rateLimiting.getDouble(0), x = Swerve.rateLimiting.getDouble(0), r = Swerve.rateLimiting.getDouble(0);
+            if(y != yRate || x != xRate || r != rRate) {
+                yRate = y;
+                xRate = x;
+                rRate = r;
+                yAxisFilter = new SlewRateLimiter(y);
+                xAxisFilter = new SlewRateLimiter(x);
+                rAxisFilter = new SlewRateLimiter(r);
+            }
         }
 
         translation = getTranslation2d();//new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
