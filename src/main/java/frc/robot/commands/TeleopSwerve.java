@@ -25,12 +25,9 @@ public class TeleopSwerve extends CommandBase {
     private int translationAxis;
     private int strafeAxis;
     private int rotationAxis;
-    private double xRate = Constants.Swerve.slewRateLimiterAmount;
-    SlewRateLimiter xAxisFilter = new SlewRateLimiter(xRate);
-    private double yRate = Constants.Swerve.slewRateLimiterAmount;
-    SlewRateLimiter yAxisFilter = new SlewRateLimiter(yRate);
-    private double rRate = Constants.Swerve.slewRateLimiterAmount;
-    SlewRateLimiter rAxisFilter = new SlewRateLimiter(rRate);
+    SlewRateLimiter xAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
+    SlewRateLimiter yAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
+    SlewRateLimiter rAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
 
 
     /**

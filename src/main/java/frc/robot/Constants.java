@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -165,7 +166,7 @@ public final class Constants {
         public static final double thetaKP = -5.0;
         public static final double thetaKI = 0.0;
         public static final double thetaKD = -0.1;
-        public static final double slewRateLimiterAmount = Double.MAX_VALUE;
+        public static final double slewRateLimiterAmount = 0;
         public static double thetaTolerance = 0.07;
 
     }
