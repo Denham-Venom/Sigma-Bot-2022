@@ -251,15 +251,15 @@ public final class Constants {
             // {4.71, 3200, 32}
             // //{-1, 3300, 35}    
             
-            {1.18 + Units.feetToMeters(4)/2, 2250, 16.3},
-            {1.75 + Units.feetToMeters(4)/2, 2200, 18.5},
-            // {2.06 + Units.feetToMeters(4)/2, 2300, 20.5},
-            // {2.43 + Units.feetToMeters(4)/2, 2400, 24.0},
-            {2.16 + Units.feetToMeters(4)/2, 2250, 23},
-            {2.61 + Units.feetToMeters(4)/2, 2425, 24},
-            {3.17 + Units.feetToMeters(4)/2, 2500, 25},
-            {3.64 + Units.feetToMeters(4)/2, 2700, 26.5},
-            {4.20 + Units.feetToMeters(4)/2, 3100, 28.9}
+            {1.18, 2250, 16.3},
+            {1.75, 2200, 18.5},
+            //{2.06, 2300, 20.5},
+            //{2.43, 2400, 24.0},
+            {2.16, 2250, 23},
+            {2.61, 2425, 24},
+            {3.17, 2500, 25},
+            {3.64, 2700, 26.5},
+            {4.2, 3100, 28.9}
         };
 
         public static final double[] shooterLowMap = 

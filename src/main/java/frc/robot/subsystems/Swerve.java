@@ -267,10 +267,6 @@ public class Swerve extends SubsystemBase {
         goalRelTranslation = curPos.getTranslation().plus(goalVector);
     }
 
-    public Translation2d getTarget(){
-        return goalRelTranslation.minus(getPose().getTranslation());
-    }
-
     public Rotation2d getAngleToTargetRel(){
         Rotation2d angle;
         Pose2d robotPose = getPose();

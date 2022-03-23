@@ -9,7 +9,6 @@ import java.sql.Driver;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -26,8 +25,6 @@ import frc.lib.util.InterpolatableTreeMap;
 import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
-//import frc.robot.Constants.Swerve;
-import frc.robot.subsystems.Swerve;
 import frc.robot.States.ShooterStates;
 
 public class Shooter extends SubsystemBase {
@@ -70,10 +67,9 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry hoodReady = drivers.add("Hood Ready", false).getEntry();
   private PIDController hoodController;
   private ShooterStates state;
-  private Swerve swerve;
   
 
-  public Shooter(Vision m_Vision, Swerve m_Swerve) {
+  public Shooter(Vision m_Vision) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
     shooterMotorChild.setStatusFrames(255); //check for performance
@@ -84,8 +80,6 @@ public class Shooter extends SubsystemBase {
     //hoodMotor.configPID(Constants.Shooter.hoodPID);
     //turretMotor.configPID(Constants.Shooter.turretPID);
     limelight = m_Vision.getLimelight();
-
-    this.swerve = m_Swerve;
 
     tuningShooterPID = Constants.Shooter.shooterPID;
     hoodController = new PIDController(
@@ -126,14 +120,6 @@ public class Shooter extends SubsystemBase {
     for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
       shooterMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][1]));
       hoodMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
-    }
-  }
-
-  public double getDistanceToCenterGoal(){
-    if(limelight.hasTarget()){
-      return limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm();
-    } else {
-      return swerve.getTarget().getNorm();
     }
   }
 
@@ -277,10 +263,8 @@ public class Shooter extends SubsystemBase {
               setShooterRPM(setShootRPM.getDouble(0));
               setHoodAngle(setHoodAng.getDouble(0));
           } else{
-              // setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
-              // setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
-              setShooterRPM(shooterMap.get(getDistanceToCenterGoal()));
-              setHoodAngle(shooterMap.get(getDistanceToCenterGoal()));
+              setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
+              setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
           }
           break;
       //}
