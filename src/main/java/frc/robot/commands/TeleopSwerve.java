@@ -5,12 +5,9 @@ import frc.robot.States;
 import frc.robot.States.ShooterStates;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -25,9 +22,9 @@ public class TeleopSwerve extends CommandBase {
     private int translationAxis;
     private int strafeAxis;
     private int rotationAxis;
-    SlewRateLimiter xAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-    SlewRateLimiter yAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-    SlewRateLimiter rAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
+    SlewRateLimiter xAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
+    SlewRateLimiter yAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
+    SlewRateLimiter rAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
 
 
     /**

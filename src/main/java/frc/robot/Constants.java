@@ -166,7 +166,9 @@ public final class Constants {
         public static final double thetaKP = -5.0;
         public static final double thetaKI = 0.0;
         public static final double thetaKD = -0.1;
+
         public static final double slewRateLimiterAmount = 0;
+
         public static double thetaTolerance = 0.07;
 
     }

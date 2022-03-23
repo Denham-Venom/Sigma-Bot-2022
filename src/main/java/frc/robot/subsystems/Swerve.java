@@ -48,13 +48,12 @@ public class Swerve extends SubsystemBase {
     public NetworkTableEntry xEntry;
     public NetworkTableEntry yEntry;
     public NetworkTableEntry headingEntry;
-    private static ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+    private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
     private NetworkTableEntry turnP = tuning.add("Turn P", 0).getEntry();
     private NetworkTableEntry turnI = tuning.add("Turn I", 0).getEntry();
     private NetworkTableEntry turnD = tuning.add("Turn D", 0).getEntry();
     private NetworkTableEntry turnTol = tuning.add("Turn Tol", 0).getEntry();
     private NetworkTableEntry tuneSwerve = tuning.add("Tune Swerve", false).getEntry();
-    public static NetworkTableEntry rateLimiting = tuning.add("Tune Rate Limiting", 0).getEntry();
     private double turnTolVal = Constants.Swerve.thetaTolerance;
     private ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
     private NetworkTableEntry swerveReady = Drivers.add("Swerve Ready" , false).getEntry();

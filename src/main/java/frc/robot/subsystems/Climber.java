@@ -45,8 +45,8 @@ public class Climber extends SubsystemBase {
       () -> States.retractClimber()
     ));
   }
-
-/**
+  
+  /**
    * Checks if the climber is in a climbing state
    * @return
    */
