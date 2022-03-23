@@ -421,6 +421,18 @@ public final class Constants {
             // new Pose2d(5.464, 1.954, new Rotation2d(0.008)),
             // new Pose2d(7.559, 1, new Rotation2d(-1.571))
         };
+
+        public static final SwerveTrajectoryWaypoint[] optimizedRightPoints =
+        {
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571),             //part1 end got ball 1
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.597),              //part2 start go to ball 2            
+            new SwerveTrajectoryWaypoint(5.409, 2.168, -2.503, 2.379),              //part2 end got ball 2
+            new SwerveTrajectoryWaypoint(5.409, 2.168, -2.503, -2.975),             //part3 start go ball 3 and 4
+            new SwerveTrajectoryWaypoint(3.724, 1.983, -3.042, -2.768),             //part3 mid adjust to path
+            new SwerveTrajectoryWaypoint(1.712, 1.241, 2.393, 2.393),               //part3 mid get ball 3 and 4
+            new SwerveTrajectoryWaypoint(1.21, 1.769, 2.32, 2.32),                  //part3 mid get ball 3 and 4
+            new SwerveTrajectoryWaypoint(3.615, 2.952, 0.279, 0.449)                //part3 end go to shoot
+        };
 }
     
 }

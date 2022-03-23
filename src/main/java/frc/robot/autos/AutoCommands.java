@@ -16,12 +16,16 @@ import frc.robot.subsystems.Swerve;
 /** Add your docs here. */
 public class AutoCommands {
 
+    private static Swerve swerve;
+    private static OptimizedRightPaths optimizedRightPaths;
+
+
     public enum StartingTarmac {
         left, right
     };
 
     public enum StartingPosition {
-        left, middle, right
+        left, middle, right, optimized
     };
 
     public enum NumberOfBalls {
@@ -60,6 +64,14 @@ public class AutoCommands {
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
             "RightLeft",
             new SwerveTrajectoryWaypoint(6.506, 2.56, -2.283, -1.097) //TODO test
+        ),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
+            "RightOptimized",
+            new SwerveTrajectoryWaypoint(7.524, 1.756, -1.555,  -1.555)
+        ),
+        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
+            "LeftOptimized",
+            new SwerveTrajectoryWaypoint(7.524, 1.756, -1.555,  -1.555)
         )
     );
     // shuffleboard value for number of balls, starting Position, left/right tarmac
@@ -96,6 +108,9 @@ public class AutoCommands {
             case right:
                 position = "Right";
                 break;
+            case optimized:
+                position = "Optimized";
+                break;
             default:
                 position = "Left";
                 break;
@@ -125,8 +140,13 @@ public class AutoCommands {
         }
     }
 
-    public static Command getSelectedAuto(Swerve swerve) {
-        
+    public static void setSwerve(Swerve swerve) {
+        AutoCommands.swerve = swerve;
+        optimizedRightPaths = new OptimizedRightPaths(swerve);
+    }
+
+    public static Command getSelectedAuto() {
+        if(swerve == null) return null;
         if (leftTarmac) {
             if (numBalls == 0){
                 return new InstantCommand(
@@ -138,6 +158,9 @@ public class AutoCommands {
             }
             return new LeftTarmacPaths(swerve, position, numBalls);
         } else {
+            if (position.compareTo("Optimized") == 0){
+                return optimizedRightPaths;
+            }
             if (numBalls == 0){
                 return new InstantCommand(
                     () -> {
