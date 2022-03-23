@@ -5,9 +5,7 @@ import frc.robot.States;
 import frc.robot.States.ShooterStates;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -22,10 +20,6 @@ public class TeleopSwerve extends CommandBase {
     private int translationAxis;
     private int strafeAxis;
     private int rotationAxis;
-    SlewRateLimiter xAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
-    SlewRateLimiter yAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
-    SlewRateLimiter rAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
-
 
     /**
      * Driver control
@@ -50,11 +44,7 @@ public class TeleopSwerve extends CommandBase {
         yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
         xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
 
-        /* Squaring Inputs */
-        yAxis *= yAxis;
-        xAxis *= xAxis;
-
-        return new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
+        return new Translation2d(yAxis * s_Swerve.gethighLowGear(), xAxis * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
     }
 
     @Override
@@ -70,13 +60,8 @@ public class TeleopSwerve extends CommandBase {
         xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
         rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
 
-        /* Squaring Inputs */ 
-        yAxis *= yAxis;
-        xAxis *= xAxis;
-        rAxis *= rAxis;
-
-        translation = new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
-        rotation = rAxisFilter.calculate(rAxis) * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
+        translation = new Translation2d(yAxis * s_Swerve.gethighLowGear(), xAxis * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
+        rotation = rAxis * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
         s_Swerve.drive(translation, rotation, openLoop);
         }
     }
