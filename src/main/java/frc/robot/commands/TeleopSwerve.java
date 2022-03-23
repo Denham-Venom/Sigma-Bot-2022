@@ -25,9 +25,9 @@ public class TeleopSwerve extends CommandBase {
     private int translationAxis;
     private int strafeAxis;
     private int rotationAxis;
-    SlewRateLimiter xAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
-    SlewRateLimiter yAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
-    SlewRateLimiter rAxisFilter = new SlewRateLimiter(Constants.Swerve.slewRateLimiterAmount);
+    SlewRateLimiter xAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
+    SlewRateLimiter yAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
+    SlewRateLimiter rAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
 
 
     /**
@@ -57,11 +57,6 @@ public class TeleopSwerve extends CommandBase {
         yAxis *= yAxis;
         xAxis *= xAxis;
 
-        if(Constants.tuningMode) {
-            yAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-            xAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-        }
-
         return new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
     }
 
@@ -82,12 +77,6 @@ public class TeleopSwerve extends CommandBase {
         yAxis *= yAxis;
         xAxis *= xAxis;
         rAxis *= rAxis;
-
-        if(Constants.tuningMode) {
-            yAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-            xAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-            rAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
-        }
 
         translation = new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
         rotation = rAxisFilter.calculate(rAxis) * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
