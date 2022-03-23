@@ -54,8 +54,8 @@ public class TeleopSwerve extends CommandBase {
         xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
 
         /* Squaring Inputs */
-        yAxis *= Math.abs(yAxis);
-        xAxis *= Math.abs(xAxis);
+        yAxis *= yAxis;
+        xAxis *= xAxis;
 
         return new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
     }
@@ -74,9 +74,9 @@ public class TeleopSwerve extends CommandBase {
         rAxis = (Math.abs(rAxis) < Constants.stickDeadband) ? 0 : rAxis;
 
         /* Squaring Inputs */ 
-        yAxis *= Math.abs(yAxis);
-        xAxis *= Math.abs(xAxis);
-        rAxis *= Math.abs(rAxis);
+        yAxis *= yAxis;
+        xAxis *= xAxis;
+        rAxis *= rAxis;
 
         if(Constants.tuningMode) {
             yAxisFilter = new SlewRateLimiter(Swerve.rateLimiting.getDouble(0));
