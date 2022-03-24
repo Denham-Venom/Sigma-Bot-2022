@@ -87,6 +87,7 @@ public class RobotContainer {
     s_Swerve = new Swerve(m_Vision);
     m_Shooter = new Shooter(m_Vision, s_Swerve);
     m_Climber = new Climber();
+    AutoCommands.setSwerve(s_Swerve);
 
     
     s_Swerve.setDefaultCommand(new TeleopSwerve(
@@ -255,6 +256,6 @@ public class RobotContainer {
     AutoCommands.NumberOfBalls balls = m_chooseBall.getSelected();
     AutoCommands.setBalls(balls);
 
-    return AutoCommands.getSelectedAuto(s_Swerve);
+    return AutoCommands.getSelectedAuto();
   }
 }
