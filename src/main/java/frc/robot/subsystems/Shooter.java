@@ -253,6 +253,7 @@ public class Shooter extends SubsystemBase {
     boolean hoodDown = !hoodLimit.get();
     hoodLimitSwitchPressed.setBoolean(hoodDown);
     if(hoodDown) hoodEncoder.reset();
+
     if(!homingDone) {
       if(hoodDown) homingDone = true;
       setHoodPower(-1);

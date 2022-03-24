@@ -4,12 +4,14 @@ import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.lib.math.BooleanMedianFilter;
 
 public class Limelight {
     private final double limelightHeight;
     private final Rotation2d limelightAngle;
     private final double targetHeight;
     private MedianFilter distanceMedian; //TODO determine if should reinstate
+    private BooleanMedianFilter hasTargetMedian;
     private MedianFilter xMedian;
     private MedianFilter yMedian;
 
@@ -25,6 +27,7 @@ public class Limelight {
         distanceMedian = new MedianFilter(10);
         xMedian = new MedianFilter(10);
         yMedian = new MedianFilter(10);
+        hasTargetMedian = new BooleanMedianFilter(10);
     }
 
     /**@return Horizontal Offset From Crosshair To Target in degrees
@@ -48,7 +51,7 @@ public class Limelight {
             //distanceMedian.reset();
             resetFilters();
         }
-        return hasTarget;
+        return hasTargetMedian.calculate(hasTarget);
     }
 
     /**@return Median filtered distance to Target in meters */
