@@ -281,7 +281,7 @@ public class Shooter extends SubsystemBase {
               // setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
               // setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
               setShooterRPM(shooterMap.get(getDistanceToCenterGoal()));
-              setHoodAngle(shooterMap.get(getDistanceToCenterGoal()));
+              setHoodAngle(hoodMap.get(getDistanceToCenterGoal()));
           }
           break;
       //}
