@@ -54,10 +54,12 @@ public class Swerve extends SubsystemBase {
     private NetworkTableEntry turnD = tuning.add("Turn D", 0).getEntry();
     private NetworkTableEntry turnTol = tuning.add("Turn Tol", 0).getEntry();
     private NetworkTableEntry tuneSwerve = tuning.add("Tune Swerve", false).getEntry();
-    public static NetworkTableEntry rateLimiting = tuning.add("Tune Rate Limiting", 0).getEntry();
+    public static NetworkTableEntry transRateLimiting = tuning.add("Trans Rate Limiting", 0).getEntry();
+    public static NetworkTableEntry turnRateLimiting = tuning.add("Turn Rate Limiting", 0).getEntry();
     private double turnTolVal = Constants.Swerve.thetaTolerance;
     private ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
     private NetworkTableEntry swerveReady = Drivers.add("Swerve Ready" , false).getEntry();
+    private NetworkTableEntry fieldRelEntry = Drivers.add("Field Rel" , true).getEntry();
 
     // Feedback Controllers
     public final PIDController xController = new PIDController(
@@ -290,6 +292,7 @@ public class Swerve extends SubsystemBase {
      */
     public boolean toggleFieldRelative() {
         fieldRelative = !fieldRelative;
+        fieldRelEntry.setBoolean(fieldRelative);
         return fieldRelative;
     }
 

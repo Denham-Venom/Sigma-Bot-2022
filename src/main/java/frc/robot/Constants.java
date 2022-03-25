@@ -91,7 +91,7 @@ public final class Constants {
         public static final double maxAngularVelocity = 11.5;
 
         /* Swerve Gear Scaling Values */
-        public static final double highGearValue = 0.7;
+        public static final double highGearValue = 1.0;
         public static final double lowGearValue = 0.3;
 
         /* Neutral Modes */

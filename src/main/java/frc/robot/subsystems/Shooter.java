@@ -188,7 +188,7 @@ public class Shooter extends SubsystemBase {
       hoodReady.setBoolean(true);
       return;
     }
-      hoodReady.setBoolean(false);
+    hoodReady.setBoolean(false);
       
     double output = hoodController.calculate(getHoodAngle());// + Constants.Shooter.hoodPID.kFF;
     if(output < 0) {
