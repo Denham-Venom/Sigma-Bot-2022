@@ -348,7 +348,7 @@ public class Swerve extends SubsystemBase {
                 currentNeutral = 0;
             }
             else if (DriverStation.isDisabled() && currentNeutral == 0){
-                setNeutral(NeutralMode.Coast);
+                //setNeutral(NeutralMode.Coast); TODO change back
                 currentNeutral = 1;
             }
         }

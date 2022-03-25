@@ -32,22 +32,25 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
     SwerveTrajectory opRightPaths1 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig, 
       startPos, //start
-      AutoConstants.rightPoints [waypointIndex++] //ball1 & shoot
+      AutoConstants.optimizedRightPoints [waypointIndex++] //ball1 & shoot
     );
     
     SwerveTrajectory opRightPaths2 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.rightPoints [waypointIndex++], //start from ball1
-      AutoConstants.rightPoints [waypointIndex++] //go to ball2 and shoot
+      AutoConstants.optimizedRightPoints [waypointIndex++], //start from ball1
+      AutoConstants.optimizedRightPoints [waypointIndex++] //go to ball2 and shoot
     );
 
     SwerveTrajectory opRightPaths3 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.rightPoints [waypointIndex++], //start from ball2
-      AutoConstants.rightPoints [waypointIndex++], //move the the side a bit
-      AutoConstants.rightPoints [waypointIndex++], //go to get ball 3 and 4
-      AutoConstants.rightPoints [waypointIndex++], //go to get ball 3 and 4
-      AutoConstants.rightPoints [waypointIndex] //go to shoot
+      AutoConstants.optimizedRightPoints [waypointIndex++], //start from ball2
+      AutoConstants.optimizedRightPoints [waypointIndex++] //go to get ball 3 and 4
+    );
+
+    SwerveTrajectory opRightPaths4 = new SwerveTrajectory(
+      Constants.AutoConstants.trajectoryConfig,
+      AutoConstants.optimizedRightPoints [waypointIndex++], //go to get ball 3 and 4
+      AutoConstants.optimizedRightPoints [waypointIndex] //go to shoot
     );
     
     var thetaController =
@@ -88,6 +91,18 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
             new PIDController(Constants.Swerve.yKP, 0, 0),
             thetaController,
             opRightPaths3.getAngleSupplier(),
+            s_Swerve::setModuleStates,
+            s_Swerve);
+
+    SwerveControllerCommand swerveControllerCommand4 = 
+        new SwerveControllerCommand(
+            opRightPaths4.getTrajectory(),
+            s_Swerve::getPose,
+            Constants.Swerve.swerveKinematics,
+            new PIDController(Constants.Swerve.xKP, 0, 0),
+            new PIDController(Constants.Swerve.yKP, 0, 0),
+            thetaController,
+            opRightPaths4.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
 
@@ -137,6 +152,8 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand3,
 
+      swerveControllerCommand4,
+
       //Activates the shooter and shoots the 1 ball
       new InstantCommand(() -> States.activateShooter()),
       new WaitCommand(1.0), 
@@ -148,7 +165,7 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.stopIntake()),
       new InstantCommand(() -> States.deactivateShooter())
     );
-    new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.rightPoints [waypointIndex-1].getPositionAndOrientation()));
+    new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.optimizedRightPoints [waypointIndex-1].getPositionAndOrientation()));
 
   };
 }

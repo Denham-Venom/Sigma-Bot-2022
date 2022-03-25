@@ -231,6 +231,7 @@ public class RobotContainer {
     m_choosePosition.setDefaultOption("Middle of Tarmac", AutoCommands.StartingPosition.middle);
     m_choosePosition.addOption("Left of Tarmac", AutoCommands.StartingPosition.left);
     m_choosePosition.addOption("Right of Tarmac", AutoCommands.StartingPosition.right);
+    m_choosePosition.addOption("Optimized", AutoCommands.StartingPosition.optimized);
 
     m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.StartingTarmac.right);
     m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
@@ -257,5 +258,7 @@ public class RobotContainer {
     AutoCommands.setBalls(balls);
 
     return AutoCommands.getSelectedAuto();
+
+    //return new OptimizedRightPaths(s_Swerve);
   }
 }

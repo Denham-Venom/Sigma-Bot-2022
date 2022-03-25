@@ -344,7 +344,7 @@ public final class Constants {
         );
         
         /* Tuned speed constants */
-        public static final double intakeSpeed = 0.4;
+        public static final double intakeSpeed = 0.5;
         public static final double indexSpeed = 0.6;
         public static final double spinupSpeed = 0.5;
 
@@ -424,15 +424,14 @@ public final class Constants {
 
         public static final SwerveTrajectoryWaypoint[] optimizedRightPoints =
         {
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571),             //part1 end got ball 1
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.597),              //part2 start go to ball 2            
-            new SwerveTrajectoryWaypoint(5.409, 2.168, -2.503, 2.379),              //part2 end got ball 2
-            new SwerveTrajectoryWaypoint(5.409, 2.168, -2.503, -2.975),             //part3 start go ball 3 and 4
-            new SwerveTrajectoryWaypoint(3.724, 1.983, -3.042, -2.768),             //part3 mid adjust to path
-            new SwerveTrajectoryWaypoint(1.712, 1.241, 2.393, 2.393),               //part3 mid get ball 3 and 4
-            new SwerveTrajectoryWaypoint(1.21, 1.769, 2.32, 2.32),                  //part3 mid get ball 3 and 4
-            new SwerveTrajectoryWaypoint(3.615, 2.952, 0.279, 0.449)                //part3 end go to shoot
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end got ball 1
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.597),  //part2 start go to ball 2            
+            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, 2.379),  //part2 end got ball 2
+            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, -2.975), //part3 start go ball 3 and 4
+            new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, -3.005),      //part3 mid get ball 3 and 4
+            new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, 0.724),      //part4 start get ball 3 and 4
+            new SwerveTrajectoryWaypoint(3.615, 2.952, -2.938, 0.533)     //part4 end go to shoot
         };
-}
+    }
     
 }
