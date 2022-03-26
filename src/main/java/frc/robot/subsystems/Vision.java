@@ -27,6 +27,7 @@ public class Vision extends SubsystemBase {
       Constants.Vision.limelightAngle,
       Constants.Vision.goalHeight
     );
+    limelight.ledState(ledStates.off);
   }
 
   public Limelight getLimelight() {

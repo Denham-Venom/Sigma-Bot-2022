@@ -23,15 +23,13 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private LazySparkMAX climberMotor;
   private RelativeEncoder climbEncoder;
-  private DoubleSolenoid climberPiston;
   private final ShuffleboardTab testing;
   private ClimberStates state = States.climberState;
 
   public Climber() {
     // Devices
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
-    climberMotor.setStatusFrames(1000);
-    climberPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.ClimberSolenoidForwardChannel, Constants.Climber.ClimberSolenoidReverseChannel);
+    // climberMotor.setStatusFrames(1000);
     climbEncoder = climberMotor.getEncoder();
     climbEncoder.setPosition(0);
 
@@ -52,79 +50,26 @@ public class Climber extends SubsystemBase {
     
   }
 
-/**
-   * Checks if the climber is in a climbing state
-   * @return
-   */
-  public static boolean canClimb() {
-    return States.climberState != States.ClimberStates.disabled;
+  public void setPower(double power){
+    if (power > 0 && climbEncoder.getPosition() < Constants.Climber.climberHighLimit){
+      climberMotor.set(ControlType.kDutyCycle, power);
+    }
+    else if( power < 0 && climbEncoder.getPosition() > Constants.Climber.climberLowLimit){
+      climberMotor.set(ControlType.kDutyCycle, power);
+    }
+    else{
+      climberMotor.set(ControlType.kDutyCycle, 0);
+    }
   }
+
 
   
-  public void extendClimber() {
-    setClimberPosition(Constants.Climber.extendedCounts);
-  }
-
-  private void setClimberPosition(double climberPosition) {
-    if(!canClimb()) return;
-    if (climberPosition > Constants.Climber.climberHighLimit){
-      climberPosition = Constants.Climber.climberHighLimit;
-    }
-    else if (climberPosition < Constants.Climber.climberLowLimit){
-      climberPosition = Constants.Climber.climberLowLimit;
-    }
-    climberMotor.set(ControlType.kPosition, climberPosition);
-  }
-
-  public void setClimberPiston(boolean extended) {
-    //if(!canClimb()) return;
-    if(extended) {
-      climberPiston.set(Value.kForward);
-    } else {
-      climberPiston.set(Value.kReverse);
-    }
-  }
-
-  private void setClimberMotor(double demand) {
-    climberMotor.set(demand);
-  }
-
-  public void setClimberPiston() {
-    climberPiston.set(Value.kOff);
-  }
+  
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Climber Encoder", climbEncoder.getPosition());
-    if(!States.climbAllowed) {
-      States.stopClimber();
-    }
-    if(States.climberState != state) {
-      state = States.climberState;
-      switch(States.climberState) {
-        case extendClimber:
-          //setClimberMotorSafe(Constants.Climber.ClimberSpeed);
-          if(climbEncoder.getPosition() < Constants.Climber.climberHighLimit)
-            setClimberMotor(Constants.Climber.ClimberSpeed);
-          break;
-        case retractClimber:
-          //setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
-          if(climbEncoder.getPosition() > Constants.Climber.climberLowLimit)
-            setClimberMotor(-Constants.Climber.ClimberSpeed);
-          break;
-        case extendClimberPiston:
-          climberPiston.set(Value.kForward);
-          break;
-        case retractClimberPiston:
-          climberPiston.set(Value.kReverse);
-          break;
-        case disabled:
-          climberPiston.set(Value.kOff);
-          setClimberMotor(0);
-          break;
-      }
-    }
+    double climbEncoderPos = climbEncoder.getPosition();
+    SmartDashboard.putNumber("Climber Encoder", climbEncoderPos);
   }
 }
 

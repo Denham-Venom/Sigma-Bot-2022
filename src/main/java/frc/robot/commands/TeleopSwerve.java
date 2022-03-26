@@ -61,10 +61,10 @@ public class TeleopSwerve extends CommandBase {
         xAxis = (xAxisAbs < Constants.stickDeadband) ? 0 : xAxis;
 
         /* Squaring Inputs */
-        yAxis *= yAxis;
-        xAxis *= xAxis;
-        // xAxis *= xAxisAbs;
-        // yAxis *= yAxisAbs;
+        // xAxis *= xAxis;
+        // yAxis *= yAxis;
+        xAxis *= xAxisAbs;
+        yAxis *= yAxisAbs;
 
         double combinedAxis = xAxis + yAxis;
         double filteredCombinedAxis = translationFilter.calculate(combinedAxis);
@@ -72,10 +72,10 @@ public class TeleopSwerve extends CommandBase {
         double filteredIsolatedY = filteredCombinedAxis * (yAxis / combinedAxis);
 
         return new Translation2d(
-            filteredIsolatedX * Math.signum(xAxis),
-            //yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), 
-            filteredIsolatedY * Math.signum(yAxis)
-            //xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()
+            //filteredIsolatedX * Math.signum(xAxis),
+            yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), 
+            //filteredIsolatedY * Math.signum(yAxis)
+            xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()
         ).times(Constants.Swerve.maxSpeed);
     }
 
