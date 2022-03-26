@@ -24,7 +24,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 public final class Constants {
 
     /* General constants */
-    public static final boolean tuningMode = false;
+    public static final boolean tuningMode = true;
     public static final double stickDeadband = 0.1;
     public static final String driverTab = "Drivers";
 
@@ -177,7 +177,7 @@ public final class Constants {
     public static final class Shooter {
 
         /* Shooter behavior constants */
-        public static final boolean calibrationMode = false;
+        public static final boolean calibrationMode = true;
         public static final boolean autoAim = false; //TODO set to true
 
 
