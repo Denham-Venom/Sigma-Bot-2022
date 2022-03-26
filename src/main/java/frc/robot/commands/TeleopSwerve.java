@@ -5,12 +5,8 @@ import frc.robot.States;
 import frc.robot.States.ShooterStates;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -59,12 +55,13 @@ public class TeleopSwerve extends CommandBase {
 
         /* Squaring Inputs */
         double squaredX = xAxis * xAxis;
-        double squaredY = yAxis * yAxis;
+        double squaredY = yAxis * yAxis; 
 
         double combinedAxis = squaredX + squaredY;
         double filteredCombinedAxis = translationFilter.calculate(combinedAxis);
         double filteredIsolatedX = filteredCombinedAxis * (squaredX / combinedAxis);
         double filteredIsolatedY = filteredCombinedAxis * (squaredY / combinedAxis);
+        // double filteredIsolatedY = combinedAxis - filteredIsolatedX;
 
         return new Translation2d(
             filteredIsolatedX * Math.signum(xAxis) * speedMultiplier,
