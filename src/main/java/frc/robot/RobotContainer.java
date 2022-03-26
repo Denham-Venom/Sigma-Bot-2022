@@ -59,8 +59,8 @@ public class RobotContainer {
   private final JoystickButton opToggleIntakePiston = new JoystickButton(operator, XboxController.Button.kY.value);
   private final JoystickButton opOuttake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton opHomeHood = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  private final JoystickButton opAllowClimb = new JoystickButton(operator, XboxController.Button.kStart.value);
-  private final JoystickButton opDisallowClimb = new JoystickButton(operator, XboxController.Button.kBack.value);
+  // private final JoystickButton opAllowClimb = new JoystickButton(operator, XboxController.Button.kStart.value);
+  // private final JoystickButton opDisallowClimb = new JoystickButton(operator, XboxController.Button.kBack.value);
   // private final Trigger opShootLow = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
   private final POVButton opExtendClimber = new POVButton(operator, 0); //up
   private final POVButton opRetractClimber = new POVButton(operator, 180); //down
