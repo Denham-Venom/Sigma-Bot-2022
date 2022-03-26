@@ -196,9 +196,9 @@ public class RobotContainer {
     //   () -> States.extendClimber(),
     //   () -> States.stopClimber()
     // ));
-    opExtendClimber.whileHeld(new ClimbControl(m_Climber, 0.8));
+    opExtendClimber.whileHeld(new ClimbControl(m_Climber, 0.9));
     
-    opRetractClimber.whileHeld(new ClimbControl(m_Climber, -0.8));
+    opRetractClimber.whileHeld(new ClimbControl(m_Climber, -0.9));
     // opRetractClimber.whileHeld(new StartEndCommand(
     //   () -> States.retractClimber(),
     //   () -> States.stopClimber()
