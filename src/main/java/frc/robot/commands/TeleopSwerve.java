@@ -73,9 +73,9 @@ public class TeleopSwerve extends CommandBase {
 
         return new Translation2d(
             //filteredIsolatedX * Math.signum(xAxis),
-            yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), 
             //filteredIsolatedY * Math.signum(yAxis)
-            xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()
+            xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear(),
+            yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear() 
         ).times(Constants.Swerve.maxSpeed);
     }
 
