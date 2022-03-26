@@ -161,7 +161,7 @@ public class RightTarmacPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.deactivateShooter()),
       new InstantCommand(() -> States.stopIntake())
       );
-      new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.rightPoints [waypointIndex-1].getPositionAndOrientation()));
+      //new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.rightPoints [waypointIndex-1].getPositionAndOrientation()));
     }
     // if(numBalls == 5) {
     //   addCommands(

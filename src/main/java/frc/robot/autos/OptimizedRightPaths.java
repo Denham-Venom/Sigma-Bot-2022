@@ -165,7 +165,7 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.stopIntake()),
       new InstantCommand(() -> States.deactivateShooter())
     );
-    new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.optimizedRightPoints [waypointIndex-1].getPositionAndOrientation()));
+    //new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.optimizedRightPoints [waypointIndex-1].getPositionAndOrientation()));
 
   };
 }
