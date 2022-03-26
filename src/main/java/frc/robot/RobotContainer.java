@@ -46,7 +46,7 @@ public class RobotContainer {
   private final JoystickButton intake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
   private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
   private final JoystickButton toggleFieldRelative = new JoystickButton(driver, XboxController.Button.kBack.value);
-  private final Trigger shootLow = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
+  // private final Trigger shootLow = new Trigger(() -> driver.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
   //private final POVButton preShootOn = new POVButton(driver, 0); //up
   //private final POVButton preShootOff = new POVButton(driver, 180); //down
   private final POVButton lowPreShootOn = new POVButton(driver, 270); //left
@@ -61,11 +61,11 @@ public class RobotContainer {
   private final JoystickButton opHomeHood = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
   private final JoystickButton opAllowClimb = new JoystickButton(operator, XboxController.Button.kStart.value);
   private final JoystickButton opDisallowClimb = new JoystickButton(operator, XboxController.Button.kBack.value);
-  private final Trigger opShootLow = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
+  // private final Trigger opShootLow = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
   private final POVButton opExtendClimber = new POVButton(operator, 0); //up
   private final POVButton opRetractClimber = new POVButton(operator, 180); //down
-  private final POVButton opExtendClimberPiston = new POVButton(operator, 270); //left
-  private final POVButton opRetractClimberPiston = new POVButton(operator, 90); //right
+  // private final POVButton opExtendClimberPiston = new POVButton(operator, 270); //left
+  // private final POVButton opRetractClimberPiston = new POVButton(operator, 90); //right
 
   /* Subsystems */
   //private final PneumaticHub m_pHub;
