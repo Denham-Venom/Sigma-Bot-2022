@@ -138,6 +138,7 @@ public class Intaker extends SubsystemBase {
           break;
         case feeding: 
         // Runs all intake/indexer motors
+          //TODO only spin if drivetrain and hood are ready
           spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
           CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
           new WaitCommand(0.15),
