@@ -7,23 +7,33 @@ package frc.lib.math;
 import edu.wpi.first.math.filter.MedianFilter;
 
 /** Add your docs here. */
-public class BooleanMedianFilter {
-    private MedianFilter filter;
+public class BooleanMedianFilter extends MedianFilter {
     
     public BooleanMedianFilter(int size) {
-        filter = new MedianFilter(size);
+        super(size);
     }
 
     public boolean calculate(boolean next) {
         double result;
         if(next) {
-            result = filter.calculate(1);
+            result = super.calculate(1);
         } else {
-            result = filter.calculate(0);
+            result = super.calculate(0);
         }
 
         int rounded = (int) Math.round(result);
         if(rounded > 0) return true;
         else return false;
+    }
+
+    @Override
+    public double calculate(double next) {
+        double result;
+        if(next != 0) {
+            result = calculate(true) ? 1 : 0;
+        } else {
+            result = calculate(false) ? 1 : 0;
+        }
+        return result;
     }
 }

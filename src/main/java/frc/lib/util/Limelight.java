@@ -65,9 +65,10 @@ public class Limelight {
      * Needs to be called whenever the Limelight
      */
     public void resetFilters(){
-        //distanceMedian.reset();
+        distanceMedian.reset();
         xMedian.reset();
         yMedian.reset();
+        hasTargetMedian.reset();
     }
 
     /**@return The pipeline’s latency contribution in seconds  */
