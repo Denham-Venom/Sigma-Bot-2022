@@ -52,6 +52,9 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
       AutoConstants.optimizedRightPoints [waypointIndex++], //go to get ball 3 and 4
       AutoConstants.optimizedRightPoints [waypointIndex] //go to shoot
     );
+
+    var xController = new PIDController(Constants.Swerve.xKP, 0, 0);
+    var yController = new PIDController(Constants.Swerve.yKP, 0, 0);
     
     var thetaController =
         new ProfiledPIDController(
@@ -63,8 +66,8 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
             opRightPaths1.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
+            xController,
+            yController,
             thetaController,
             opRightPaths1.getAngleSupplier(),
             s_Swerve::setModuleStates,
@@ -75,8 +78,8 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
             opRightPaths2.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
+            xController,
+            yController,
             thetaController,
             opRightPaths2.getAngleSupplier(),
             s_Swerve::setModuleStates,
@@ -87,8 +90,8 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
             opRightPaths3.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
+            xController,
+            yController,
             thetaController,
             opRightPaths3.getAngleSupplier(),
             s_Swerve::setModuleStates,
@@ -99,8 +102,8 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
             opRightPaths4.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
+            xController,
+            yController,
             thetaController,
             opRightPaths4.getAngleSupplier(),
             s_Swerve::setModuleStates,
@@ -120,10 +123,10 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
 
       //Activates the shooter and shoots the 2 balls
       new InstantCommand(() -> States.activateShooter()),
-      new WaitCommand(1.0), 
+      new WaitCommand(0.8), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
+        new WaitCommand(0.8),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
@@ -137,10 +140,10 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
 
       //Activates the shooter and shoots the 1 ball
       new InstantCommand(() -> States.activateShooter()),
-      new WaitCommand(1.0), 
+      new WaitCommand(0.8), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
+        new WaitCommand(0.8),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
@@ -156,10 +159,10 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
 
       //Activates the shooter and shoots the 1 ball
       new InstantCommand(() -> States.activateShooter()),
-      new WaitCommand(1.0), 
+      new WaitCommand(0.8), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
+        new WaitCommand(0.8),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
