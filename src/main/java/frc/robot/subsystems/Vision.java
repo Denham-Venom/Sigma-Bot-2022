@@ -41,7 +41,7 @@ public class Vision extends SubsystemBase {
         limelight.ledState(ledStates.on);
       }
       else{
-        limelight.ledState(ledStates.on);
+        limelight.ledState(ledStates.off);
       }
     }
     if(Constants.Shooter.calibrationMode) limelight.ledState(ledStates.on);
