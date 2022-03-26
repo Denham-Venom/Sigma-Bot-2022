@@ -10,7 +10,7 @@ public class Limelight {
     private final double limelightHeight;
     private final Rotation2d limelightAngle;
     private final double targetHeight;
-    private MedianFilter distanceMedian; //TODO determine if should reinstate
+    // private MedianFilter distanceMedian; //TODO determine if should reinstate
     private BooleanMedianFilter hasTargetMedian;
     private MedianFilter xMedian;
     private MedianFilter yMedian;
@@ -24,7 +24,7 @@ public class Limelight {
         this.limelightHeight = limelightHeight;
         this.limelightAngle = limelightAngle;
         this.targetHeight = targetHeight;
-        distanceMedian = new MedianFilter(10);
+        // distanceMedian = new MedianFilter(10);
         xMedian = new MedianFilter(10);
         yMedian = new MedianFilter(10);
         hasTargetMedian = new BooleanMedianFilter(10);
@@ -65,7 +65,7 @@ public class Limelight {
      * Needs to be called whenever the Limelight
      */
     public void resetFilters(){
-        distanceMedian.reset();
+        // distanceMedian.reset();
         xMedian.reset();
         yMedian.reset();
         hasTargetMedian.reset();
