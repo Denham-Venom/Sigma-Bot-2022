@@ -203,12 +203,12 @@ public class RobotContainer {
     //   () -> States.retractClimber(),
     //   () -> States.stopClimber()
     // ));
-    opAllowClimb.whenPressed(new InstantCommand(
-      () -> States.allowClimb()
-    ));
-    opDisallowClimb.whenPressed(new InstantCommand(
-      () -> States.disallowClimb()
-    ));
+    // opAllowClimb.whenPressed(new InstantCommand(
+    //   () -> States.allowClimb()
+    // ));
+    // opDisallowClimb.whenPressed(new InstantCommand(
+    //   () -> States.disallowClimb()
+    // ));
 
   };
 
