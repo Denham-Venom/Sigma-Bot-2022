@@ -24,7 +24,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 public final class Constants {
 
     /* General constants */
-    public static final boolean tuningMode = false;
+    public static final boolean tuningMode = true;
     public static final double stickDeadband = 0.1;
     public static final String driverTab = "Drivers";
 
@@ -298,16 +298,16 @@ public final class Constants {
             MotorType.kBrushless, 
             sparkCurrentLimit.sparkCurLimit40, 
             IdleMode.kBrake, 
-            false
+            false //invert
         );
         
         /* Tuned values */
         public static final double ClimberSpeed = 0.80;
 
         /* Mechanism properties */
-        public static final double climberHighLimit = 0;
-        public static final double climberLowLimit = 0;
-        public static final double climberGearRatio = 0;
+        public static final double climberHighLimit = Double.MAX_VALUE;
+        public static final double climberLowLimit = Double.MIN_VALUE;
+        public static final double climberGearRatio = 12.;
         public static final double extendedCounts = 0;
         public static final double retractedCounts = 0;
     }

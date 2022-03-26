@@ -61,21 +61,21 @@ public class TeleopSwerve extends CommandBase {
         xAxis = (xAxisAbs < Constants.stickDeadband) ? 0 : xAxis;
 
         /* Squaring Inputs */
-        // yAxis *= yAxis;
-        // xAxis *= xAxis;
-        yAxis *= yAxisAbs;
-        xAxis *= xAxisAbs;
+        yAxis *= yAxis;
+        xAxis *= xAxis;
+        // xAxis *= xAxisAbs;
+        // yAxis *= yAxisAbs;
 
-        // double combinedAxis = xAxis + yAxis;
-        // double filteredCombinedAxis = translationFilter.calculate(combinedAxis);
-        // double filteredIsolatedX = filteredCombinedAxis * (xAxis / combinedAxis);
-        // double filteredIsolatedY = filteredCombinedAxis * (yAxis / combinedAxis);
+        double combinedAxis = xAxis + yAxis;
+        double filteredCombinedAxis = translationFilter.calculate(combinedAxis);
+        double filteredIsolatedX = filteredCombinedAxis * (xAxis / combinedAxis);
+        double filteredIsolatedY = filteredCombinedAxis * (yAxis / combinedAxis);
 
         return new Translation2d(
-            //filteredIsolatedX * Math.signum(xAxis),
-            yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), 
-            //filteredIsolatedY * Math.signum(yAxis)
-            xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()
+            filteredIsolatedX * Math.signum(xAxis),
+            //yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), 
+            filteredIsolatedY * Math.signum(yAxis)
+            //xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()
         ).times(Constants.Swerve.maxSpeed);
     }
 
@@ -116,7 +116,7 @@ public class TeleopSwerve extends CommandBase {
         }
 
         translation = getTranslation2d();//new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
-        rotation = /*rAxisFilter.calculate(*/rAxis/*)*/ * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
+        rotation = rAxisFilter.calculate(rAxis) * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
         s_Swerve.drive(translation, rotation, openLoop);
         }
     }

@@ -4,12 +4,14 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Controllers.LazySparkMAX;
@@ -20,6 +22,7 @@ import frc.robot.States.ClimberStates;
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   private LazySparkMAX climberMotor;
+  private RelativeEncoder climbEncoder;
   private DoubleSolenoid climberPiston;
   private final ShuffleboardTab testing;
   private ClimberStates state = States.climberState;
@@ -29,7 +32,9 @@ public class Climber extends SubsystemBase {
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
     climberMotor.setStatusFrames(1000);
     climberPiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.ClimberSolenoidForwardChannel, Constants.Climber.ClimberSolenoidReverseChannel);
-      
+    climbEncoder = climberMotor.getEncoder();
+    climbEncoder.setPosition(0);
+
     // Shuffleboard
     testing = Shuffleboard.getTab("Testing");
     testing.add("Climber Extend Piston", new InstantCommand(
@@ -44,6 +49,7 @@ public class Climber extends SubsystemBase {
     testing.add("Climber Retract Motor", new InstantCommand(
       () -> States.retractClimber()
     ));
+    
   }
 
 /**
@@ -90,6 +96,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Climber Encoder", climbEncoder.getPosition());
     if(!States.climbAllowed) {
       States.stopClimber();
     }
@@ -98,11 +105,13 @@ public class Climber extends SubsystemBase {
       switch(States.climberState) {
         case extendClimber:
           //setClimberMotorSafe(Constants.Climber.ClimberSpeed);
-          setClimberMotor(Constants.Climber.ClimberSpeed);
+          if(climbEncoder.getPosition() < Constants.Climber.climberHighLimit)
+            setClimberMotor(Constants.Climber.ClimberSpeed);
           break;
         case retractClimber:
           //setClimberMotorSafe(-Constants.Climber.ClimberSpeed);
-          setClimberMotor(-Constants.Climber.ClimberSpeed);
+          if(climbEncoder.getPosition() > Constants.Climber.climberLowLimit)
+            setClimberMotor(-Constants.Climber.ClimberSpeed);
           break;
         case extendClimberPiston:
           climberPiston.set(Value.kForward);
