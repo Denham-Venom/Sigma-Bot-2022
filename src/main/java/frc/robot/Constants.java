@@ -92,7 +92,7 @@ public final class Constants {
 
         /* Swerve Gear Scaling Values */
         public static final double highGearValue = 1.0;
-        public static final double lowGearValue = 0.5;
+        public static final double lowGearValue = 0.3;
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
@@ -165,8 +165,7 @@ public final class Constants {
         public static final double thetaKP = -5.0;
         public static final double thetaKI = 0.0;
         public static final double thetaKD = -0.1;
-        public static final double transRateLimit = Double.MAX_VALUE;
-        public static final double rotRateLimit = Double.MAX_VALUE;
+        public static final double slewRateLimiterAmount = Double.MAX_VALUE;
         public static double thetaTolerance = 0.07;
 
     }

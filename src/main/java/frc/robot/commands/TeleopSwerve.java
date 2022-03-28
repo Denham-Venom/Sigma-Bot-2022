@@ -21,9 +21,13 @@ public class TeleopSwerve extends CommandBase {
     private int translationAxis;
     private int strafeAxis;
     private int rotationAxis;
-    private double tRate = Constants.Swerve.transRateLimit;
+    private double tRate = Double.MAX_VALUE;
     SlewRateLimiter translationFilter = new SlewRateLimiter(tRate);
-    private double rRate = Constants.Swerve.rotRateLimit;
+    private double xRate = Constants.Swerve.slewRateLimiterAmount;
+    SlewRateLimiter xAxisFilter = new SlewRateLimiter(xRate);
+    private double yRate = Constants.Swerve.slewRateLimiterAmount;
+    SlewRateLimiter yAxisFilter = new SlewRateLimiter(yRate);
+    private double rRate = Constants.Swerve.slewRateLimiterAmount;
     SlewRateLimiter rAxisFilter = new SlewRateLimiter(rRate);
 
 
@@ -42,7 +46,6 @@ public class TeleopSwerve extends CommandBase {
     }
 
     public Translation2d getTranslation2d() {
-        double speedMultiplier = s_Swerve.gethighLowGear();
 
         double yAxis = -controller.getRawAxis(translationAxis);
         double yAxisAbs = Math.abs(yAxis);
@@ -57,15 +60,17 @@ public class TeleopSwerve extends CommandBase {
         double squaredX = xAxis * xAxis;
         double squaredY = yAxis * yAxis; 
 
-        double combinedAxis = squaredX + squaredY;
+        double combinedAxis = xAxis + yAxis;
         double filteredCombinedAxis = translationFilter.calculate(combinedAxis);
         double filteredIsolatedX = filteredCombinedAxis * (squaredX / combinedAxis);
         double filteredIsolatedY = filteredCombinedAxis * (squaredY / combinedAxis);
         // double filteredIsolatedY = combinedAxis - filteredIsolatedX;
 
         return new Translation2d(
-            filteredIsolatedX * Math.signum(xAxis) * speedMultiplier,
-            filteredIsolatedY * Math.signum(yAxis) * speedMultiplier
+            //filteredIsolatedX * Math.signum(xAxis),
+            //filteredIsolatedY * Math.signum(yAxis)
+            xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear(),
+            yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear() 
         ).times(Constants.Swerve.maxSpeed);
     }
 
@@ -73,29 +78,41 @@ public class TeleopSwerve extends CommandBase {
     public void execute() {
 
         if(States.shooterState != ShooterStates.preShoot){
+        
+        //double yAxis = -controller.getRawAxis(translationAxis);
+        //double xAxis = -controller.getRawAxis(strafeAxis);
+        double rAxis = -controller.getRawAxis(rotationAxis);
+        double rAxisAbs = Math.abs(rAxis);
+        
+        /* Deadbands */
+        //yAxis = (Math.abs(yAxis) < Constants.stickDeadband) ? 0 : yAxis;
+        //xAxis = (Math.abs(xAxis) < Constants.stickDeadband) ? 0 : xAxis;
+        rAxis = (rAxisAbs < Constants.stickDeadband) ? 0 : rAxis;
 
-            double rAxis = -controller.getRawAxis(rotationAxis);
-            double rAxisAbs = Math.abs(rAxis);
-            
-            /* Deadbands */
-            rAxis = (rAxisAbs < Constants.stickDeadband) ? 0 : rAxis;
+        /* Squaring Inputs */ 
+        //yAxis *= Math.abs(yAxis);
+        //xAxis *= Math.abs(xAxis);
+        rAxis *= rAxisAbs;
 
-            /* Squaring Inputs */ 
-            rAxis *= rAxisAbs;
-
-            translation = getTranslation2d();//new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
-            rotation = rAxisFilter.calculate(rAxis) * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
-            s_Swerve.drive(translation, rotation, openLoop);
-
-            if(Constants.tuningMode) {
-                double r = Swerve.turnRateLimiting.getDouble(0), t = Swerve.transRateLimiting.getDouble(0);
-                if(r != rRate || t != tRate) {
-                    rRate = r;
-                    tRate = t;
-                    rAxisFilter = new SlewRateLimiter(r);
-                    translationFilter = new SlewRateLimiter(t);
-                }
+        if(Constants.tuningMode) {
+            double r = Swerve.turnRateLimiting.getDouble(0);
+            double t = Swerve.transRateLimiting.getDouble(0);
+            //double y = Swerve.rateLimiting.getDouble(0), x = Swerve.rateLimiting.getDouble(0), r = Swerve.rateLimiting.getDouble(0);
+            if( r != rRate || t != tRate) { //y != yRate || x != xRate ||
+                //yRate = y;
+                //xRate = x;
+                rRate = r;
+                tRate = t;
+                //yAxisFilter = new SlewRateLimiter(y);
+                //xAxisFilter = new SlewRateLimiter(x);
+                rAxisFilter = new SlewRateLimiter(r);
+                translationFilter = new SlewRateLimiter(t);
             }
+        }
+
+        translation = getTranslation2d();//new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
+        rotation = rAxisFilter.calculate(rAxis) * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
+        s_Swerve.drive(translation, rotation, openLoop);
         }
     }
 
