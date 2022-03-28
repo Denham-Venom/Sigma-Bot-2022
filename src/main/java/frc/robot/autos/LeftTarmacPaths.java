@@ -30,7 +30,7 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
     SwerveTrajectory leftTarmacPaths1 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
       startPos,
-      AutoConstants.leftPoints [waypointIndex]
+      AutoConstants.leftPoints [waypointIndex++]
     );
 
     var thetaController =
@@ -52,7 +52,11 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
 
       addCommands(
         //Gets the initial pose
-        new InstantCommand(() -> s_Swerve.resetOdometry(startPos.getPositionAndOrientation())),
+        new InstantCommand(() -> s_Swerve.resetOdometry(startPos.getPositionAndOrientation()))
+      );
+
+      if(numBalls > 0) {
+        addCommands(
         //Deploys the intake
         new InstantCommand(() -> States.deployIntake()),
 
@@ -74,5 +78,6 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
         new InstantCommand(() -> States.stopIntake()),
         new InstantCommand(() -> States.deactivateShooter())
       );
+      }
   }
 }

@@ -79,12 +79,16 @@ public class Climber extends SubsystemBase {
 
   
   
-
+  int count = 1;
   @Override
   public void periodic() {
-    double climbEncoderPos = climbEncoder.getPosition();
-    SmartDashboard.putNumber("Climber Encoder", climbEncoderPos);
-    SmartDashboard.putNumber("Encoder Offset", encoderOffset);
+    if(count > 10){
+      double climbEncoderPos = climbEncoder.getPosition();
+      SmartDashboard.putNumber("Climber Encoder", climbEncoderPos);
+      SmartDashboard.putNumber("Encoder Offset", encoderOffset);
+      count = 1;
+    }    
+    count++;
   }
 }
 

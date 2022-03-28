@@ -409,13 +409,14 @@ public final class Constants {
 
         public static final SwerveTrajectoryWaypoint[] leftPoints = 
         {
-            new SwerveTrajectoryWaypoint(5.245, 5.955, 2.618, 2.618),
-            new SwerveTrajectoryWaypoint(4.213, 4.564, -2.147, -2.147),
-            new SwerveTrajectoryWaypoint(1.685, 1.697, -2.374, -2.374),
-            new SwerveTrajectoryWaypoint(2.297, 1.726, 0.209, 0.209),
-            new SwerveTrajectoryWaypoint(5.464, 1.954, 0, 0),
-            new SwerveTrajectoryWaypoint(6.198, 1.997, -2.356, -2.356),
-            new SwerveTrajectoryWaypoint(7.559, 1, -1.571, -1.571)
+            new SwerveTrajectoryWaypoint(6.023, 5.095, -0.794, -0.794)
+            // new SwerveTrajectoryWaypoint(5.245, 5.955, 2.618, 2.618),
+            // new SwerveTrajectoryWaypoint(4.213, 4.564, -2.147, -2.147),
+            // new SwerveTrajectoryWaypoint(1.685, 1.697, -2.374, -2.374),
+            // new SwerveTrajectoryWaypoint(2.297, 1.726, 0.209, 0.209),
+            // new SwerveTrajectoryWaypoint(5.464, 1.954, 0, 0),
+            // new SwerveTrajectoryWaypoint(6.198, 1.997, -2.356, -2.356),
+            // new SwerveTrajectoryWaypoint(7.559, 1, -1.571, -1.571)
 
             // new Pose2d(5.245, 5.955, new Rotation2d(2.622)),
             // new Pose2d(4.213, 4.564, new Rotation2d(-2.141)),
