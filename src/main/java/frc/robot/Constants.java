@@ -24,7 +24,7 @@ import frc.lib.util.SwerveTrajectoryWaypoint;
 public final class Constants {
 
     /* General constants */
-    public static final boolean tuningMode = true;
+    public static final boolean tuningMode = false;
     public static final double stickDeadband = 0.1;
     public static final String driverTab = "Drivers";
 
@@ -44,7 +44,7 @@ public final class Constants {
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
         public static final double trackWidth = Units.inchesToMeters(17.5);
         public static final double wheelBase = Units.inchesToMeters(17.5);
-        public static final double wheelDiameter = Units.inchesToMeters(3.90);
+        public static final double wheelDiameter = Units.inchesToMeters(3.95); //changed from 3.9 for new neoprene tread
         public static final double wheelCircumference = wheelDiameter * Math.PI; //0.3110484 m
         public static final double driveGearRatio = (6.86 / 1.0); //6.86:1
         public static final double angleGearRatio = (12.8 / 1.0); //12.8:1
@@ -91,7 +91,7 @@ public final class Constants {
         public static final double maxAngularVelocity = 11.5;
 
         /* Swerve Gear Scaling Values */
-        public static final double highGearValue = 1.0;
+        public static final double highGearValue = 0.7;
         public static final double lowGearValue = 0.3;
 
         /* Neutral Modes */
@@ -112,7 +112,7 @@ public final class Constants {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 1;
             public static final int canCoderID = 1;
-            public static final double angleOffset = 48.33984375;
+            public static final double angleOffset = 228.427734375 - 180; //This might be the actual one 48.33984375;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -122,7 +122,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 2;
-            public static final double angleOffset = 73.212890625;
+            public static final double angleOffset = 73.4765625; //This one might be right 73.212890625;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -132,7 +132,7 @@ public final class Constants {
             public static final int driveMotorID = 6;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 3;
-            public static final double angleOffset = 38.144;
+            public static final double angleOffset = 220.078125 - 180 ; //This one might be correct 38.144;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -142,7 +142,7 @@ public final class Constants {
             public static final int driveMotorID = 8;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 4;
-            public static final double angleOffset = 297.421875;
+            public static final double angleOffset = 297.333984375; //This one might be correct 297.421875;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -176,7 +176,7 @@ public final class Constants {
     public static final class Shooter {
 
         /* Shooter behavior constants */
-        public static final boolean calibrationMode = true;
+        public static final boolean calibrationMode = false;
         public static final boolean autoAim = false; //TODO set to true
 
 
@@ -256,10 +256,12 @@ public final class Constants {
             // {2.06 + Units.feetToMeters(4)/2, 2300, 20.5},
             // {2.43 + Units.feetToMeters(4)/2, 2400, 24.0},
             {2.16 + Units.feetToMeters(4)/2, 2250, 23},
+            {2.35 + Units.feetToMeters(4)/2, 2250, 23.5}, //TODO remove if not work
             {2.61 + Units.feetToMeters(4)/2, 2425, 24},
             {3.17 + Units.feetToMeters(4)/2, 2500, 25},
             {3.64 + Units.feetToMeters(4)/2, 2700, 26.5},
-            {4.20 + Units.feetToMeters(4)/2, 3100, 28.9}
+            {4.20 + Units.feetToMeters(4)/2, 3100, 28.9},
+            {7.58, 3600, 35}
         };
 
         public static final double[] shooterLowMap = 

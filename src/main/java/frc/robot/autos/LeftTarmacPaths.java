@@ -23,9 +23,8 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new leftTarmacPaths. */
-  public LeftTarmacPaths(Swerve s_Swerve, String position, int numBalls) {    
+  public LeftTarmacPaths(Swerve s_Swerve, SwerveTrajectoryWaypoint startPos, int numBalls) {    
     
-    SwerveTrajectoryWaypoint startPos = AutoCommands.getStartingPose("Left" + position);
     waypointIndex = 0;
 
     SwerveTrajectory leftTarmacPaths1 = new SwerveTrajectory(
@@ -34,21 +33,6 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
       AutoConstants.leftPoints [waypointIndex]
     );
 
-    SwerveTrajectory leftTarmacPaths2 = new SwerveTrajectory (
-      Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.leftPoints [waypointIndex++],
-      AutoConstants.leftPoints [waypointIndex++],
-      AutoConstants.leftPoints [waypointIndex++],
-      AutoConstants.leftPoints [waypointIndex++],
-      AutoConstants.leftPoints [waypointIndex++],
-      AutoConstants.leftPoints [waypointIndex]
-    );
-
-    SwerveTrajectory leftTarmacPaths3 = new SwerveTrajectory (
-      Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.leftPoints [waypointIndex++],
-      AutoConstants.leftPoints [waypointIndex]
-    );
     var thetaController =
         new ProfiledPIDController(
           Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -63,30 +47,6 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
           new PIDController(Constants.Swerve.yKP, 0, 0),
           thetaController,
           leftTarmacPaths1.getAngleSupplier(),
-          s_Swerve::setModuleStates,
-          s_Swerve);
-
-    SwerveControllerCommand swerveControllerCommand2 = 
-      new SwerveControllerCommand(
-          leftTarmacPaths2.getTrajectory(),
-          s_Swerve::getPose,
-          Constants.Swerve.swerveKinematics,
-          new PIDController(Constants.Swerve.xKP, 0, 0),
-          new PIDController(Constants.Swerve.yKP, 0, 0),
-          thetaController,
-          leftTarmacPaths2.getAngleSupplier(),
-          s_Swerve::setModuleStates,
-          s_Swerve);
-
-    SwerveControllerCommand swerveControllerCommand3 = 
-      new SwerveControllerCommand(
-          leftTarmacPaths3.getTrajectory(),
-          s_Swerve::getPose,
-          Constants.Swerve.swerveKinematics,
-          new PIDController(Constants.Swerve.xKP, 0, 0),
-          new PIDController(Constants.Swerve.yKP, 0, 0),
-          thetaController,
-          leftTarmacPaths3.getAngleSupplier(),
           s_Swerve::setModuleStates,
           s_Swerve);
 
@@ -114,44 +74,5 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
         new InstantCommand(() -> States.stopIntake()),
         new InstantCommand(() -> States.deactivateShooter())
       );
-      if(numBalls >= 4) {
-        addCommands(
-        //Does the second trajectory while intaking and picks up 2 balls
-        new InstantCommand(() -> States.intake()),
-        swerveControllerCommand2,
-
-        new InstantCommand(() -> States.stopIntake()),
-
-        //Activates the shooter and shoots the 2 balls
-        new InstantCommand(() -> States.activateShooter()),
-        new WaitCommand(1.0), 
-        
-        new ParallelDeadlineGroup(
-          new WaitCommand(1),
-          new InstantCommand(() -> States.feed())),
-
-        new InstantCommand(() -> States.deactivateShooter()),
-        new InstantCommand(() -> States.stopIntake())
-        );
-      }
-      if(numBalls >= 5) {
-        addCommands(
-        //Does the fourth trajectory while intaking and picks up 1 ball
-        new InstantCommand(() -> States.intake()),
-        swerveControllerCommand3,
-        new InstantCommand(() -> States.stopIntake()),
-
-        //Activated the shooter and shoots the ball
-        new InstantCommand(() -> States.activateShooter()),
-        new WaitCommand(1.0), 
-        
-        new ParallelDeadlineGroup(
-          new WaitCommand(1),
-          new InstantCommand(() -> States.feed())),
-
-        new InstantCommand(() -> States.deactivateShooter()),
-        new InstantCommand(() -> States.stopIntake())
-        );
-      }
   }
 }

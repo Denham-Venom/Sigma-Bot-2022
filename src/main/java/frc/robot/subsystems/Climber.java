@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -25,14 +26,19 @@ public class Climber extends SubsystemBase {
   private RelativeEncoder climbEncoder;
   private final ShuffleboardTab testing;
   private ClimberStates state = States.climberState;
+  private boolean checkEncoders = true;
+  private double encoderOffset = 0;
 
   public Climber() {
     // Devices
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
     // climberMotor.setStatusFrames(1000);
     climbEncoder = climberMotor.getEncoder();
-    climbEncoder.setPosition(0);
-
+    //climbEncoder.setPosition(0);
+    encoderOffset = climbEncoder.getPosition();
+    
+    SmartDashboard.putData("Set Climb Encoder Offset", new InstantCommand(() -> encoderOffset = climbEncoder.getPosition()));
+    
     // Shuffleboard
     testing = Shuffleboard.getTab("Testing");
     testing.add("Climber Extend Piston", new InstantCommand(
@@ -51,14 +57,22 @@ public class Climber extends SubsystemBase {
   }
 
   public void setPower(double power){
-    if (power > 0 && climbEncoder.getPosition() < Constants.Climber.climberHighLimit){
-      climberMotor.set(ControlType.kDutyCycle, power);
-    }
-    else if( power < 0 && climbEncoder.getPosition() > Constants.Climber.climberLowLimit){
-      climberMotor.set(ControlType.kDutyCycle, power);
-    }
-    else{
-      climberMotor.set(ControlType.kDutyCycle, 0);
+    boolean newCheckEncoders = SmartDashboard.getBoolean("Climb Soft Limits", true);
+    if(!newCheckEncoders) {
+      checkEncoders = newCheckEncoders; //false
+        //SmartDashboard.putNumber( "Encoder reset successful", climbEncoder.setPosition(0).value );
+      climberMotor.set(power);
+    } else {
+      checkEncoders = newCheckEncoders; //true;
+      if (power > 0 && climbEncoder.getPosition() < encoderOffset + Constants.Climber.climberHighLimit){
+        climberMotor.set(ControlType.kDutyCycle, power);
+      }
+      else if( power < 0 && climbEncoder.getPosition() > encoderOffset + Constants.Climber.climberLowLimit){
+        climberMotor.set(ControlType.kDutyCycle, power);
+      }
+      else{
+        climberMotor.set(ControlType.kDutyCycle, 0);
+      }
     }
   }
 
@@ -70,6 +84,7 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     double climbEncoderPos = climbEncoder.getPosition();
     SmartDashboard.putNumber("Climber Encoder", climbEncoderPos);
+    SmartDashboard.putNumber("Encoder Offset", encoderOffset);
   }
 }
 

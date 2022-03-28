@@ -24,16 +24,11 @@ public class AutoCommands {
         left, right
     };
 
-    public enum StartingPosition {
-        left, middle, right, optimized
-    };
-
     public enum NumberOfBalls {
-        zero, two, three, four, five
+        zero, two, three, five
     };
 
     static boolean leftTarmac;
-    static String position;
     static int numBalls;
 
     // "RightMid" - first word: left/right tarmac, second word: left/mid/right
@@ -41,36 +36,11 @@ public class AutoCommands {
     // So the above example would be the Right Tarmac in the Middle Position
     private static Map<String, SwerveTrajectoryWaypoint> startPositions = Map.ofEntries(
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "LeftRight",
-            new SwerveTrajectoryWaypoint(6.764, 5.712, 2.035, 2.035) //TODO
-        ),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "LeftMid",
-            new SwerveTrajectoryWaypoint(7.022, 4.814, 2.775, 2.775) //TODO
-        ),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "LeftLeft",
-            new SwerveTrajectoryWaypoint(5.962, 3.958, 3.141, 3.141) //TODO
-        ),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "RightRight",
-            new SwerveTrajectoryWaypoint(8.48, 1.833, -1.561, -2.561) //TODO test
-            
-        ),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "RightMid",
-            new SwerveTrajectoryWaypoint(7.716, 2.811, -1.920, -1.920) //tested
-        ),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "RightLeft",
-            new SwerveTrajectoryWaypoint(6.506, 2.56, -2.283, -1.097) //TODO test
-        ),
-        new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "RightOptimized",
+            "Right",
             new SwerveTrajectoryWaypoint(7.524, 1.756, -1.555,  -1.555)
         ),
         new AbstractMap.SimpleImmutableEntry<String, SwerveTrajectoryWaypoint>(
-            "LeftOptimized",
+            "Left",
             new SwerveTrajectoryWaypoint(7.524, 1.756, -1.555,  -1.555)
         )
     );
@@ -97,26 +67,6 @@ public class AutoCommands {
         }
     }
 
-    public static void setPosition(StartingPosition aPosition) {
-        switch (aPosition) {
-            case left:
-                position = "Left";
-                break;
-            case middle:
-                position = "Mid";
-                break;
-            case right:
-                position = "Right";
-                break;
-            case optimized:
-                position = "Optimized";
-                break;
-            default:
-                position = "Left";
-                break;
-        }
-    }
-
     public static void setBalls(NumberOfBalls balls) {
         switch (balls) {
             case two:
@@ -124,9 +74,6 @@ public class AutoCommands {
                 break;
             case three:
                 numBalls = 3;
-                break;
-            case four:
-                numBalls = 4;
                 break;
             case five:
                 numBalls = 5;
@@ -148,28 +95,28 @@ public class AutoCommands {
     public static Command getSelectedAuto() {
         if(swerve == null) return null;
         if (leftTarmac) {
+            var start = getStartingPose("Left");
             if (numBalls == 0){
                 return new InstantCommand(
                     () -> {
-                        var start = getStartingPose("Left" + position);
                         swerve.resetOdometry(start.getPositionAndOrientation());
                     }
-                );
-            }
-            return new LeftTarmacPaths(swerve, position, numBalls);
+                    );
+                }
+            return new LeftTarmacPaths(swerve, start, numBalls);
         } else {
-            if (position.compareTo("Optimized") == 0){
+            var start = getStartingPose("Right");
+            if (numBalls == 5){
                 return optimizedRightPaths;
             }
             if (numBalls == 0){
                 return new InstantCommand(
                     () -> {
-                        var start = getStartingPose("Right" + position);
                         swerve.resetOdometry(start.getPositionAndOrientation());
                     }
                 );
             }
-            return new RightTarmacPaths(swerve, position, numBalls);
+            return new RightTarmacPaths(swerve, start, numBalls);
         }
     }
 }

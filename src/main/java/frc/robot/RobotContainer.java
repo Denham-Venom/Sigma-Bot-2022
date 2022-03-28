@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -113,7 +114,6 @@ public class RobotContainer {
   // SendableChooser<Command> m_chooser = new SendableChooser<>();
   SendableChooser<AutoCommands.NumberOfBalls> m_chooseBall = new SendableChooser<>();
   SendableChooser<AutoCommands.StartingTarmac> m_chooseTarmac = new SendableChooser<>();
-  SendableChooser<AutoCommands.StartingPosition> m_choosePosition = new SendableChooser<>();
 
   private void configureButtonBindings() {
 
@@ -213,6 +213,8 @@ public class RobotContainer {
   };
 
   private void configureShuffleboard() {
+    SmartDashboard.putBoolean("Climb Soft Limits", true);
+
     //Instatiate tabs
     Shuffleboard.getTab("Testing");
     Shuffleboard.getTab("Tuning");
@@ -222,20 +224,12 @@ public class RobotContainer {
     m_chooseBall.setDefaultOption("0 Balls", AutoCommands.NumberOfBalls.zero);
     m_chooseBall.addOption("2 Balls", AutoCommands.NumberOfBalls.two);
     m_chooseBall.addOption("3 Balls", AutoCommands.NumberOfBalls.three);
-    m_chooseBall.addOption("4 Balls", AutoCommands.NumberOfBalls.four);
     m_chooseBall.addOption("5 Balls", AutoCommands.NumberOfBalls.five);
-
-    m_choosePosition.setDefaultOption("Middle of Tarmac", AutoCommands.StartingPosition.middle);
-    m_choosePosition.addOption("Left of Tarmac", AutoCommands.StartingPosition.left);
-    m_choosePosition.addOption("Right of Tarmac", AutoCommands.StartingPosition.right);
-    m_choosePosition.addOption("Optimized", AutoCommands.StartingPosition.optimized);
 
     m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.StartingTarmac.right);
     m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
     // Puts the chooser on the dashboard
-    //SmartDashboard.putData("auto", m_chooser);
     Drivers.add("Auto # Balls", m_chooseBall);
-    Drivers.add("Auto Choose Position", m_choosePosition);
     Drivers.add("Auto Choose Tarmac", m_chooseTarmac);
   }
 
@@ -249,8 +243,6 @@ public class RobotContainer {
 
     AutoCommands.StartingTarmac tarmac = m_chooseTarmac.getSelected();
     AutoCommands.setTarmac(tarmac);
-    AutoCommands.StartingPosition start = m_choosePosition.getSelected();
-    AutoCommands.setPosition(start);
     AutoCommands.NumberOfBalls balls = m_chooseBall.getSelected();
     AutoCommands.setBalls(balls);
 

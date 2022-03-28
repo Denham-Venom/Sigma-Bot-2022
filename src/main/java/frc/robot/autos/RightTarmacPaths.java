@@ -24,11 +24,9 @@ public class RightTarmacPaths extends SequentialCommandGroup {
   private int waypointIndex;
 
   /** Creates a new rightTarmacPaths. */
-  public RightTarmacPaths(Swerve s_Swerve, String position, int numBalls) {
+  public RightTarmacPaths(Swerve s_Swerve, SwerveTrajectoryWaypoint startPos, int numBalls) {
 
     waypointIndex = 0;
-    SwerveTrajectoryWaypoint startPos = AutoCommands.getStartingPose("Right" + position);
-
 
     SwerveTrajectory rightTarmacPaths1 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig, 
