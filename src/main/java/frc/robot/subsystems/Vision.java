@@ -27,7 +27,7 @@ public class Vision extends SubsystemBase {
       Constants.Vision.limelightAngle,
       Constants.Vision.goalHeight
     );
-    limelight.ledState(ledStates.off);
+    limelight.ledState(ledStates.on);
   }
 
   public Limelight getLimelight() {
@@ -42,7 +42,7 @@ public class Vision extends SubsystemBase {
         limelight.ledState(ledStates.on);
       }
       else{
-        limelight.ledState(ledStates.off);
+        limelight.ledState(ledStates.on);
       }
     }
     if(Constants.Shooter.calibrationMode) limelight.ledState(ledStates.on);

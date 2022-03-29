@@ -27,7 +27,7 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
   public OptimizedRightPaths(Swerve s_Swerve) {
 
     waypointIndex = 0;
-    SwerveTrajectoryWaypoint startPos = AutoCommands.getStartingPose("RightOptimized");
+    SwerveTrajectoryWaypoint startPos = AutoCommands.getStartingPose("Right");
 
     SwerveTrajectory opRightPaths1 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig, 

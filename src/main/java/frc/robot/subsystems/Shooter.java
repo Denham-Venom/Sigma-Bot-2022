@@ -51,6 +51,7 @@ public class Shooter extends SubsystemBase {
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
   private ShuffleboardTab testing = Shuffleboard.getTab("Testing");
   private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
+  private ShuffleboardTab drivers = Shuffleboard.getTab("Drivers");
   private NetworkTableEntry shootP = tuning.add("Shoot P", 0).getEntry();
   private NetworkTableEntry shootI = tuning.add("Shoot I", 0).getEntry();
   private NetworkTableEntry shootD = tuning.add("Shoot D", 0).getEntry();
@@ -66,8 +67,8 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry tuneHood = tuning.add("Tune Hood", false).getEntry();
   private NetworkTableEntry hoodPIDOut = tuning.add("HoodPIDOut", 0.).getEntry();
   private NetworkTableEntry hoodLimitSwitchPressed = tuning.add("HoodLimitPressed", false).getEntry();
-  private ShuffleboardTab drivers = Shuffleboard.getTab("Drivers");
   private NetworkTableEntry hoodReady = drivers.add("Hood Ready", false).getEntry();
+  private NetworkTableEntry getDistEntry = drivers.add("GetDist", 0).getEntry();
   private PIDController hoodController;
   private ShooterStates state;
   private Swerve swerve;
@@ -127,6 +128,8 @@ public class Shooter extends SubsystemBase {
       shooterMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][1]));
       hoodMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
     }
+
+    
   }
 
   public double getDistanceToCenterGoal(){
@@ -249,6 +252,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    getDistEntry.setDouble(getDistanceToCenterGoal());
     
     boolean hoodDown = !hoodLimit.get();
     hoodLimitSwitchPressed.setBoolean(hoodDown);
