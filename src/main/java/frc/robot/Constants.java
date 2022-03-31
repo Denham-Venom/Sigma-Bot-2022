@@ -113,7 +113,7 @@ public final class Constants {
             public static final int driveMotorID = 2;
             public static final int angleMotorID = 1;
             public static final int canCoderID = 1;
-            public static final double angleOffset = 228.1640625 - 180; //This might be the actual one 48.33984375;
+            public static final double angleOffset = 228.515625 - 180; //This might be the actual one 48.33984375;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -123,7 +123,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 2;
-            public static final double angleOffset = 74.1796875; //This one might be right 73.212890625;
+            public static final double angleOffset = 73.7402344; //This one might be right 73.212890625;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -133,7 +133,7 @@ public final class Constants {
             public static final int driveMotorID = 6;
             public static final int angleMotorID = 5;
             public static final int canCoderID = 3;
-            public static final double angleOffset = 220.25390625 - 180 ; //This one might be correct 38.144;
+            public static final double angleOffset = 220.341796875 - 180 ; //This one might be correct 38.144;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -143,7 +143,7 @@ public final class Constants {
             public static final int driveMotorID = 8;
             public static final int angleMotorID = 7;
             public static final int canCoderID = 4;
-            public static final double angleOffset = 297.861328125; //This one might be correct 297.421875;
+            public static final double angleOffset = 297.509765625; //This one might be correct 297.421875;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -177,7 +177,7 @@ public final class Constants {
     public static final class Shooter {
 
         /* Shooter behavior constants */
-        public static final boolean calibrationMode = true;
+        public static final boolean calibrationMode = false;
         public static final boolean autoAim = false; //TODO set to true
 
 
@@ -271,6 +271,7 @@ public final class Constants {
             {1.75 + Units.feetToMeters(4)/2, 2000, 17},
             {2.17 + Units.feetToMeters(4)/2, 2050, 20},
             {2.67 + Units.feetToMeters(4)/2, 2100, 21},
+            {2.93 + Units.feetToMeters(4)/2, 2175, 22},
             {3.19 + Units.feetToMeters(4)/2, 2250, 23},
             {3.67 + Units.feetToMeters(4)/2, 2400, 23},
             {4.18 + Units.feetToMeters(4)/2, 2425, 25},
@@ -451,6 +452,20 @@ public final class Constants {
             new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, 0.724),      //part4 start get ball 3 and 4
             new SwerveTrajectoryWaypoint(3.615, 2.952, -2.938, 0.533)     //part4 end go to shoot
         };
+
+        public static final SwerveTrajectoryWaypoint[] optimizedRightPointsBlue =
+        {
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end got ball 1
+            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.597),  //part2 start go to ball 2            
+            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, 2.379),  //part2 end got ball 2
+            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, -2.975), //part3 start go ball 3 and 4
+            new SwerveTrajectoryWaypoint(1.358, 1.426, -2.744, -3.005),      //part3 mid get ball 3 and 4
+            new SwerveTrajectoryWaypoint(1.358, 1.426, -2.744, 0.724),      //part4 start get ball 3 and 4
+            new SwerveTrajectoryWaypoint(3.615, 2.952, -2.938, 0.533)     //part4 end go to shoot
+        };
+
+        // public static final SwerveTrajectoryWaypoint blueFixedPt = new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, -3.005);
+        // public static final SwerveTrajectoryWaypoint blueFixedPt2 = new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, 0.724);
     }
     
 }

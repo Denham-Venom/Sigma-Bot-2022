@@ -8,6 +8,7 @@ import java.util.AbstractMap;
 import java.util.Map;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.lib.util.SwerveTrajectoryWaypoint;
@@ -18,6 +19,7 @@ public class AutoCommands {
 
     private static Swerve swerve;
     private static OptimizedRightPaths optimizedRightPaths;
+    private static OptimizedRightPathsBlue optimizedRightPathsBlue;
 
 
     public enum StartingTarmac {
@@ -90,6 +92,7 @@ public class AutoCommands {
     public static void setSwerve(Swerve swerve) {
         AutoCommands.swerve = swerve;
         optimizedRightPaths = new OptimizedRightPaths(swerve);
+        optimizedRightPathsBlue = new OptimizedRightPathsBlue(swerve);
     }
 
     public static Command getSelectedAuto() {
@@ -107,7 +110,15 @@ public class AutoCommands {
         } else {
             var start = getStartingPose("Right");
             if (numBalls == 5){
-                return optimizedRightPaths;
+                var alliance = DriverStation.getAlliance();
+                switch(alliance) {
+                    case Red:
+                        return optimizedRightPaths;
+                    case Blue:
+                        return optimizedRightPathsBlue;
+                    default:
+                        return new RightTarmacPaths(swerve, start, 0);
+                }
             }
             if (numBalls == 0){
                 return new InstantCommand(
