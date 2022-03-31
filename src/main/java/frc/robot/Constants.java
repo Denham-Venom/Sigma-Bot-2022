@@ -177,7 +177,7 @@ public final class Constants {
     public static final class Shooter {
 
         /* Shooter behavior constants */
-        public static final boolean calibrationMode = false;
+        public static final boolean calibrationMode = true;
         public static final boolean autoAim = false; //TODO set to true
 
 
@@ -236,7 +236,7 @@ public final class Constants {
         public static final PIDGains hoodPID = new PIDGains(0.05, 0,
          0.001, 0.12); //contains up FF
         public static final double hoodDownFF = -0.05;
-        public static final double hoodControllerToleranceDegrees = 0.5;
+        public static final double hoodControllerToleranceDegrees = 0.3;
         public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed  
 
         /* Shooter Calibration Values */
@@ -279,7 +279,7 @@ public final class Constants {
         public static final double goalDiameter = Units.feetToMeters(4);
 
         public static final double limelightHeight = Units.inchesToMeters(21.0);
-        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(48);
+        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(47);
     }
 
 
