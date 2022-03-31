@@ -271,9 +271,12 @@ public final class Constants {
             {1.75 + Units.feetToMeters(4)/2, 2000, 17},
             {2.17 + Units.feetToMeters(4)/2, 2050, 20},
             {2.67 + Units.feetToMeters(4)/2, 2100, 21},
+            {2.85 + Units.feetToMeters(4)/2, 2175, 23.3},
             {2.93 + Units.feetToMeters(4)/2, 2175, 22},
             {3.19 + Units.feetToMeters(4)/2, 2250, 23},
+            {3.39 + Units.feetToMeters(4)/2, 2300, 23.9},
             {3.67 + Units.feetToMeters(4)/2, 2400, 23},
+            {4.08 + Units.feetToMeters(4)/2, 2350, 25.7},
             {4.18 + Units.feetToMeters(4)/2, 2425, 25},
             {4.74 + Units.feetToMeters(4)/2, 2550, 27}, 
             {5.66 + Units.feetToMeters(4)/2, 2650, 29}
