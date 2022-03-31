@@ -240,7 +240,7 @@ public final class Constants {
         public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed  
 
         /* Shooter Calibration Values */
-        public static final double[][] shooterMap = 
+        public static final double[][] oldShooterMap = 
         // {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
         {
             // {1.84, 2200, 14.6},
@@ -265,6 +265,19 @@ public final class Constants {
             //{7.58, 3600, 35}
         };
 
+        public static final double[][] shooterMap = 
+        {
+            {1.27 + Units.feetToMeters(4)/2, 2000, 15},
+            {1.75 + Units.feetToMeters(4)/2, 2000, 17},
+            {2.17 + Units.feetToMeters(4)/2, 2050, 20},
+            {2.67 + Units.feetToMeters(4)/2, 2100, 21},
+            {3.19 + Units.feetToMeters(4)/2, 2250, 23},
+            {3.67 + Units.feetToMeters(4)/2, 2400, 23},
+            {4.18 + Units.feetToMeters(4)/2, 2425, 25},
+            {4.74 + Units.feetToMeters(4)/2, 2550, 27}, 
+            {5.66 + Units.feetToMeters(4)/2, 2650, 29}
+        };
+
         public static final double[] shooterLowMap = 
         // distance, shooter speed, shooter angle
         {1.83, 900, 14.00};
@@ -275,7 +288,9 @@ public final class Constants {
 
     /* Container for vision subsystem constants */
     public static final class Vision {
-        public static final double goalHeight = Units.inchesToMeters(101.375);
+        public static final double practiceFieldHeight = Units.inchesToMeters(103);
+        public static final double compFieldHeight = Units.inchesToMeters(104);
+        public static final double goalHeight = practiceFieldHeight;//Units.inchesToMeters(101.375);
         public static final double goalDiameter = Units.feetToMeters(4);
 
         public static final double limelightHeight = Units.inchesToMeters(21.0);
