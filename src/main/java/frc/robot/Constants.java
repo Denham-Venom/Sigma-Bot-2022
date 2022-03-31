@@ -290,7 +290,7 @@ public final class Constants {
     public static final class Vision {
         public static final double practiceFieldHeight = Units.inchesToMeters(103);
         public static final double compFieldHeight = Units.inchesToMeters(104);
-        public static final double goalHeight = practiceFieldHeight;//Units.inchesToMeters(101.375);
+        public static final double goalHeight = compFieldHeight;//Units.inchesToMeters(101.375);
         public static final double goalDiameter = Units.feetToMeters(4);
 
         public static final double limelightHeight = Units.inchesToMeters(21.0);
