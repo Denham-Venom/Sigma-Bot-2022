@@ -60,7 +60,7 @@ public class RobotContainer {
   private final JoystickButton opToggleIntakePiston = new JoystickButton(operator, XboxController.Button.kY.value);
   private final JoystickButton opOuttake = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
   private final JoystickButton opHomeHood = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-  // private final JoystickButton opAllowClimb = new JoystickButton(operator, XboxController.Button.kStart.value);
+  private final JoystickButton opShooterReady = new JoystickButton(operator, XboxController.Button.kStart.value);
   // private final JoystickButton opDisallowClimb = new JoystickButton(operator, XboxController.Button.kBack.value);
   // private final Trigger opShootLow = new Trigger(() -> operator.getRawAxis(XboxController.Axis.kRightTrigger.value) != 0);
   private final POVButton opExtendClimber = new POVButton(operator, 0); //up
@@ -84,9 +84,9 @@ public class RobotContainer {
     //m_pHub = new PneumaticHub();
     //m_pHub = new PneumaticsControlModule();
     m_Vision = new Vision();
-    m_Intaker = new Intaker();
     s_Swerve = new Swerve(m_Vision);
     m_Shooter = new Shooter(m_Vision, s_Swerve);
+    m_Intaker = new Intaker(m_Shooter);
     m_Climber = new Climber();
     AutoCommands.setSwerve(s_Swerve);
 
@@ -168,6 +168,9 @@ public class RobotContainer {
     opFeedShooter.whileHeld(new StartEndCommand(
       () -> States.feed(), 
       () -> States.stopIntake()
+    ));
+    opShooterReady.whenPressed(new InstantCommand( 
+      () -> m_Intaker.toggleCheckShooter()
     ));
     opToggleUseIntakeSensors.whenPressed(new InstantCommand(
       () -> m_Intaker.toggleUseSensors()

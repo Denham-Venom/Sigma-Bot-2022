@@ -226,6 +226,7 @@ public final class Constants {
         public static final double hoodHighLimit = 90;
         public static final double turretLowLimit = 0;
         public static final double turretHighLimit = 0;
+        public static final double tolerance = 100;
 
         /* Shooter characterization and tuning values */
         public static final double shootKs = 0.75347;

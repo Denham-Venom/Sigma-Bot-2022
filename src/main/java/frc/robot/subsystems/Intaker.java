@@ -28,6 +28,7 @@ import frc.robot.States.IntakeStates;
 
 public class Intaker extends SubsystemBase {
   /** Creates a new Intaker. */
+  private Shooter m_Shooter;
  
   // indexer 1 by intake
   private LazyTalonFX indexerMotor;
@@ -41,6 +42,7 @@ public class Intaker extends SubsystemBase {
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
   private boolean useSensors = true;
+  private boolean useShooterTarget = false;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
 
@@ -48,9 +50,11 @@ public class Intaker extends SubsystemBase {
   NetworkTableEntry useIntakeSensors = Drivers.add("Use Sensors", false).getEntry();
   NetworkTableEntry intakeSensorValue = Drivers.add("intakeSensor", false).getEntry();
   NetworkTableEntry shooterSensorValue = Drivers.add("shooterSensor", false).getEntry();
+  NetworkTableEntry useShooterTargetEntry = Drivers.add("Checking Shooter RPM", false).getEntry();
   
-  public Intaker(){
+  public Intaker(Shooter m_shooter){
     //Instantiate devices
+    m_Shooter = m_shooter;
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
     indexerMotor.setStatusFrames(255);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
@@ -87,6 +91,11 @@ public class Intaker extends SubsystemBase {
     useIntakeSensors.setBoolean(useSensors);
   }
 
+  public void toggleCheckShooter() {
+    useShooterTarget = !useShooterTarget;
+    useShooterTargetEntry.setBoolean(useShooterTarget);
+  }
+
 
   @Override
   public void periodic() {
@@ -102,7 +111,7 @@ public class Intaker extends SubsystemBase {
     }
 
     // Check for state update or if intaking
-    if(States.intakeState != state || state == States.IntakeStates.intaking) {
+    if(States.intakeState != state || state == States.IntakeStates.intaking || state == States.IntakeStates.feeding) {
       state = States.intakeState;
       switch(States.intakeState) {
         case intaking:
@@ -139,11 +148,19 @@ public class Intaker extends SubsystemBase {
         case feeding: 
         // Runs all intake/indexer motors
           //TODO only spin if drivetrain and hood are ready
-          spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
-          CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
-          new WaitCommand(0.15),
-            new InstantCommand(() -> indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed))
-          ));
+          if(!useShooterTarget) {
+            spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
+            CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
+            new WaitCommand(0.15),
+              new InstantCommand(() -> indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed))
+            ));
+          } else if(m_Shooter.isShooterReady()){
+            spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
+            indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
+          } else {
+            spinUpMotor.set(ControlType.kDutyCycle, 0);
+            indexerMotor.set(ControlMode.PercentOutput, 0);
+          }
           //intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
           break;
         case reverseFeeding:

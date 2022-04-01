@@ -45,6 +45,7 @@ public class Shooter extends SubsystemBase {
   //   this.hoodEncoder = encoder;
   //   this.hoodEncoder.setPositionConversionFactor(Constants.Shooter.hoodGearRatio * 360 /*degrees*/);
   // };
+  private double targetShooterRPM = 0;
   private DutyCycleEncoder hoodEncoderAbsolute = new DutyCycleEncoder(new DigitalInput(Constants.Shooter.hoodEncoderAbsoluteChannel));
   private Encoder hoodEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
@@ -68,6 +69,7 @@ public class Shooter extends SubsystemBase {
   private NetworkTableEntry hoodPIDOut = tuning.add("HoodPIDOut", 0.).getEntry();
   private NetworkTableEntry hoodLimitSwitchPressed = tuning.add("HoodLimitPressed", false).getEntry();
   private NetworkTableEntry hoodReady = drivers.add("Hood Ready", false).getEntry();
+  private boolean shooterReady = false;
   private NetworkTableEntry getDistEntry = drivers.add("GetDist", 0).getEntry();
   private PIDController hoodController;
   private ShooterStates state;
@@ -145,6 +147,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterRPM(double shooterRPM){
+    targetShooterRPM = shooterRPM;
     double falconVelocity = Conversions.RPMToFalcon(shooterRPM, Constants.Shooter.shooterGearRatio);
     shooterMotorParent.set(ControlMode.Velocity, falconVelocity);//, DemandType.ArbitraryFeedForward, Constants.Shooter.shooterFF.calculate(falconVelocity));
   }
@@ -210,6 +213,13 @@ public class Shooter extends SubsystemBase {
 
   public void stopHood() {
     hoodMotor.set(ControlMode.PercentOutput, 0);
+  }
+
+  public boolean isShooterReady() {
+    if(getShooterRPM() >= targetShooterRPM - Constants.Shooter.tolerance && getShooterRPM() <= targetShooterRPM + Constants.Shooter.tolerance) {
+      return true;
+    }
+    return false;
   }
     
 
