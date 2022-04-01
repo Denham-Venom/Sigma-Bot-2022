@@ -42,7 +42,7 @@ public class Intaker extends SubsystemBase {
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
   private boolean useSensors = true;
-  private boolean useShooterTarget = false;
+  private boolean useShooterTarget = true;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
 
@@ -50,7 +50,7 @@ public class Intaker extends SubsystemBase {
   NetworkTableEntry useIntakeSensors = Drivers.add("Use Sensors", false).getEntry();
   NetworkTableEntry intakeSensorValue = Drivers.add("intakeSensor", false).getEntry();
   NetworkTableEntry shooterSensorValue = Drivers.add("shooterSensor", false).getEntry();
-  NetworkTableEntry useShooterTargetEntry = Drivers.add("Checking Shooter RPM", false).getEntry();
+  NetworkTableEntry useShooterTargetEntry = Drivers.add("Checking Shooter RPM", true).getEntry();
   
   public Intaker(Shooter m_shooter){
     //Instantiate devices
