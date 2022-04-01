@@ -350,7 +350,7 @@ public final class Constants {
         public static final TalonConstants intakeMotorConstants = new TalonConstants(
             intakeID, 
             talonCurrentLimit.supplyCurLim40, 
-            NeutralMode.Brake, 
+            NeutralMode.Coast, 
             InvertType.InvertMotorOutput
         );
         public static final TalonConstants indexMotorConstants = new TalonConstants(
