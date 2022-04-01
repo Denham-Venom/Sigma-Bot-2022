@@ -455,7 +455,7 @@ public final class Constants {
             new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, -2.975), //part3 start go ball 3 and 4
             new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, -3.005),      //part3 mid get ball 3 and 4
             new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, 0.724),      //part4 start get ball 3 and 4
-            new SwerveTrajectoryWaypoint(3.615, 2.952, -2.938, 0.533)     //part4 end go to shoot
+            new SwerveTrajectoryWaypoint(3.955, 3.08, -2.938, 0.533)     //part4 end go to shoot
         };
 
         public static final SwerveTrajectoryWaypoint[] optimizedRightPointsBlue =
@@ -466,7 +466,7 @@ public final class Constants {
             new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, -2.975), //part3 start go ball 3 and 4
             new SwerveTrajectoryWaypoint(1.358, 1.426, -2.744, -3.005),      //part3 mid get ball 3 and 4
             new SwerveTrajectoryWaypoint(1.358, 1.426, -2.744, 0.724),      //part4 start get ball 3 and 4
-            new SwerveTrajectoryWaypoint(3.615, 2.952, -2.938, 0.533)     //part4 end go to shoot
+            new SwerveTrajectoryWaypoint(3.955, 3.08, -2.938, 0.533)     //part4 end go to shoot
         };
 
         // public static final SwerveTrajectoryWaypoint blueFixedPt = new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, -3.005);
