@@ -45,7 +45,7 @@ public final class Constants {
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
         public static final double trackWidth = Units.inchesToMeters(17.5);
         public static final double wheelBase = Units.inchesToMeters(17.5);
-        public static final double wheelDiameter = Units.inchesToMeters(3.95); //changed from 3.9 for new neoprene tread
+        public static final double wheelDiameter = Units.inchesToMeters(3.90); //changed from 3.9 for new neoprene tread
         public static final double wheelCircumference = wheelDiameter * Math.PI; //0.3110484 m
         public static final double driveGearRatio = (6.86 / 1.0); //6.86:1
         public static final double angleGearRatio = (12.8 / 1.0); //12.8:1
@@ -277,7 +277,7 @@ public final class Constants {
             {3.19 + Units.feetToMeters(4)/2, 2250, 23},
             {3.39 + Units.feetToMeters(4)/2, 2300, 23.9},
             {3.67 + Units.feetToMeters(4)/2, 2400, 23},
-            // {3.91 + Units.feetToMeters(4)/2, 2300, 24.5} {Check again}
+            {3.91 + Units.feetToMeters(4)/2, 2300, 24.5},
             {4.08 + Units.feetToMeters(4)/2, 2350, 25.7},
             {4.18 + Units.feetToMeters(4)/2, 2425, 25},
             {4.74 + Units.feetToMeters(4)/2, 2550, 27}, 
