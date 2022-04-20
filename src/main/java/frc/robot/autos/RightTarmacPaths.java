@@ -23,32 +23,39 @@ public class RightTarmacPaths extends SequentialCommandGroup {
   //private Timer m_timer;
   private int waypointIndex;
 
-  /** Creates a new rightTarmacPaths. */
-  public RightTarmacPaths(Swerve s_Swerve, SwerveTrajectoryWaypoint startPos, int numBalls) {
+  /** Creates a new OptimizedRightPaths. */
+  public RightTarmacPaths(Swerve s_Swerve) {
 
     waypointIndex = 0;
+    SwerveTrajectoryWaypoint startPos = AutoCommands.getStartingPose("Right");
 
-    SwerveTrajectory rightTarmacPaths1 = new SwerveTrajectory(
+    SwerveTrajectory opRightPaths1 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig, 
       startPos, //start
-      AutoConstants.rightPoints [waypointIndex++] //ball1 & shoot
+      AutoConstants.optimizedRightPoints [waypointIndex++] //ball 1 & shoot
     );
     
-    SwerveTrajectory rightTarmacPaths2 = new SwerveTrajectory(
+    SwerveTrajectory opRightPaths2 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.rightPoints [waypointIndex++], //start from ball1
-      AutoConstants.rightPoints [waypointIndex++], //ball2
-      AutoConstants.rightPoints [waypointIndex++], //ball3
-      AutoConstants.rightPoints [waypointIndex++] //shoot pos
+      AutoConstants.optimizedRightPoints [waypointIndex++], //start from ball 1
+      AutoConstants.optimizedRightPoints [waypointIndex++] //go to ball 2 and shoot
     );
-    
-    // SwerveTrajectory rightTarmacPaths3 = new SwerveTrajectory(
-    //   Constants.AutoConstants.trajectoryConfig,
-    //   AutoConstants.rightPoints [waypointIndex++], //start shoot pos
-    //   AutoConstants.rightPoints [waypointIndex++], //ball4
-    //   AutoConstants.rightPoints [waypointIndex++] //end final shoot pos
-    // );
 
+    SwerveTrajectory opRightPaths3 = new SwerveTrajectory(
+      Constants.AutoConstants.trajectoryConfig,
+      AutoConstants.optimizedRightPoints [waypointIndex++], //start from ball 2
+      AutoConstants.optimizedRightPoints [waypointIndex++] //go to get ball 3 and 4
+    );
+
+    SwerveTrajectory opRightPaths4 = new SwerveTrajectory(
+      Constants.AutoConstants.trajectoryConfig,
+      AutoConstants.optimizedRightPoints [waypointIndex++], //go to get ball 3 and 4
+      AutoConstants.optimizedRightPoints [waypointIndex] //go to shoot
+    );
+
+    var xController = new PIDController(Constants.Swerve.xKP, 0, 0);
+    var yController = new PIDController(Constants.Swerve.yKP, 0, 0);
+    
     var thetaController =
         new ProfiledPIDController(
             Constants.AutoConstants.thetaKP, 0, 0, Constants.AutoConstants.kThetaControllerConstraints);
@@ -56,149 +63,115 @@ public class RightTarmacPaths extends SequentialCommandGroup {
 
     SwerveControllerCommand swerveControllerCommand1 = 
         new SwerveControllerCommand(
-            rightTarmacPaths1.getTrajectory(),
+            opRightPaths1.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
+            xController,
+            yController,
             thetaController,
-            rightTarmacPaths1.getAngleSupplier(),
+            opRightPaths1.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
 
     SwerveControllerCommand swerveControllerCommand2 = 
         new SwerveControllerCommand(
-            rightTarmacPaths2.getTrajectory(),
+            opRightPaths2.getTrajectory(),
             s_Swerve::getPose,
             Constants.Swerve.swerveKinematics,
-            new PIDController(Constants.Swerve.xKP, 0, 0),
-            new PIDController(Constants.Swerve.yKP, 0, 0),
+            xController,
+            yController,
             thetaController,
-            rightTarmacPaths2.getAngleSupplier(),
+            opRightPaths2.getAngleSupplier(),
             s_Swerve::setModuleStates,
             s_Swerve);
 
-    // SwerveControllerCommand swerveControllerCommand3 = 
-    //     new SwerveControllerCommand(
-    //         rightTarmacPaths3.getTrajectory(),
-    //         s_Swerve::getPose,
-    //         Constants.Swerve.swerveKinematics,
-    //         new PIDController(Constants.Swerve.xKP, 0, 0),
-    //         new PIDController(Constants.Swerve.yKP, 0, 0),
-    //         thetaController,
-    //         rightTarmacPaths3.getAngleSupplier(),
-    //         s_Swerve::setModuleStates,
-    //         s_Swerve);
-            
+    SwerveControllerCommand swerveControllerCommand3 = 
+        new SwerveControllerCommand(
+            opRightPaths3.getTrajectory(),
+            s_Swerve::getPose,
+            Constants.Swerve.swerveKinematics,
+            xController,
+            yController,
+            thetaController,
+            opRightPaths3.getAngleSupplier(),
+            s_Swerve::setModuleStates,
+            s_Swerve);
+
+    SwerveControllerCommand swerveControllerCommand4 = 
+        new SwerveControllerCommand(
+            opRightPaths4.getTrajectory(),
+            s_Swerve::getPose,
+            Constants.Swerve.swerveKinematics,
+            xController,
+            yController,
+            thetaController,
+            opRightPaths4.getAngleSupplier(),
+            s_Swerve::setModuleStates,
+            s_Swerve);
+
     addCommands(
       //Gets the initial pose
       new InstantCommand(() -> s_Swerve.resetOdometry(startPos.getPositionAndOrientation())),
       //Deploys the intake
       new InstantCommand(() -> States.deployIntake()),
 
-      //Picks up ball 1  
+      //GETS BALL1 AND SHOOTS BALL1 AND PRE-LOADED BALL
+
+      //Picks up 1 ball (ball1) while doing the first trajectory
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand1,
-      // new InstantCommand(() -> States.stopIntake()),
 
       //Activates the shooter and shoots the 2 balls
       new InstantCommand(() -> States.activateShooter()),
-      new WaitCommand(1.0), 
+      new WaitCommand(0.8), 
       
       new ParallelDeadlineGroup(
-        new WaitCommand(1),
+        new WaitCommand(0.8),
+        new InstantCommand(() -> States.feed())),
+
+      new InstantCommand(() -> States.stopIntake()),
+      new InstantCommand(() -> States.deactivateShooter()),
+
+      //GETS BALL2 AND SHOOTS BALL2
+
+      //picks up 1 ball (ball2) while doing the second trajectory
+      new InstantCommand(() -> States.intake()),
+      swerveControllerCommand2,
+
+      //Activates the shooter and shoots the 1 ball
+      new InstantCommand(() -> States.activateShooter()),
+      new WaitCommand(0.8), 
+      
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.8),
+        new InstantCommand(() -> States.feed())),
+
+      new InstantCommand(() -> States.stopIntake()),
+      new InstantCommand(() -> States.deactivateShooter()),
+
+       //GETS BALL3 AND BALL4 AND SHOOTS BALL3 AND BALL4
+
+      //picks up 2 balls (ball3 and ball4) while doing the third trajectory
+      new InstantCommand(() -> States.intake()),
+      swerveControllerCommand3,
+
+      //waits in front of the terminal for the human player ball
+      new WaitCommand(0.6),
+      swerveControllerCommand4,
+
+      //Activates the shooter and shoots the 2 ball
+      new InstantCommand(() -> States.activateShooter()),
+      new WaitCommand(0.8), 
+      
+      new ParallelDeadlineGroup(
+        new WaitCommand(0.8),
         new InstantCommand(() -> States.feed())),
 
       new InstantCommand(() -> States.stopIntake()),
       new InstantCommand(() -> States.deactivateShooter())
     );
-    if(numBalls == 4) {
-      addCommands(
-      //Picks up ball 2 and 3
-      new InstantCommand(() -> {
-        States.deployIntake();
-        States.intake();
-      }),
-      swerveControllerCommand2,
-    
-      new InstantCommand(() -> States.stopIntake()),
+    //new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.optimizedRightPoints [waypointIndex-1].getPositionAndOrientation()));
 
-      //Activates the shooter and shoots the 2 balls
-      new InstantCommand(() -> States.activateShooter()),
-      new WaitCommand(1.0), 
-      
-      new ParallelDeadlineGroup(
-        new WaitCommand(1),
-        new InstantCommand(() -> States.feed())),
-
-      new InstantCommand(() -> States.deactivateShooter()),
-      new InstantCommand(() -> States.stopIntake())
-      );
-    }
-    else if(numBalls == 5) {
-      addCommands(
-      //Picks up ball 2 and 3
-      new InstantCommand(() -> {
-        States.deployIntake();
-        States.intake();
-      }),
-      swerveControllerCommand2,
-    
-      new InstantCommand(() -> States.stopIntake()),
-
-      //Activates the shooter and shoots the 2 balls
-      new InstantCommand(() -> {
-        States.activateShooter();
-      }),
-      new WaitCommand(1.0), 
-      
-      new ParallelDeadlineGroup(
-        new WaitCommand(5),
-        new InstantCommand(() -> States.intakeAndFeed())),
-
-      new InstantCommand(() -> States.deactivateShooter()),
-      new InstantCommand(() -> States.stopIntake())
-      );
-      //new InstantCommand(() -> s_Swerve.resetOdometry(AutoConstants.rightPoints [waypointIndex-1].getPositionAndOrientation()));
-    }
-    // if(numBalls == 5) {
-    //   addCommands(
-    //   //Picks up ball 4
-    //   new InstantCommand(() -> {
-    //     States.deployIntake();
-    //     States.intake();
-    //   }),
-    //   swerveControllerCommand3,
-
-    //   //Activated the shooter and shoots the ball
-    //   new InstantCommand(() -> States.activateShooter()),
-    //   new WaitCommand(1.0), 
-      
-    //   new ParallelDeadlineGroup(
-    //     new WaitCommand(1),
-    //     new InstantCommand(() -> States.feed())),
-
-    //   new InstantCommand(() -> States.deactivateShooter()),
-    //   new InstantCommand(() -> States.stopIntake())
-    //   );
-    // }
-  }
+  };
 }
-
-//InstantCommand starts intaking
-//path 1
-//path 2
-//stop intaking
-//preshoot
-//feed
-//stop shooter
-//stop intake
-
-
-// public class enum Pose2d[] {
-//    case: blah
-//       code;
-//    case: blahblah
-//       code;
-//    return(code);
-// }
+    

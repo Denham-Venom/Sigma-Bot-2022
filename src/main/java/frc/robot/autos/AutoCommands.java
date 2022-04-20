@@ -18,7 +18,7 @@ import frc.robot.subsystems.Swerve;
 public class AutoCommands {
 
     private static Swerve swerve;
-    private static OptimizedRightPaths optimizedRightPaths;
+    private static RightTarmacPaths rightTarmacPaths;
     private static OptimizedRightPathsBlue optimizedRightPathsBlue;
 
 
@@ -91,7 +91,7 @@ public class AutoCommands {
 
     public static void setSwerve(Swerve swerve) {
         AutoCommands.swerve = swerve;
-        optimizedRightPaths = new OptimizedRightPaths(swerve);
+        rightTarmacPaths = new RightTarmacPaths(swerve);
         optimizedRightPathsBlue = new OptimizedRightPathsBlue(swerve);
     }
 
@@ -113,11 +113,11 @@ public class AutoCommands {
                 var alliance = DriverStation.getAlliance();
                 switch(alliance) {
                     case Red:
-                        return optimizedRightPaths;
+                        return rightTarmacPaths;
                     case Blue:
                         return optimizedRightPathsBlue;
                     default:
-                        return new RightTarmacPaths(swerve, start, 0);
+                        return rightTarmacPaths;
                 }
             }
             if (numBalls == 0){
@@ -127,7 +127,7 @@ public class AutoCommands {
                     }
                 );
             }
-            return new RightTarmacPaths(swerve, start, numBalls);
+            return new RightTarmacPaths(swerve);
         }
     }
 }

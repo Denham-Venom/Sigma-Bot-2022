@@ -110,12 +110,12 @@ public class OptimizedRightPathsBlue extends SequentialCommandGroup {
             s_Swerve);
 
     addCommands(
-      // GETS BALL1 AND SHOOTS BALL1 AND THE PRE-LOADED BALL
-      
       //Gets the initial pose
       new InstantCommand(() -> s_Swerve.resetOdometry(startPos.getPositionAndOrientation())),
       //Deploys the intake
       new InstantCommand(() -> States.deployIntake()),
+
+      //GETS BALL1 AND SHOOTS BALL1 AND THE PRE-LOADED BALL
 
       //Picks up ball 1 (ball1)
       new InstantCommand(() -> States.intake()),
@@ -155,6 +155,8 @@ public class OptimizedRightPathsBlue extends SequentialCommandGroup {
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand3,
 
+      //waits in front of the terminal to get human player ball
+      new WaitCommand(0.6),
       swerveControllerCommand4,
 
       //Activates the shooter and shoots the 1 ball

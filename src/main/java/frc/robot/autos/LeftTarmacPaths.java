@@ -37,7 +37,7 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
 
     SwerveTrajectory leftTarmacPaths2 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
-      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++], //goes to our ball and shoots
       AutoConstants.leftPoints [waypointIndex++], //goes to the far red ball 
       AutoConstants.leftPoints [waypointIndex++], //goes to the closer red ball
       AutoConstants.leftPoints [waypointIndex]  //goes to the hangar and desposes the ball
@@ -82,7 +82,7 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
         //Deploys the intake
         new InstantCommand(() -> States.deployIntake()),
 
-        //Does the first trajectory while intaking and picks one ball
+        //Does the first trajectory while intaking and picks one ball (our color)
         new InstantCommand(() -> States.intake()),
 
         swerveControllerCommand,
@@ -97,16 +97,20 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
           new WaitCommand(1),
           new InstantCommand(() -> States.feed())),
 
+        //Stops shooting
         new InstantCommand(() -> States.stopIntake()),
         new InstantCommand(() -> States.deactivateShooter()),
 
+        //Does the second trajectory while intaking and picks up the two balls (opposing color)
         new InstantCommand(() -> States.intake()),
 
         swerveControllerCommand2,
 
+        //Outakes the opposing balls into the hangar
         new InstantCommand(() -> States.outtake()),
         new WaitCommand(.3),
 
+        //Stops the intake
         new InstantCommand(() -> States.stopIntake())
   
       );
