@@ -155,6 +155,7 @@ public class OptimizedRightPaths extends SequentialCommandGroup {
       new InstantCommand(() -> States.intake()),
       swerveControllerCommand3,
 
+      new WaitCommand(0.6),
       swerveControllerCommand4,
 
       //Activates the shooter and shoots the 1 ball

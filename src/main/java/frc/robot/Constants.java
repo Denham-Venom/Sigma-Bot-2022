@@ -430,7 +430,11 @@ public final class Constants {
 
         public static final SwerveTrajectoryWaypoint[] leftPoints = 
         {
-            new SwerveTrajectoryWaypoint(6.023, 5.095, -0.794, -0.794)
+            new SwerveTrajectoryWaypoint(6.023, 5.095, -0.794, -0.794),
+            new SwerveTrajectoryWaypoint(6.023, 5.095, -0.794, -0.794),
+            new SwerveTrajectoryWaypoint(4.724, 3.681, 0.929, 0.929),
+            new SwerveTrajectoryWaypoint(5.615, 6.921, 0.731, 0.731),
+            new SwerveTrajectoryWaypoint(3.71, 6.875, -3.132, -3.132)
             // new SwerveTrajectoryWaypoint(5.245, 5.955, 2.618, 2.618),
             // new SwerveTrajectoryWaypoint(4.213, 4.564, -2.147, -2.147),
             // new SwerveTrajectoryWaypoint(1.685, 1.697, -2.374, -2.374),

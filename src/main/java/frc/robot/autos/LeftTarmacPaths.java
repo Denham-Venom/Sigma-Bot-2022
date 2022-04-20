@@ -4,6 +4,8 @@
 
 package frc.robot.autos;
 
+import com.fasterxml.jackson.databind.node.IntNode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -29,8 +31,16 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
 
     SwerveTrajectory leftTarmacPaths1 = new SwerveTrajectory(
       Constants.AutoConstants.trajectoryConfig,
-      startPos,
-      AutoConstants.leftPoints [waypointIndex++]
+      startPos, //start
+      AutoConstants.leftPoints [waypointIndex++]  //goes to our ball and shoots
+    );
+
+    SwerveTrajectory leftTarmacPaths2 = new SwerveTrajectory(
+      Constants.AutoConstants.trajectoryConfig,
+      AutoConstants.leftPoints [waypointIndex++],
+      AutoConstants.leftPoints [waypointIndex++], //goes to the far red ball 
+      AutoConstants.leftPoints [waypointIndex++], //goes to the closer red ball
+      AutoConstants.leftPoints [waypointIndex]  //goes to the hangar and desposes the ball
     );
 
     var thetaController =
@@ -47,6 +57,18 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
           new PIDController(Constants.Swerve.yKP, 0, 0),
           thetaController,
           leftTarmacPaths1.getAngleSupplier(),
+          s_Swerve::setModuleStates,
+          s_Swerve);
+
+       SwerveControllerCommand swerveControllerCommand2 = 
+      new SwerveControllerCommand(
+          leftTarmacPaths2.getTrajectory(),
+          s_Swerve::getPose,
+          Constants.Swerve.swerveKinematics,
+          new PIDController(Constants.Swerve.xKP, 0, 0),
+          new PIDController(Constants.Swerve.yKP, 0, 0),
+          thetaController,
+          leftTarmacPaths2.getAngleSupplier(),
           s_Swerve::setModuleStates,
           s_Swerve);
 
@@ -76,7 +98,17 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
           new InstantCommand(() -> States.feed())),
 
         new InstantCommand(() -> States.stopIntake()),
-        new InstantCommand(() -> States.deactivateShooter())
+        new InstantCommand(() -> States.deactivateShooter()),
+
+        new InstantCommand(() -> States.intake()),
+
+        swerveControllerCommand2,
+
+        new InstantCommand(() -> States.outtake()),
+        new WaitCommand(.3),
+
+        new InstantCommand(() -> States.stopIntake())
+  
       );
       }
   }
