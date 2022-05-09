@@ -91,14 +91,15 @@ public class RobotContainer {
     AutoCommands.setSwerve(s_Swerve);
 
     
-    s_Swerve.setDefaultCommand(new TeleopSwerve(
-      s_Swerve, 
-      driver, 
-      translationAxis, 
-      strafeAxis, 
-      rotationAxis,  
-      Constants.Swerve.openLoop
-      ));
+    s_Swerve.setDefaultCommand(
+        new TeleopSwerve(
+            s_Swerve, 
+            () -> -driver.getRawAxis(translationAxis), 
+            () -> -driver.getRawAxis(strafeAxis), 
+            () -> -driver.getRawAxis(rotationAxis),  
+            Constants.Swerve.openLoop
+        )
+    );
       
     configureShuffleboard();
     configureButtonBindings();

@@ -22,4 +22,8 @@ public class Boundaries {
     public static double curveInput(double input, int power){
         return Math.pow(Math.abs(input), power) * Math.signum(input);
     }
+
+    public static double squareInput(double input){
+        return input * Math.abs(input);
+    }
 }
