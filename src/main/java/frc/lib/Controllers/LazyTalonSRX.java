@@ -36,7 +36,7 @@ public class LazyTalonSRX extends TalonSRX {
     }
 
     /**
-     * Config using talonFxConstants.
+     * Config using talonSRXConstants.
      * @param talonSRXConstants
      */
     public LazyTalonSRX(TalonSRXConstants talonSRXConstants){

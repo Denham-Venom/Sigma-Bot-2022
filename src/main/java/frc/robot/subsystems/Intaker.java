@@ -56,11 +56,9 @@ public class Intaker extends SubsystemBase {
     //Instantiate devices
     m_Shooter = m_shooter;
     indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
-    indexerMotor.setStatusFrames(255);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     spinUpMotor.setStatusFrames(1000);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    intakeMotor.setStatusFrames(255);
     intakeExtend = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
     intakeSensor = new DigitalInput(6);
     shooterSensor = new DigitalInput(5);

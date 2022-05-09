@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Controllers.LazyTalonFX;
+import frc.lib.Controllers.LazyTalonSRX;
 import frc.lib.math.Conversions;
 import frc.lib.math.PIDGains;
 import frc.lib.util.Interpolatable;
@@ -35,7 +36,7 @@ public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private LazyTalonFX shooterMotorParent;
   private LazyTalonFX shooterMotorChild;
-  private LazyTalonFX hoodMotor;
+  private LazyTalonSRX hoodMotor;
   //private LazyTalonFX turretMotor;
   private Limelight limelight;
   private boolean homingDone = false;
@@ -79,10 +80,8 @@ public class Shooter extends SubsystemBase {
   public Shooter(Vision m_Vision, Swerve m_Swerve) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
     shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
-    shooterMotorChild.setStatusFrames(255); //check for performance
-    hoodMotor = new LazyTalonFX(Constants.Shooter.hoodConstants);
+    hoodMotor = new LazyTalonSRX(Constants.Shooter.hoodConstants);
     //turretMotor = new LazyTalonFX(Constants.Shooter.turretConstants);
-    shooterMotorParent.configPID(Constants.Shooter.shooterPID);
     shooterMotorChild.follow(shooterMotorParent);
     //hoodMotor.configPID(Constants.Shooter.hoodPID);
     //turretMotor.configPID(Constants.Shooter.turretPID);

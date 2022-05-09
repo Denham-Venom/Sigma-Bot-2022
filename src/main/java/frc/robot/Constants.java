@@ -15,6 +15,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.Controllers.SparkConstants;
+import frc.lib.Controllers.TalonFxConstants;
+import frc.lib.Controllers.TalonSRXConstants;
 import frc.lib.math.Conversions;
 import frc.lib.math.PIDGains;
 import frc.lib.tempDenhamAutoStuff.SwerveTrajectoryWaypoint;
@@ -56,18 +58,7 @@ public final class Constants {
 
         /* Ramping values */
         public static final double openLoopRamp = 0.25;
-        public static final double closedLoopRamp = 0.0; 
-
-        /* Swerve Current Limiting */
-        public static final int angleContinuousCurrentLimit = 25;
-        public static final int anglePeakCurrentLimit = 40;
-        public static final double anglePeakCurrentDuration = 0.1;
-        public static final boolean angleEnableCurrentLimit = true;
-
-        public static final int driveContinuousCurrentLimit = 35;
-        public static final int drivePeakCurrentLimit = 60;
-        public static final double drivePeakCurrentDuration = 0.1;
-        public static final boolean driveEnableCurrentLimit = true;
+        public static final double closedLoopRamp = 0.0;
 
         /* Angle Motor PID Values */
         public static final double angleKP = 0.2;/*0.1;*/ /*.6*/
@@ -190,30 +181,29 @@ public final class Constants {
         public static final int hoodLimitSwitchID = 4;
 
         /* Motor constants */
-        public static final TalonConstants parentShooterConstants = new TalonConstants(
+        public static final TalonFxConstants parentShooterConstants = new TalonFxConstants(
             parentShooterID, 
-            talonCurrentLimit.supplyCurLim40, 
+            Robot.ctreConfigs.shooterFXConfig,
             NeutralMode.Coast, 
-            InvertType.InvertMotorOutput
+            InvertType.InvertMotorOutput,
+            false
         );
-        public static final TalonConstants childShooterConstants = new TalonConstants(
+
+        public static final TalonFxConstants childShooterConstants = new TalonFxConstants(
             childShooterID, 
-            talonCurrentLimit.supplyCurLim40, 
+            Robot.ctreConfigs.shooterFXConfig,
             NeutralMode.Coast, 
-            InvertType.OpposeMaster
+            InvertType.OpposeMaster,
+            true
         );
-        public static final TalonConstants hoodConstants = new TalonConstants(
+
+        public static final TalonSRXConstants hoodConstants = new TalonSRXConstants(
             hoodID, 
-            talonCurrentLimit.supplyCurLim40, 
+            Robot.ctreConfigs.shooterSRXConfig,
             NeutralMode.Brake, 
-            InvertType.InvertMotorOutput
+            InvertType.InvertMotorOutput,
+            true
         );
-        public static final TalonConstants turretConstants = new TalonConstants(
-            0, 
-            talonCurrentLimit.supplyCurLim40, 
-            NeutralMode.Brake, 
-            InvertType.None
-        ); //might need to change invert type
         
         /* Mechanism properties */
         public static final double shooterGearRatio = (1/1);
@@ -231,10 +221,9 @@ public final class Constants {
         public static final double shootKs = 0.75347;
         public static final double shootKv = 0.11309;
         public static final double shootKa = 0.0073;
-        public static final PIDGains shooterPID = new PIDGains(0.15, 0, 1.0, 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio));//0.046976); // might need to be changed
+        public static final PIDGains shooterPID = new PIDGains(0.15, 0, 1.0, 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio));
         public static final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(shootKs, shootKv, shootKa);
-        public static final PIDGains hoodPID = new PIDGains(0.05, 0,
-         0.001, 0.12); //contains up FF
+        public static final PIDGains hoodPID = new PIDGains(0.05, 0, 0.001, 0.12); //contains up FF
         public static final double hoodDownFF = -0.05;
         public static final double hoodControllerToleranceDegrees = 0.3;
         public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed  
@@ -346,17 +335,19 @@ public final class Constants {
         public static final int IntakeSolenoidReverseChannel = 1;
 
         /* Motor constants */
-        public static final TalonConstants intakeMotorConstants = new TalonConstants(
+        public static final TalonFxConstants intakeMotorConstants = new TalonFxConstants(
             intakeID, 
-            talonCurrentLimit.supplyCurLim40, 
+            Robot.ctreConfigs.intakeFXConfig,
             NeutralMode.Coast, 
-            InvertType.InvertMotorOutput
+            InvertType.InvertMotorOutput,
+            true
         );
-        public static final TalonConstants indexMotorConstants = new TalonConstants(
+        public static final TalonFxConstants indexMotorConstants = new TalonFxConstants(
             indexID, 
-            talonCurrentLimit.supplyCurLim40, 
+            Robot.ctreConfigs.indexerFXConfig,
             NeutralMode.Brake, 
-            InvertType.None
+            InvertType.None,
+            true
         );
         public static final SparkConstants spinUpMotorConstants = new SparkConstants(
             spinupID, 

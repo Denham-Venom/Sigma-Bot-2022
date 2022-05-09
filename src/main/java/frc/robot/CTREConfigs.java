@@ -1,7 +1,7 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -12,49 +12,67 @@ public final class CTREConfigs {
     public TalonFXConfiguration swerveDriveFXConfig;
     public CANCoderConfiguration swerveCanCoderConfig;
 
+    public TalonFXConfiguration shooterFXConfig;
+    public TalonSRXConfiguration shooterSRXConfig;
+
+    public TalonFXConfiguration indexerFXConfig;
+    public TalonFXConfiguration intakeFXConfig;
+
 
     public CTREConfigs(){
         swerveAngleFXConfig = new TalonFXConfiguration();
         swerveDriveFXConfig = new TalonFXConfiguration();
         swerveCanCoderConfig = new CANCoderConfiguration();
 
-        /* Swerve Angle Motor Configurations */
-        SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(
-            Constants.Swerve.angleEnableCurrentLimit, 
-            Constants.Swerve.angleContinuousCurrentLimit, 
-            Constants.Swerve.anglePeakCurrentLimit, 
-            Constants.Swerve.anglePeakCurrentDuration);
+        shooterFXConfig = new TalonFXConfiguration();
+        shooterSRXConfig = new TalonSRXConfiguration();
 
+        indexerFXConfig = new TalonFXConfiguration();
+        intakeFXConfig = new TalonFXConfiguration();
+
+        /* Swerve Angle Motor Configurations */
         swerveAngleFXConfig.slot0.kP = Constants.Swerve.angleKP;
         swerveAngleFXConfig.slot0.kI = Constants.Swerve.angleKI;
         swerveAngleFXConfig.slot0.kD = Constants.Swerve.angleKD;
         swerveAngleFXConfig.slot0.kF = Constants.Swerve.angleKF;
-        swerveAngleFXConfig.supplyCurrLimit = angleSupplyLimit;
-        swerveAngleFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
-
+        swerveAngleFXConfig.supplyCurrLimit = Constants.talonCurrentLimit.supplyCurLim30;
 
         /* Swerve Drive Motor Configuration */
-        SupplyCurrentLimitConfiguration driveSupplyLimit = new SupplyCurrentLimitConfiguration(
-            Constants.Swerve.driveEnableCurrentLimit, 
-            Constants.Swerve.driveContinuousCurrentLimit, 
-            Constants.Swerve.drivePeakCurrentLimit, 
-            Constants.Swerve.drivePeakCurrentDuration);
-
         swerveDriveFXConfig.slot0.kP = Constants.Swerve.driveKP;
         swerveDriveFXConfig.slot0.kI = Constants.Swerve.driveKI;
         swerveDriveFXConfig.slot0.kD = Constants.Swerve.driveKD;
         swerveDriveFXConfig.slot0.kF = Constants.Swerve.driveKF;        
-        swerveDriveFXConfig.supplyCurrLimit = driveSupplyLimit;
-        swerveDriveFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        swerveDriveFXConfig.supplyCurrLimit = Constants.talonCurrentLimit.supplyCurLim40;
         swerveDriveFXConfig.openloopRamp = Constants.Swerve.openLoopRamp;
         swerveDriveFXConfig.closedloopRamp = Constants.Swerve.closedLoopRamp;
-
         
         /* Swerve CANCoder Configuration */
         swerveCanCoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         swerveCanCoderConfig.sensorDirection = Constants.Swerve.canCoderInvert;
         swerveCanCoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         swerveCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
+
+        /* Shooter Motor Configuration */
+        shooterFXConfig.slot0.kP = Constants.Shooter.shooterPID.kP;
+        shooterFXConfig.slot0.kI = Constants.Shooter.shooterPID.kI;
+        shooterFXConfig.slot0.kD = Constants.Shooter.shooterPID.kD;
+        shooterFXConfig.slot0.kF = Constants.Shooter.shooterPID.kFF;
+        shooterFXConfig.supplyCurrLimit = Constants.talonCurrentLimit.supplyCurLim40;
+
+        /* Hood Motor Configuration */
+        shooterSRXConfig.continuousCurrentLimit = (int) Constants.talonCurrentLimit.supplyCurLim30.currentLimit;
+        shooterSRXConfig.peakCurrentLimit = (int) Constants.talonCurrentLimit.supplyCurLim30.triggerThresholdCurrent;
+        shooterSRXConfig.peakCurrentDuration = (int) (Constants.talonCurrentLimit.supplyCurLim30.triggerThresholdTime * 1000);
+
+        /* Indexer Motor Configuration */
+        indexerFXConfig.supplyCurrLimit = Constants.talonCurrentLimit.supplyCurLim40;
+
+        /* Intake Motor Configuration */
+        intakeFXConfig.supplyCurrLimit = Constants.talonCurrentLimit.supplyCurLim40;
+
+
+
+
 
         
 
