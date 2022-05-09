@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Controllers.LazyTalonFX;
+import frc.lib.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
 import frc.lib.math.PIDGains;
 import frc.lib.util.Interpolatable;

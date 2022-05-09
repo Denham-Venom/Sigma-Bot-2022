@@ -1,21 +1,20 @@
-package frc.Controllers;
+package frc.lib.Controllers;
 
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.lib.math.PIDGains;
 
 /**
- * Thin Falcon wrapper to make setup easier.
+ * Thin Talon SRX wrapper to make setup easier.
  */
-public class LazyTalonFX extends TalonFX {
+public class LazyTalonSRX extends TalonSRX {
 
     /**
-     * Config a Talon FX using talonFxConstants.
+     * Config a Talon SRX using talonFxConstants.
      * 
      * @param talonConstants
      */
-    public LazyTalonFX(TalonConstants talonConstants) {
+    public LazyTalonSRX(TalonConstants talonConstants) {
         super(talonConstants.deviceNumber);
         super.configFactoryDefault();
         super.configSupplyCurrentLimit(talonConstants.currentLimit);
@@ -39,15 +38,6 @@ public class LazyTalonFX extends TalonFX {
         super.configNominalOutputReverse(0);
         super.configPeakOutputForward(pidGains.kMaxForward);
         super.configPeakOutputReverse(pidGains.kMaxReverse);
-    }
-
-    public void setStatusFrames(int period){
-        period = period > 255 ? 255 : period;
-        for(int i = 0; i < 16; i++){
-            super.setStatusFramePeriod(i, period);
-
-        }
-
     }
     
 }

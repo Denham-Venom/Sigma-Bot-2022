@@ -1,4 +1,4 @@
-package frc.Controllers;
+package frc.lib.Controllers;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;

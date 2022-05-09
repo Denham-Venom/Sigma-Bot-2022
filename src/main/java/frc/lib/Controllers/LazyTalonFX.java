@@ -1,22 +1,24 @@
-package frc.Controllers;
+package frc.lib.Controllers;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import frc.lib.math.PIDGains;
 
 /**
- * Thin Victor SPX wrapper to make setup easier.
+ * Thin Falcon wrapper to make setup easier.
  */
-public class LazyVictorSPX extends VictorSPX {
+public class LazyTalonFX extends TalonFX {
 
     /**
-     * Config a Victor SPX using talonConstants
+     * Config a Talon FX using talonFxConstants.
      * 
      * @param talonConstants
      */
-    public LazyVictorSPX(TalonConstants talonConstants) {
+    public LazyTalonFX(TalonConstants talonConstants) {
         super(talonConstants.deviceNumber);
         super.configFactoryDefault();
+        super.configSupplyCurrentLimit(talonConstants.currentLimit);
         super.setNeutralMode(talonConstants.neutralMode);
         super.setInverted(talonConstants.invertType);
         super.configVoltageCompSaturation(12);
@@ -37,6 +39,15 @@ public class LazyVictorSPX extends VictorSPX {
         super.configNominalOutputReverse(0);
         super.configPeakOutputForward(pidGains.kMaxForward);
         super.configPeakOutputReverse(pidGains.kMaxReverse);
+    }
+
+    public void setStatusFrames(int period){
+        period = period > 255 ? 255 : period;
+        for(int i = 0; i < 16; i++){
+            super.setStatusFramePeriod(i, period);
+
+        }
+
     }
     
 }

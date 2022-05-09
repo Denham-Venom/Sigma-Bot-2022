@@ -1,4 +1,4 @@
-package frc.Controllers;
+package frc.lib.Controllers;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
