@@ -15,11 +15,10 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.Controllers.SparkConstants;
-import frc.lib.Controllers.TalonConstants;
 import frc.lib.math.Conversions;
 import frc.lib.math.PIDGains;
+import frc.lib.tempDenhamAutoStuff.SwerveTrajectoryWaypoint;
 import frc.lib.util.SwerveModuleConstants;
-import frc.lib.util.SwerveTrajectoryWaypoint;
 
 public final class Constants {
 
@@ -101,8 +100,8 @@ public final class Constants {
         public static final boolean coastOnDisable = true;
 
         /* Motor Inverts */
-        public static final boolean driveMotorInvert = false;
-        public static final boolean angleMotorInvert = false;
+        public static final InvertType driveMotorInvert = InvertType.None;
+        public static final InvertType angleMotorInvert = InvertType.None;
 
         /* Angle Encoder Invert */
         public static final boolean canCoderInvert = false;

@@ -2,25 +2,28 @@ package frc.lib.Controllers;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
-public class TalonConstants {
+public class TalonFxConstants {
     public final int deviceNumber;
-    public final SupplyCurrentLimitConfiguration currentLimit;
+    public final TalonFXConfiguration allConfigs;
     public final NeutralMode neutralMode;
     public final InvertType invertType;
+    public final boolean slowStatusFrame;    
     
     /**
      * Constants to be used with LazyTalonFX Util
      * @param deviceNumber
-     * @param currentLimit
+     * @param allConfigs
      * @param neutralMode
      * @param invertType
+     * @param slowStatusFrames
      */
-    public TalonConstants(int deviceNumber, SupplyCurrentLimitConfiguration currentLimit, NeutralMode neutralMode, InvertType invertType) {
+    public TalonFxConstants(int deviceNumber, TalonFXConfiguration allConfigs, NeutralMode neutralMode, InvertType invertType, boolean slowStatusFrame) {
         this.deviceNumber = deviceNumber;
-        this.currentLimit = currentLimit;
+        this.allConfigs = allConfigs;
         this.neutralMode = neutralMode;
         this.invertType = invertType;
+        this.slowStatusFrame = slowStatusFrame;
     }
 }

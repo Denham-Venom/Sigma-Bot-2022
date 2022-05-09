@@ -4,6 +4,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
+import frc.lib.Controllers.LazyCANCoder;
+import frc.lib.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
 import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
@@ -29,16 +31,26 @@ public class SwerveModule {
         angleOffset = moduleConstants.angleOffset;
         
         /* Angle Encoder Config */
-        angleEncoder = new CANCoder(moduleConstants.cancoderID);
-        configAngleEncoder();
+        angleEncoder = new LazyCANCoder(moduleConstants.cancoderID, Robot.ctreConfigs.swerveCanCoderConfig);
 
         /* Angle Motor Config */
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
-        configAngleMotor();
+        mAngleMotor = new LazyTalonFX(
+            moduleConstants.angleMotorID, 
+            Robot.ctreConfigs.swerveAngleFXConfig, 
+            Constants.Swerve.angleNeutralMode, 
+            Constants.Swerve.angleMotorInvert, 
+            false
+        );
+        resetToAbsolute();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
-        configDriveMotor();
+        mDriveMotor = new LazyTalonFX(
+            moduleConstants.driveMotorID,
+            Robot.ctreConfigs.swerveDriveFXConfig,
+            Constants.Swerve.driveNeutralMode,
+            Constants.Swerve.driveMotorInvert,
+            false
+        );
 
         lastAngle = getState().angle.getDegrees();
     }
@@ -63,27 +75,6 @@ public class SwerveModule {
     private void resetToAbsolute(){
         double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset, Constants.Swerve.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
-    }
-
-    private void configAngleEncoder(){        
-        angleEncoder.configFactoryDefault();
-        angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
-    }
-
-    private void configAngleMotor(){
-        mAngleMotor.configFactoryDefault();
-        mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
-        mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
-        mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
-        resetToAbsolute();
-    }
-
-    private void configDriveMotor(){        
-        mDriveMotor.configFactoryDefault();
-        mDriveMotor.configAllSettings(Robot.ctreConfigs.swerveDriveFXConfig);
-        mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert);
-        mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
-        mDriveMotor.setSelectedSensorPosition(0);
     }
 
     public Rotation2d getCanCoder(){

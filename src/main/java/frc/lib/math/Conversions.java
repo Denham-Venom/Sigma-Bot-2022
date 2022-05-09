@@ -2,8 +2,23 @@ package frc.lib.math;
 
 public class Conversions {
 
-    public static double canCoderToDegrees(double units) {
-        return units * (360.0 / 4096.0);
+    /**
+     * @param counts CANCoder Counts
+     * @param gearRatio Gear Ratio between CANCoder and Mechanism
+     * @return Degrees of Rotation of Mechanism
+     */
+    public static double CANcoderToDegrees(double counts, double gearRatio) {
+        return counts * (360.0 / (gearRatio * 4096.0));
+    }
+
+    /**
+     * @param degrees Degrees of rotation of Mechanism
+     * @param gearRatio Gear Ratio between CANCoder and Mechanism
+     * @return CANCoder Counts
+     */
+    public static double degreesToCANcoder(double degrees, double gearRatio) {
+        double ticks =  degrees / (360.0 / (gearRatio * 4096.0));
+        return ticks;
     }
 
     /**

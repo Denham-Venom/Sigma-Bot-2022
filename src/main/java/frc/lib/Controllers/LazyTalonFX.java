@@ -1,7 +1,10 @@
 package frc.lib.Controllers;
 
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import frc.lib.math.PIDGains;
 
@@ -11,19 +14,43 @@ import frc.lib.math.PIDGains;
 public class LazyTalonFX extends TalonFX {
 
     /**
-     * Config a Talon FX using talonFxConstants.
-     * 
-     * @param talonConstants
+     * Config using individual parameters.
+     * @param deviceNumber
+     * @param allConfigs
+     * @param neutralMode
+     * @param invertType
+     * @param slowStatusFrame
      */
-    public LazyTalonFX(TalonConstants talonConstants) {
-        super(talonConstants.deviceNumber);
+    public LazyTalonFX(int deviceNumber, TalonFXConfiguration allConfigs, NeutralMode neutralMode, InvertType invertType, boolean slowStatusFrame){
+        super(deviceNumber);
         super.configFactoryDefault();
-        super.configSupplyCurrentLimit(talonConstants.currentLimit);
-        super.setNeutralMode(talonConstants.neutralMode);
-        super.setInverted(talonConstants.invertType);
-        super.configVoltageCompSaturation(12);
-        super.enableVoltageCompensation(true);
+        super.configAllSettings(allConfigs);
+        super.setNeutralMode(neutralMode);
+        super.setInverted(invertType);
         super.setSelectedSensorPosition(0);
+
+        if (slowStatusFrame){
+            super.setStatusFramePeriod(StatusFrame.Status_1_General, 255, 30);
+            super.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, 30);
+        }
+    }
+
+    /**
+     * Config using talonFxConstants.
+     * @param talonFxConstants
+     */
+    public LazyTalonFX(TalonFxConstants talonFxConstants){
+        super(talonFxConstants.deviceNumber);
+        super.configFactoryDefault();
+        super.configAllSettings(talonFxConstants.allConfigs);
+        super.setNeutralMode(talonFxConstants.neutralMode);
+        super.setInverted(talonFxConstants.invertType);
+        super.setSelectedSensorPosition(0);
+
+        if (talonFxConstants.slowStatusFrame){
+            super.setStatusFramePeriod(StatusFrame.Status_1_General, 255, 30);
+            super.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, 30);
+        }
     }
     
     /**
@@ -35,19 +62,7 @@ public class LazyTalonFX extends TalonFX {
         super.config_kI(0, pidGains.kI);
         super.config_kD(0, pidGains.kD);
         super.config_kF(0, pidGains.kFF);
-        super.configNominalOutputForward(0);
-        super.configNominalOutputReverse(0);
         super.configPeakOutputForward(pidGains.kMaxForward);
         super.configPeakOutputReverse(pidGains.kMaxReverse);
-    }
-
-    public void setStatusFrames(int period){
-        period = period > 255 ? 255 : period;
-        for(int i = 0; i < 16; i++){
-            super.setStatusFramePeriod(i, period);
-
-        }
-
-    }
-    
+    }    
 }

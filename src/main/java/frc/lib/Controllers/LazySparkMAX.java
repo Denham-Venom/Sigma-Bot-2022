@@ -89,34 +89,6 @@ public class LazySparkMAX extends CANSparkMax {
         return m_encoder.getVelocity();
     }
 
-    /**
-     * Set conversion factor of encoder, so that position is in meters and velocity is in MPS.
-     * @param circumference Circumference of wheel in meters
-     * @param gearRatio Reduction to wheel. For example "15" if on a 15:1 reduction.
-     */
-    public void setConversionFactorMeters(double circumference, double gearRatio){
-        m_encoder.setPositionConversionFactor(circumference / gearRatio);
-        m_encoder.setVelocityConversionFactor((circumference / gearRatio) / 60.0);
-    }
-
-    /**
-     * Set conversion factor of encoder, so that position is in rotations and velocity is in RPM
-     * @param gearRatio Reduction to mech. For example "15" if on a 15:1 reduction.
-     */
-    public void setConversionFactorRotations(double gearRatio){
-        m_encoder.setPositionConversionFactor(1 / gearRatio);
-        m_encoder.setVelocityConversionFactor(1 / gearRatio);
-    }
-
-    /**
-     * Set conversion factor of encoder, so that position is in degrees and velocity is in degrees/min
-     * @param gearRatio Reduction to mech. For example "15" if on a 15:1 reduction.
-     */
-    public void setConversionFactorDegrees(double gearRatio){
-        m_encoder.setPositionConversionFactor(360 / gearRatio);
-        m_encoder.setVelocityConversionFactor(360 / gearRatio);
-    }
-
     public void setStatusFrames(int period){
         period = period > 65535 ? 65535 : period;
         super.setPeriodicFramePeriod(PeriodicFrame.kStatus1, period);
