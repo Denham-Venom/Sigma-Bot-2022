@@ -222,7 +222,7 @@ public final class Constants {
         public static final double shootKP = 0.15;
         public static final double shootKI = 0.0;
         public static final double shootKD = 1.0;
-        public static final double shootKF = 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio);
+        public static final double shootKF = 0.05258; //1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio); 
 
         public static final double hoodKP = 0.05;
         public static final double hoodKI = 0.0;

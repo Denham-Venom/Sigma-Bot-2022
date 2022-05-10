@@ -56,7 +56,7 @@ public final class CTREConfigs {
         shooterFXConfig.slot0.kP = Constants.Shooter.shootKP;
         shooterFXConfig.slot0.kI = Constants.Shooter.shootKI;
         shooterFXConfig.slot0.kD = Constants.Shooter.shootKD;
-        shooterFXConfig.slot0.kF = Constants.Shooter.shootKF;
+        // shooterFXConfig.slot0.kF = Constants.Shooter.shootKF;
         shooterFXConfig.supplyCurrLimit = Constants.talonCurrentLimit.supplyCurLim40;
 
         /* Hood Motor Configuration */
