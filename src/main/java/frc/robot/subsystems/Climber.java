@@ -75,9 +75,6 @@ public class Climber extends SubsystemBase {
       }
     }
   }
-
-
-  
   
   int count = 1;
   @Override
@@ -91,7 +88,6 @@ public class Climber extends SubsystemBase {
     count++;
   }
 }
-
 
 // piston starts extended
       // bar climber goes up

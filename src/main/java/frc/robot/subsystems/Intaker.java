@@ -46,6 +46,7 @@ public class Intaker extends SubsystemBase {
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
 
+  //Shuffleboard
   ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
   NetworkTableEntry useIntakeSensors = Drivers.add("Use Sensors", false).getEntry();
   NetworkTableEntry intakeSensorValue = Drivers.add("intakeSensor", false).getEntry();
@@ -111,25 +112,26 @@ public class Intaker extends SubsystemBase {
     }
 
     // Check for state update or if intaking
+    //There is 2 spots in the the intake: intake and shooter
     if(States.intakeState != state || state == States.IntakeStates.intaking || state == States.IntakeStates.feeding) {
       state = States.intakeState;
       switch(States.intakeState) {
         case intaking:
           if(useSensors) {
-            if(!intakeSensor.get()) { //ball intake
-              if(!shooterSensor.get()) { //ball shooter
+            if(!intakeSensor.get()) { //ball in intake
+              if(!shooterSensor.get()) { //ball in shooter
                 spinUpMotor.set(ControlType.kDutyCycle, 0);
                 indexerMotor.set(ControlMode.PercentOutput, 0);
-              } else { //no ball shooter
+              } else { //no ball in shooter
                 indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
                 spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
                 intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
               }
-            } else if(!shooterSensor.get()) { //no ball intake, ball shooter
+            } else if(!shooterSensor.get()) { //no ball in intake, ball in shooter
               indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
               spinUpMotor.set(ControlType.kDutyCycle, 0);
               intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
-            } else { //no balls
+            } else { //no balls in intake or shooter
               indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
               spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
               intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
@@ -140,6 +142,7 @@ public class Intaker extends SubsystemBase {
             intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
           }
           break;
+
         case outtaking:
         // reverses the intake motor
           intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.intakeSpeed);

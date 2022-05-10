@@ -55,6 +55,7 @@ public class AutoCommands {
         return startPositions.get(start);
     }
 
+    //Chooses which tarmac to use for auto (left or right)
     public static void setTarmac(StartingTarmac tarmac) {
         switch (tarmac) {
             case left:
@@ -69,6 +70,7 @@ public class AutoCommands {
         }
     }
 
+    //Sets the number of balls for auto (2,3,5,0)
     public static void setBalls(NumberOfBalls balls) {
         switch (balls) {
             case two:
