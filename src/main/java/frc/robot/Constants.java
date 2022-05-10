@@ -7,35 +7,26 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.lib.Controllers.SparkConstants;
 import frc.lib.Controllers.TalonFxConstants;
 import frc.lib.Controllers.TalonSRXConstants;
-import frc.lib.math.Conversions;
 import frc.lib.tempDenhamAutoStuff.SwerveTrajectoryWaypoint;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
-
     /* General constants */
     public static final boolean tuningMode = false;
     public static final double stickDeadband = 0.1;
     public static final String driverTab = "Drivers";
     public static final int ballCamFPS = 12;
 
-
     /* Container for swerve subsystem constants */
     public static final class Swerve {
-
         /* Behavior constants */
-        //whether "forward" for swerve is relative to front of robot (false) or to whole field (true)
-        //public static final boolean fieldRelative = true;
         public static final boolean openLoop = true;
 
         /* Device IDs */
@@ -49,11 +40,13 @@ public final class Constants {
         public static final double wheelCircumference = wheelDiameter * Math.PI; //0.3110484 m
         public static final double driveGearRatio = (6.86 / 1.0); //6.86:1
         public static final double angleGearRatio = (12.8 / 1.0); //12.8:1
-        public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
+        public static final SwerveDriveKinematics swerveKinematics = 
+            new SwerveDriveKinematics(
                 new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
                 new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
                 new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
-                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
+                new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+            );
 
         /* Ramping values */
         public static final double openLoopRamp = 0.25;
@@ -137,47 +130,21 @@ public final class Constants {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
-        /* Translation PID */
-        public static final double xKP = 1;
-        public static final double xKI = 0;
-        public static final double xKD = 0;
-        public static final double yKP = 1;
-        public static final double yKI = 0;
-        public static final double yKD = 0;
-
-        /* Rotational PID */
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-            kMaxAngularSpeedRadiansPerSecond, 
-            kMaxAngularSpeedRadiansPerSecondSquared
-        );
+        /* Rotational PID for aiming while shooting */        
         public static final double thetaKP = -5.0;
         public static final double thetaKI = 0.0;
         public static final double thetaKD = -0.1;
-        public static final double slewRateLimiterAmount = Double.MAX_VALUE;
         public static double thetaTolerance = 0.07;
-
     }
-
-
 
     /* Container for shooter subsystem constants */
     public static final class Shooter {
-
         /* Shooter behavior constants */
         public static final boolean calibrationMode = false;
-        public static final boolean autoAim = false; //TODO set to true
-
 
         /* IDs for motors and sensors */
         private static final int parentShooterID = 9;
         private static final int childShooterID = 10;
-        private static final int hoodID = 12;
-        public static final int hoodEncoderAbsoluteChannel = 0;
-        public static final int[] hoodEncoderRelativeChannels = {1, 2};
-        public static final boolean hoodEncoderInverted = true;
-        public static final int hoodLimitSwitchID = 4;
 
         /* Motor constants */
         public static final TalonFxConstants parentShooterConstants = new TalonFxConstants(
@@ -195,22 +162,9 @@ public final class Constants {
             InvertType.OpposeMaster,
             true
         );
-
-        public static final TalonSRXConstants hoodConstants = new TalonSRXConstants(
-            hoodID, 
-            Robot.ctreConfigs.shooterSRXConfig,
-            NeutralMode.Brake, 
-            InvertType.InvertMotorOutput,
-            true
-        );
         
         /* Mechanism properties */
         public static final double shooterGearRatio = (1/1);
-        public static final double hoodGearRatio = 18./42;
-        public static final double hoodAngleOffset = 10.;
-        public static final int hoodEncoderCountsPerRev = 8192;
-        public static final double hoodLowLimit = 10;
-        public static final double hoodHighLimit = 90;
         public static final double tolerance = 100;
 
         /* Shooter characterization and tuning values */
@@ -224,42 +178,9 @@ public final class Constants {
         public static final double shootKD = 1.0;
         public static final double shootKF = 0.05258; //1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio); 
 
-        public static final double hoodKP = 0.05;
-        public static final double hoodKI = 0.0;
-        public static final double hoodKD = 0.001;
-        public static final double hoodKF = 0.12;
-
-        public static final double hoodDownFF = -0.05;
-        public static final double hoodControllerToleranceDegrees = 0.3;
-
         /* Shooter Calibration Values */
-        public static final double[][] oldShooterMap = 
-        // {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
-        {
-            // {1.84, 2200, 14.6},
-            // {1.95, 2400, 21},
-            // {2.11, 2275, 22},
-            // {2.84, 2500, 25},
-            // {3.75, 2700, 27},
-            // {4.19, 2900, 29}, //tentative - TODO
-            // {4.71, 3200, 32}
-            // //{-1, 3300, 35}    
-            
-            {1.18 + Units.feetToMeters(4)/2, 2250, 16.3},
-            {1.75 + Units.feetToMeters(4)/2, 2200, 18.5},
-            // {2.06 + Units.feetToMeters(4)/2, 2300, 20.5},
-            // {2.43 + Units.feetToMeters(4)/2, 2400, 24.0},
-            {2.16 + Units.feetToMeters(4)/2, 2250, 23},
-            {2.35 + Units.feetToMeters(4)/2, 2250, 23.5}, //TODO remove if not work
-            {2.61 + Units.feetToMeters(4)/2, 2425, 24},
-            {3.17 + Units.feetToMeters(4)/2, 2500, 25},
-            {3.64 + Units.feetToMeters(4)/2, 2700, 26.5},
-            {4.20 + Units.feetToMeters(4)/2, 3100, 28.9},
-            //{7.58, 3600, 35}
-        };
-
         public static final double[][] shooterMap = 
-        {
+        {// {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
             {1.27 + Units.feetToMeters(4)/2, 2000, 15},
             {1.75 + Units.feetToMeters(4)/2, 2000, 17},
             {2.17 + Units.feetToMeters(4)/2, 2050, 20},
@@ -279,10 +200,38 @@ public final class Constants {
         public static final double[] shooterLowMap = 
         // distance, shooter speed, shooter angle
         {1.83, 900, 14.00};
-
     }
 
+    public static final class Hood {
+        private static final int hoodID = 12;
+        public static final TalonSRXConstants hoodConstants = new TalonSRXConstants(
+            hoodID, 
+            Robot.ctreConfigs.shooterSRXConfig,
+            NeutralMode.Brake, 
+            InvertType.InvertMotorOutput,
+            true
+        );
+        
+        public static final int hoodEncoderAbsoluteChannel = 0;
+        public static final int[] hoodEncoderRelativeChannels = {1, 2};
+        public static final boolean hoodEncoderInverted = true;
+        public static final int hoodLimitSwitchID = 4;
 
+        public static final int hoodEncoderCountsPerRev = 8192;
+        public static final double hoodLowLimit = 10;
+        public static final double hoodHighLimit = 90;
+
+        public static final double hoodGearRatio = 18.0/42.0;
+        public static final double hoodAngleOffset = 10.0;        
+        
+        public static final double hoodKP = 0.05;
+        public static final double hoodKI = 0.0;
+        public static final double hoodKD = 0.001;
+        public static final double hoodKF = 0.12;
+
+        public static final double hoodDownFF = -0.05;
+        public static final double hoodControllerToleranceDegrees = 0.3;
+    }
 
     /* Container for vision subsystem constants */
     public static final class Vision {
@@ -295,17 +244,10 @@ public final class Constants {
         public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(47);
     }
 
-
-
     /* Container for climber subsystem constants */
     public static final class Climber {
-
         /* Motor and device IDs */
         private static final int climberMotorID = 15;
-        public static final int ClimberSolenoidForwardChannel = 3;
-        public static final int ClimberSolenoidReverseChannel = 2;
-        public static final int climberEncoderAbsoluteChannel = -1;
-        public static final int[] climberEncoderRelativeChannels = {6, 7};
         public static final boolean climberEncoderInverted = false;
 
         /* Motor constants */
@@ -323,14 +265,11 @@ public final class Constants {
         /* Mechanism properties */
         public static final double climberHighLimit = 200.2992;
         public static final double climberLowLimit = 0;
-        public static final double climberGearRatio = 12.;
-        public static final double extendedCounts = 0;
-        public static final double retractedCounts = 0;
+        public static final double climberGearRatio = 12.0;
     }
 
     /* Container for intake subsystem constants */
     public static final class Intake {
-
         /* Motor and device IDs */
         private static final int intakeID = 11;
         private static final int indexID = 13;
@@ -365,10 +304,7 @@ public final class Constants {
         public static final double intakeSpeed = 0.5;
         public static final double indexSpeed = 0.6;
         public static final double spinupSpeed = 0.5;
-
     }
-    
-
 
     /* Current limiting configurations */
     public static final class talonCurrentLimit {
@@ -378,38 +314,22 @@ public final class Constants {
         public static final SupplyCurrentLimitConfiguration supplyCurLim30 = 
             new SupplyCurrentLimitConfiguration(true, 25, 40, 0.1);
     }
+
     public static final class sparkCurrentLimit {
         public static final int sparkCurLimit40 = 300;
     }
 
-
-
     /* Container for constants for autonomous routines */
     public static final class AutoConstants {
+        /* Auto Swerve Controller Constants */
+        public static final double kPXController = 1.0;
+        public static final double kPYController = 1.0;
+        public static final double kPThetaController = 5.0;
 
-        /* Autonomous routine movement constraints */
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    
-        public static final TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-            kMaxSpeedMetersPerSecond,
-            kMaxAccelerationMetersPerSecondSquared
-        ).setKinematics(Constants.Swerve.swerveKinematics);
-
-        public static final double thetaKP = 5.;
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = Swerve.kThetaControllerConstraints;
+        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
         /* Autonomous waypoints */
-        public static final Pose2d startPos = new Pose2d(7.606, 2.974, new Rotation2d(-1.894));
-         //Starting Positions
-            //Right
-            //new Pose2d(7.606, 2.974, new Rotation2d(-1.894)),   //0 Defalt bottom starting position
-            //new Pose2d(6.601, 2.546, new Rotation2d(-2.283)),   //1 Right bottom starting position
-            //new Pose2d(8.439, 1.876, new Rotation2d(-1.561)),   //2 Left bottom starting position
-            //Left
-            //new Pose2d(7.103, 4.871, new Rotation2d(2.742)),    //Defalt top starting position
-            //new Pose2d(5.962, 3.958, new Rotation2d(3.141)),    //Right top starting position
-            //new Pose2d(6.764, 5.712, new Rotation2d(2.035)),    //Left top starting position
         public static final SwerveTrajectoryWaypoint[] rightPoints = 
         {
             new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end - ball1 
@@ -429,20 +349,6 @@ public final class Constants {
             new SwerveTrajectoryWaypoint(4.724, 3.681, 0.929, 0.929),
             new SwerveTrajectoryWaypoint(5.615, 6.921, 0.731, 0.731),
             new SwerveTrajectoryWaypoint(3.71, 6.875, -3.132, -3.132)
-            // new SwerveTrajectoryWaypoint(5.245, 5.955, 2.618, 2.618),
-            // new SwerveTrajectoryWaypoint(4.213, 4.564, -2.147, -2.147),
-            // new SwerveTrajectoryWaypoint(1.685, 1.697, -2.374, -2.374),
-            // new SwerveTrajectoryWaypoint(2.297, 1.726, 0.209, 0.209),
-            // new SwerveTrajectoryWaypoint(5.464, 1.954, 0, 0),
-            // new SwerveTrajectoryWaypoint(6.198, 1.997, -2.356, -2.356),
-            // new SwerveTrajectoryWaypoint(7.559, 1, -1.571, -1.571)
-
-            // new Pose2d(5.245, 5.955, new Rotation2d(2.622)),
-            // new Pose2d(4.213, 4.564, new Rotation2d(-2.141)),
-            // new Pose2d(1.685, 1.697, new Rotation2d(-2.37)),
-            // new Pose2d(2.297, 1.726, new Rotation2d(0.216)),
-            // new Pose2d(5.464, 1.954, new Rotation2d(0.008)),
-            // new Pose2d(7.559, 1, new Rotation2d(-1.571))
         };
 
         public static final SwerveTrajectoryWaypoint[] optimizedRightPoints =
@@ -466,9 +372,5 @@ public final class Constants {
             new SwerveTrajectoryWaypoint(1.358, 1.426, -2.744, 0.724),      //part4 start get ball 3 and 4
             new SwerveTrajectoryWaypoint(3.955, 3.08, -2.938, 0.533)     //part4 end go to shoot
         };
-
-        // public static final SwerveTrajectoryWaypoint blueFixedPt = new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, -3.005);
-        // public static final SwerveTrajectoryWaypoint blueFixedPt2 = new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, 0.724);
-    }
-    
+    }    
 }

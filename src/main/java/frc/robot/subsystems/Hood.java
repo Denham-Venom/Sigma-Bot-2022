@@ -23,11 +23,11 @@ public class Hood extends SubsystemBase {
     private Limelight limelight;
     
     private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
-    private PIDController hoodController;
+    private PIDController hoodController;    
+    private DigitalInput hoodLimit;
+    private Encoder hoodEncoder;
 
     private boolean homingDone = false;
-    private DigitalInput hoodLimit = new DigitalInput(Constants.Shooter.hoodLimitSwitchID);
-    private Encoder hoodEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);
 
     private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
     private NetworkTableEntry hoodP = tuning.add("Hood P", 0).getEntry();
@@ -44,17 +44,20 @@ public class Hood extends SubsystemBase {
     private NetworkTableEntry hoodReady = drivers.add("Hood Ready", false).getEntry();    
 
     public Hood(Vision m_Vision) {
-        hoodMotor = new LazyTalonSRX(Constants.Shooter.hoodConstants);
+        hoodMotor = new LazyTalonSRX(Constants.Hood.hoodConstants);
         limelight = m_Vision.getLimelight();
 
         hoodController = new PIDController(
-            Constants.Shooter.hoodKP, 
-            Constants.Shooter.hoodKI, 
-            Constants.Shooter.hoodKD
+            Constants.Hood.hoodKP, 
+            Constants.Hood.hoodKI, 
+            Constants.Hood.hoodKD
         );
-        hoodController.setTolerance(Constants.Shooter.hoodControllerToleranceDegrees, 0.5);
+
+        hoodEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);
         hoodEncoder.reset();
-        hoodEncoder.setDistancePerPulse(360. * Constants.Shooter.hoodGearRatio / 2048.); //degrees
+        hoodEncoder.setDistancePerPulse(360. * Constants.Hood.hoodGearRatio / 2048.); //degrees
+
+        hoodLimit = new DigitalInput(Constants.Hood.hoodLimitSwitchID);
 
         testing.add("UP Hood Motor", new InstantCommand(
             () -> hoodMotor.set (ControlMode.PercentOutput, 0.15)
@@ -70,8 +73,7 @@ public class Hood extends SubsystemBase {
 
         for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
             hoodMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
-        }
-        
+        }        
     }
 
     public void resetHood() {
@@ -79,55 +81,56 @@ public class Hood extends SubsystemBase {
     }
 
     public double getHoodAngle(){
-        return hoodEncoder.getDistance() + Constants.Shooter.hoodAngleOffset;
+        return hoodEncoder.getDistance() + Constants.Hood.hoodAngleOffset;
     }
 
     public double getTargetAngle(){
         return hoodMap.get(limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm());
     }
 
-    public void setHoodAngle(double hoodAngle){
-        if (hoodAngle > Constants.Shooter.hoodHighLimit){
-            hoodAngle = Constants.Shooter.hoodHighLimit;
+    public void setHoodAngle(double targetAngle){
+        if (targetAngle > Constants.Hood.hoodHighLimit){
+            targetAngle = Constants.Hood.hoodHighLimit;
         }
-        else if (hoodAngle < Constants.Shooter.hoodLowLimit){
-            hoodAngle = Constants.Shooter.hoodLowLimit;
+        else if (targetAngle < Constants.Hood.hoodLowLimit){
+            targetAngle = Constants.Hood.hoodLowLimit;
         }
-        hoodController.setSetpoint(hoodAngle);
-        if(hoodController.atSetpoint()) {
-            hoodMotor.set(ControlMode.PercentOutput, 0);
-            hoodReady.setBoolean(true);
-        return;
-        }
-        hoodReady.setBoolean(false);
         
-        double output = hoodController.calculate(getHoodAngle());// + Constants.Shooter.hoodPID.kFF;
+        double output = hoodController.calculate(getHoodAngle(), targetAngle);
         if(output < 0) {
-            if(!hoodLimit.get()) output = 0;
-            else output += Constants.Shooter.hoodDownFF;
+            output = getHoodLimitSwitch() ? 0 : (output + Constants.Hood.hoodDownFF);
         } else if(output > 0) {
-            output += Constants.Shooter.hoodKF;
+            output += Constants.Hood.hoodKF;
         }
+
+        hoodReady.setBoolean(Math.abs(targetAngle - getHoodAngle()) < Constants.Hood.hoodControllerToleranceDegrees);
         hoodPIDOut.setDouble(output);
-        hoodMotor.set(ControlMode.PercentOutput, output);//Conversions.degreesToFalcon(hoodAngle, Constants.Shooter.hoodGearRatio));
+        hoodMotor.set(ControlMode.PercentOutput, output);
     }
 
     public void setHoodPower(double scale) {
-        hoodMotor.set(ControlMode.PercentOutput, scale * 0.2);//SmartDashboard.getNumber("HoodTestPow", 0));
+        hoodMotor.set(ControlMode.PercentOutput, scale * 0.2);
     }
 
     public void stopHood() {
         hoodMotor.set(ControlMode.PercentOutput, 0);
     }
 
+    public boolean getHoodLimitSwitch() {
+        return !hoodLimit.get();
+    }
+
     @Override
-    public void periodic() {    
-        boolean hoodDown = !hoodLimit.get();
-        hoodLimitSwitchPressed.setBoolean(hoodDown);
-        if(hoodDown) hoodEncoder.reset();
+    public void periodic() {
+        hoodLimitSwitchPressed.setBoolean(getHoodLimitSwitch());
+        if(getHoodLimitSwitch()){
+            hoodEncoder.reset();
+        }
 
         if(!homingDone) {
-            if(hoodDown) homingDone = true;
+            if(getHoodLimitSwitch()){
+                homingDone = true;
+            }
             setHoodPower(-1);
             return;
         }

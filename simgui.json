@@ -13,6 +13,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Climber": "Subsystem",
+      "/LiveWindow/Hood": "Subsystem",
       "/LiveWindow/Intaker": "Subsystem",
       "/LiveWindow/Shooter": "Subsystem",
       "/LiveWindow/Swerve": "Subsystem",
