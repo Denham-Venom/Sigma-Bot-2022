@@ -18,7 +18,6 @@ import frc.lib.Controllers.SparkConstants;
 import frc.lib.Controllers.TalonFxConstants;
 import frc.lib.Controllers.TalonSRXConstants;
 import frc.lib.math.Conversions;
-import frc.lib.math.PIDGains;
 import frc.lib.tempDenhamAutoStuff.SwerveTrajectoryWaypoint;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -210,23 +209,28 @@ public final class Constants {
         public static final double hoodGearRatio = 18./42;
         public static final double hoodAngleOffset = 10.;
         public static final int hoodEncoderCountsPerRev = 8192;
-        public static final double turretGearRatio = 0;
         public static final double hoodLowLimit = 10;
         public static final double hoodHighLimit = 90;
-        public static final double turretLowLimit = 0;
-        public static final double turretHighLimit = 0;
         public static final double tolerance = 100;
 
         /* Shooter characterization and tuning values */
         public static final double shootKs = 0.75347;
         public static final double shootKv = 0.11309;
         public static final double shootKa = 0.0073;
-        public static final PIDGains shooterPID = new PIDGains(0.15, 0, 1.0, 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio));
         public static final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(shootKs, shootKv, shootKa);
-        public static final PIDGains hoodPID = new PIDGains(0.05, 0, 0.001, 0.12); //contains up FF
+
+        public static final double shootKP = 0.15;
+        public static final double shootKI = 0.0;
+        public static final double shootKD = 1.0;
+        public static final double shootKF = 1023.0 / Conversions.RPMToFalcon(5700, shooterGearRatio);
+
+        public static final double hoodKP = 0.05;
+        public static final double hoodKI = 0.0;
+        public static final double hoodKD = 0.001;
+        public static final double hoodKF = 0.12;
+
         public static final double hoodDownFF = -0.05;
         public static final double hoodControllerToleranceDegrees = 0.3;
-        public static final PIDGains turretPID = new PIDGains(0, 0, 0, 0);//Definetly needs to be changed  
 
         /* Shooter Calibration Values */
         public static final double[][] oldShooterMap = 

@@ -6,7 +6,6 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.CANSparkMax;
-import frc.lib.math.PIDGains;
 
 /**
  * Thin Spark Max wrapper to make setup easier, 
@@ -39,34 +38,6 @@ public class LazySparkMAX extends CANSparkMax {
     
     public void set(ControlType kdutycycle, double setpoint) {
         m_pidController.setReference(setpoint, kdutycycle);
-    }
-    
-    /**
-     * Config PID Gains and Peak Outputs using PIDGains
-     * @param pidGains
-     */
-    public void configPID(PIDGains pidGains){
-        m_pidController.setP(pidGains.kP);
-        m_pidController.setI(pidGains.kI);
-        m_pidController.setD(pidGains.kD);
-        m_pidController.setFF(pidGains.kFF);
-        m_pidController.setOutputRange(pidGains.kMaxReverse, pidGains.kMaxForward);
-    }
-
-    /**
-     * Returns PIDGains and configured Peak Outputs from internal PIDController
-     * @return
-     */
-    public PIDGains getPIDGains(){
-        PIDGains pidGains = new PIDGains(
-            m_pidController.getP(), 
-            m_pidController.getI(), 
-            m_pidController.getD(), 
-            m_pidController.getFF(), 
-            m_pidController.getOutputMax(), 
-            m_pidController.getOutputMin()
-        );
-        return pidGains;
     }
 
     /**
