@@ -133,14 +133,6 @@ public class Shooter extends SubsystemBase {
     
   }
 
-  public double getDistanceToCenterGoal(){
-    if(limelight.hasTarget()){
-      return limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm();
-    } else {
-      return swerve.getTarget().getNorm();
-    }
-  }
-
   public double getShooterRPM(){
     return Conversions.falconToRPM(shooterMotorParent.getSelectedSensorVelocity(), Constants.Shooter.shooterGearRatio);
   }
@@ -261,7 +253,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    getDistEntry.setDouble(getDistanceToCenterGoal());
+    getDistEntry.setDouble(limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm());
     
     boolean hoodDown = !hoodLimit.get();
     hoodLimitSwitchPressed.setBoolean(hoodDown);
@@ -293,8 +285,8 @@ public class Shooter extends SubsystemBase {
           } else{
               // setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
               // setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
-              setShooterRPM(shooterMap.get(getDistanceToCenterGoal()));
-              setHoodAngle(hoodMap.get(getDistanceToCenterGoal()));
+              setShooterRPM(shooterMap.get(limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm()));
+              setHoodAngle(hoodMap.get(limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm()));
           }
           break;
       //}

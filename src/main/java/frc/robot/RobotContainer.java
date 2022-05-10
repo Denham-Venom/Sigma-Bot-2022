@@ -80,9 +80,7 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Instantiate subsystems
-    //m_pHub = new PneumaticHub();
-    //m_pHub = new PneumaticsControlModule();
+
     m_Vision = new Vision();
     s_Swerve = new Swerve(m_Vision);
     m_Shooter = new Shooter(m_Vision, s_Swerve);

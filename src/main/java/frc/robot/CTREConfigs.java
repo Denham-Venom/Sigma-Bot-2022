@@ -53,10 +53,10 @@ public final class CTREConfigs {
         swerveCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
 
         /* Shooter Motor Configuration */
-        shooterFXConfig.slot0.kP = Constants.Shooter.shooterPID.kP;
-        shooterFXConfig.slot0.kI = Constants.Shooter.shooterPID.kI;
-        shooterFXConfig.slot0.kD = Constants.Shooter.shooterPID.kD;
-        shooterFXConfig.slot0.kF = Constants.Shooter.shooterPID.kFF;
+        // shooterFXConfig.slot0.kP = Constants.Shooter.shooterPID.kP;
+        // shooterFXConfig.slot0.kI = Constants.Shooter.shooterPID.kI;
+        // shooterFXConfig.slot0.kD = Constants.Shooter.shooterPID.kD;
+        // shooterFXConfig.slot0.kF = Constants.Shooter.shooterPID.kFF;
         shooterFXConfig.supplyCurrLimit = Constants.talonCurrentLimit.supplyCurLim40;
 
         /* Hood Motor Configuration */

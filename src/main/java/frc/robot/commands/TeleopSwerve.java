@@ -37,14 +37,16 @@ public class TeleopSwerve extends CommandBase {
         double yAxis = MathUtil.applyDeadband(translationSupplier.getAsDouble(), Constants.stickDeadband);
         double xAxis = MathUtil.applyDeadband(strafeSupplier.getAsDouble(), Constants.stickDeadband);
         double rAxis = MathUtil.applyDeadband(rotationSupplier.getAsDouble(), Constants.stickDeadband);
-
-        /* Squaring Inputs */
+        
+        /* Square Inputs */
         yAxis = Boundaries.squareInput(yAxis);
         xAxis = Boundaries.squareInput(xAxis);
         rAxis = Boundaries.squareInput(rAxis);
 
         Translation2d translation = new Translation2d(yAxis, xAxis).times(Constants.Swerve.maxSpeed).times(s_Swerve.gethighLowGear());
         double rotation = rAxis * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
+
+        s_Swerve.updateTranslationInput(translation);
 
         if(States.shooterState != ShooterStates.preShoot){        
             s_Swerve.drive(translation, rotation, openLoop);

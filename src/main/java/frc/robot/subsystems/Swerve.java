@@ -1,8 +1,7 @@
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,13 +22,12 @@ import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.SwerveModule;
-import frc.robot.commands.TeleopSwerve;
 
 public class Swerve extends SubsystemBase {
 
     // Device Refs
     public SwerveModule[] mSwerveMods;
-    public PigeonIMU gyro;
+    public Pigeon2 gyro;
     private Limelight limelight;
 
     // State Variables
@@ -53,8 +51,8 @@ public class Swerve extends SubsystemBase {
     private NetworkTableEntry swerveReady = Drivers.add("Swerve Ready" , false).getEntry();
     private NetworkTableEntry fieldRelEntry = Drivers.add("Field Rel" , true).getEntry();
 
-
-    public final PIDController thetaController;
+    private PIDController thetaController;
+    private Translation2d inputTranslation = new Translation2d();
     
 
 
@@ -63,15 +61,14 @@ public class Swerve extends SubsystemBase {
      * @param m_Vision The limelight to use for target acquisition.
      */
     public Swerve(Vision m_Vision) {
-        thetaController = new PIDController(Constants.Swerve.thetaKP, Constants.Swerve.thetaKI, Constants.Swerve.thetaKD);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        
-        gyro = new PigeonIMU(Constants.Swerve.pigeonID);
+        limelight = m_Vision.getLimelight();
+
+        gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
         zeroGyro();
-        limelight = m_Vision.getLimelight();
         
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw());
+        thetaController = new PIDController(Constants.Swerve.thetaKP, Constants.Swerve.thetaKI, Constants.Swerve.thetaKD);
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -79,13 +76,8 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
-
-        SmartDashboard.putNumber("robotX_swerve_odo", 0);
-        SmartDashboard.putNumber("robotY_swerve_odo", 0);
-        SmartDashboard.putNumber("robotAng_swerve_odo", 0);
     }
 
-    //TODO - make high/low gear mangaged internally in swerve, not in teleopswerve command
     /**
      * Switches between high and low gear (soft switch).
      * @return True if now in low gear, false if in high.
@@ -202,9 +194,8 @@ public class Swerve extends SubsystemBase {
      * @return Rotation2d representation of yaw.
      */
     public Rotation2d getYaw() {
-        double[] ypr = new double[3];
-        gyro.getYawPitchRoll(ypr);
-        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - ypr[0]) : Rotation2d.fromDegrees(ypr[0]);
+        double yaw = gyro.getYaw();
+        return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - yaw) : Rotation2d.fromDegrees(yaw);
     }
     
     /**
@@ -219,23 +210,16 @@ public class Swerve extends SubsystemBase {
         return fieldRelative;
     }
 
+    public void updateTranslationInput(Translation2d translation) {
+        inputTranslation = translation;
+    }
+
     @Override
     public void periodic() {
         swerveOdometry.update(getYaw(), getStates());  
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
-        }
-
-        switch(States.shooterState){
-            case preShoot:
-                if (limelight.hasTarget()){
-                    Translation2d t = ((TeleopSwerve)this.getDefaultCommand()).getTranslation2d();
-                    this.drive(t, thetaController.calculate(limelight.getTx().getRadians(), 0), false);
-                }
-                break;
-            default:
-                break;
         }
 
         if(Constants.Swerve.coastOnDisable){
@@ -249,18 +233,34 @@ public class Swerve extends SubsystemBase {
             }
         }
 
-        if(Constants.tuningMode && tuneSwerve.getBoolean(false)) {
-            double p = turnP.getDouble(0), i = turnI.getDouble(0), d = turnD.getDouble(0);
-            if(p != thetaController.getP()
-                    || i != thetaController.getI()
-                    || d != thetaController.getD()) {
-                thetaController.setPID(p, i, d);   
-            }
+        switch(States.shooterState){
+            case preShoot:
+                swerveReady.setBoolean(Math.abs(limelight.getTx().getRadians()) < turnTolVal);
+                drive(
+                    inputTranslation, 
+                    thetaController.calculate(limelight.getTx().getRadians(), 0), 
+                    false
+                );
+                break;
+            default:
+                swerveReady.setBoolean(false);
+                break;
+        }
+        
+        if(Constants.tuningMode) {
+            if (tuneSwerve.getBoolean(false)) {
+                double p = turnP.getDouble(0), i = turnI.getDouble(0), d = turnD.getDouble(0);
+                if(p != thetaController.getP()
+                        || i != thetaController.getI()
+                        || d != thetaController.getD()) {
+                    thetaController.setPID(p, i, d);   
+                }
 
-            double tol = turnTol.getDouble(0), velTol = turnTol.getDouble(0);
-            if(tol != turnTolVal) {
-                turnTolVal = tol;
-                thetaController.setTolerance(turnTolVal);
+                double tol = turnTol.getDouble(0), velTol = turnTol.getDouble(0);
+                if(tol != turnTolVal) {
+                    turnTolVal = tol;
+                    thetaController.setTolerance(turnTolVal);
+                }
             }
         }
     }
