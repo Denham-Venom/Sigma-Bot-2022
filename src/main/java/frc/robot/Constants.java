@@ -37,7 +37,7 @@ public final class Constants {
         public static final double wheelBase = Units.inchesToMeters(17.5);
         public static final double wheelDiameter = Units.inchesToMeters(3.90); //changed from 3.9 for new neoprene tread
         public static final double wheelCircumference = wheelDiameter * Math.PI; //0.3110484 m
-        public static final double driveGearRatio = (6.86 / 1.0); //6.86:1
+        public static final double driveGearRatio = (6.86 / 1.0); //TODO: THIS AINT RIGHT
         public static final double angleGearRatio = (12.8 / 1.0); //12.8:1
         public static final SwerveDriveKinematics swerveKinematics = 
             new SwerveDriveKinematics(
