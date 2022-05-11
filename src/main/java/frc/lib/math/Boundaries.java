@@ -1,6 +1,5 @@
 package frc.lib.math;
 
-
 public class Boundaries {
 
     public static double to180Boundaries(double degrees){
@@ -25,5 +24,11 @@ public class Boundaries {
 
     public static double squareInput(double input){
         return input * Math.abs(input);
+    }
+
+    public static double deadband(double input, double deadband) {
+        if (Math.abs(input) < deadband)
+            return 0;
+        return input;
     }
 }

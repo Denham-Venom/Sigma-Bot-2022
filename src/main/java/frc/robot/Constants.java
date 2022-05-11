@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -137,7 +136,7 @@ public final class Constants {
         /* Rotational PID for aiming while shooting */        
         public static final double thetaKP = 5.0;
         public static final double thetaKI = 0.0;
-        public static final double thetaKD = 0.1;
+        public static final double thetaKD = 0.05;
         public static double thetaTolerance = 0.07;
     }
 
@@ -172,11 +171,6 @@ public final class Constants {
         public static final double tolerance = 100;
 
         /* Shooter characterization and tuning values */
-        public static final double shootKs = 0.75347;
-        public static final double shootKv = 0.11309;
-        public static final double shootKa = 0.0073;
-        public static final SimpleMotorFeedforward shooterFF = new SimpleMotorFeedforward(shootKs, shootKv, shootKa);
-
         public static final double shootKP = 0.15;
         public static final double shootKI = 0.0;
         public static final double shootKD = 1.0;
@@ -185,20 +179,20 @@ public final class Constants {
         /* Shooter Calibration Values */
         public static final double[][] shooterMap = 
         {// {distance (m), shooter speed (RPM), shooter angle (degrees from horiz)}
-            {1.27 + Units.feetToMeters(4)/2, 2000, 15},
-            {1.75 + Units.feetToMeters(4)/2, 2000, 17},
-            {2.17 + Units.feetToMeters(4)/2, 2050, 20},
-            {2.67 + Units.feetToMeters(4)/2, 2100, 21},
-            {2.85 + Units.feetToMeters(4)/2, 2175, 23.3},
-            {2.93 + Units.feetToMeters(4)/2, 2175, 22},
-            {3.19 + Units.feetToMeters(4)/2, 2250, 23},
-            {3.39 + Units.feetToMeters(4)/2, 2300, 23.9},
-            {3.67 + Units.feetToMeters(4)/2, 2400, 23},
-            {3.91 + Units.feetToMeters(4)/2, 2300, 24.5},
-            {4.08 + Units.feetToMeters(4)/2, 2350, 25.7},
-            {4.18 + Units.feetToMeters(4)/2, 2425, 25},
-            {4.74 + Units.feetToMeters(4)/2, 2550, 27}, 
-            {5.66 + Units.feetToMeters(4)/2, 2650, 29}
+            {1.27 + Vision.goalDiameter/2, 2000, 15},
+            {1.75 + Vision.goalDiameter/2, 2000, 17},
+            {2.17 + Vision.goalDiameter/2, 2050, 20},
+            {2.67 + Vision.goalDiameter/2, 2100, 21},
+            {2.85 + Vision.goalDiameter/2, 2175, 23.3},
+            {2.93 + Vision.goalDiameter/2, 2175, 22},
+            {3.19 + Vision.goalDiameter/2, 2250, 23},
+            {3.39 + Vision.goalDiameter/2, 2300, 23.9},
+            {3.67 + Vision.goalDiameter/2, 2400, 23},
+            {3.91 + Vision.goalDiameter/2, 2300, 24.5},
+            {4.08 + Vision.goalDiameter/2, 2350, 25.7},
+            {4.18 + Vision.goalDiameter/2, 2425, 25},
+            {4.74 + Vision.goalDiameter/2, 2550, 27}, 
+            {5.66 + Vision.goalDiameter/2, 2650, 29}
         };
 
         public static final double[] shooterLowMap = 
@@ -312,8 +306,8 @@ public final class Constants {
         public static final double goalHeight = compFieldHeight;
         public static final Pose2d goalPose = new Pose2d(Units.inchesToMeters(324.0), Units.inchesToMeters(162.0), new Rotation2d());
 
-        public static final double limelightHeight = Units.inchesToMeters(21.0);//TODO: Check
-        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(47);//TODO: Check
+        public static final double limelightHeight = Units.inchesToMeters(24.25);
+        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(41);
     }
 
     public static final class PoseEstimator {

@@ -67,6 +67,7 @@ public class Swerve extends SubsystemBase {
         
         autoOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw());
         thetaController = new PIDController(Constants.Swerve.thetaKP, Constants.Swerve.thetaKI, Constants.Swerve.thetaKD);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -112,6 +113,7 @@ public class Swerve extends SubsystemBase {
      * @param isOpenLoop Whether to use open loop or feedback control to achieve drive control
      */
     public void drive(Translation2d translation, double rotation, boolean isOpenLoop) {
+        rotation = (Math.abs(rotation) <= (Constants.Swerve.maxAngularVelocity * 0.02)) ? 0.0 : rotation;
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -221,6 +223,10 @@ public class Swerve extends SubsystemBase {
         m_poseEstimator.updateSwerve(getYaw(), getStates());
         autoOdometry.update(getYaw(), getStates());
 
+        SmartDashboard.putNumber("current yaw", getYaw().getDegrees());
+        SmartDashboard.putNumber("wanted Yaw", m_poseEstimator.getRobotTargetYaw().getDegrees());
+        SmartDashboard.putNumber("ll wanted yaw", getYaw().getDegrees() + limelight.getTx().getDegrees());
+
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
         }
@@ -239,7 +245,7 @@ public class Swerve extends SubsystemBase {
         switch(States.shooterState){
             case preShoot:
                 double targetYawAngle = limelight.hasTarget() ? 
-                    getYaw().getRadians() + limelight.getTx().getRadians() + Constants.Vision.shooterAngle.getRadians() : 
+                    getYaw().getRadians() + limelight.getTx().getRadians() : 
                     m_poseEstimator.getRobotTargetYaw().getRadians();
 
                 swerveReady.setBoolean(Math.abs(targetYawAngle - getYaw().getRadians()) < turnTolVal);
@@ -247,7 +253,9 @@ public class Swerve extends SubsystemBase {
                     inputTranslation, 
                     thetaController.calculate(getYaw().getRadians(), targetYawAngle), 
                     false
+                    
                 );
+                SmartDashboard.putNumber("pid output", thetaController.calculate(getYaw().getRadians(), targetYawAngle));
                 break;
             default:
                 swerveReady.setBoolean(false);

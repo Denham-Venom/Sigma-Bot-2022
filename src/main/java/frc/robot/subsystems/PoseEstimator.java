@@ -95,9 +95,9 @@ public class PoseEstimator extends SubsystemBase{
     /** @return Angle Robot needs to rotate to, to face shooter (back of robot) to target */
     public Rotation2d getRobotTargetYaw(){
         Pose2d diffPose = Constants.Vision.goalPose.relativeTo(sEstimator.getEstimatedPosition());
-        Rotation2d targetAngle = new Rotation2d(Math.atan2(diffPose.getY(), diffPose.getX()));
-        targetAngle = targetAngle.plus(Constants.Vision.shooterAngle);
-        return sEstimator.getEstimatedPosition().getRotation().plus(targetAngle);
+        Rotation2d angleToTarget = new Rotation2d(Math.atan2(diffPose.getY(), diffPose.getX()));
+        angleToTarget = angleToTarget.plus(Constants.Vision.shooterAngle);
+        return sEstimator.getEstimatedPosition().getRotation().plus(angleToTarget);
     } 
     
     @Override
