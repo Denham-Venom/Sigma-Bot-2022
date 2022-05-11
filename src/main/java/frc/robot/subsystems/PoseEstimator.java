@@ -15,7 +15,6 @@ import frc.robot.Constants;
 public class PoseEstimator extends SubsystemBase{
     public NewSwervePoseEstimator sEstimator;
     public NewTimeInterpolatableBuffer<Double> gyroYawBuffer = NewTimeInterpolatableBuffer.createDoubleBuffer(1.0);
-    public Pose2d visionPose = new Pose2d();
 
     public PoseEstimator(){
         sEstimator = new NewSwervePoseEstimator(
@@ -26,12 +25,6 @@ public class PoseEstimator extends SubsystemBase{
             Constants.PoseEstimator.gyroStdDevs, 
             Constants.PoseEstimator.visionStdDevs
         );
-
-        SmartDashboard.putNumber("LLAngle", 0.0);
-        SmartDashboard.putNumber("LLTY", 0.0);
-        SmartDashboard.putNumber("gyroYaw", 0.0);
-
-        
     }
 
     /** Check if this returns true before using {@link #updateVision()} 
@@ -42,7 +35,7 @@ public class PoseEstimator extends SubsystemBase{
 
     /** Update estimator with Swerve States and Gyro Yaw data.
      * Needs to be updated every loop. */
-    public void updateSwerve(Rotation2d gyroAngle, SwerveModuleState[] states, Translation2d robot_velocity){
+    public void updateSwerve(Rotation2d gyroAngle, SwerveModuleState[] states){
         sEstimator.update(gyroAngle, states);
         gyroYawBuffer.addSample(Timer.getFPGATimestamp(), gyroAngle.getRadians());
     }
@@ -50,39 +43,39 @@ public class PoseEstimator extends SubsystemBase{
     /** Update estimator with vision data. 
      *  Should only be updated when target is visible.
      * @param LLlatency seconds */
-    public void updateVision(Translation2d LLdistance, Rotation2d LLangle, double LLlatency){
+    public void updateVision(Translation2d targetDistance, Rotation2d LLTX, double LLlatency){
         double timeStamp = Timer.getFPGATimestamp() - LLlatency;
 
         sEstimator.addVisionMeasurement(
-            getFieldToRobotPose(
-                LLdistance, 
-                LLangle,  
+            getFieldToRobotPose2d(
+                targetDistance, 
+                LLTX,  
                 new Rotation2d(gyroYawBuffer.getSample(timeStamp).get())), 
             timeStamp
         );
     }
 
     /** Field to Robot Transforms */ 
-    private Pose2d getFieldToRobotPose(Translation2d LLdistance, Rotation2d LLangle, Rotation2d gyroYaw){
+    private Pose2d getFieldToRobotPose2d(Translation2d targetDistance, Rotation2d LLTX, Rotation2d gyroYaw){
         /* Field to Target */
         Pose2d fieldToTarget = Constants.Vision.goalPose;
 
         /* Field to Target to LL */
         Transform2d targetToLL = 
             new Transform2d(
-                LLdistance.rotateBy(LLangle.plus(Constants.Vision.shooterAngle).plus(gyroYaw)).unaryMinus(),
-                LLangle.plus(Constants.Vision.shooterAngle).plus(gyroYaw)
+                targetDistance.rotateBy(LLTX.plus(Constants.Vision.shooterAngle).plus(gyroYaw)).unaryMinus(),
+                LLTX.plus(Constants.Vision.shooterAngle).plus(gyroYaw)
             );
         Pose2d fieldToLL = fieldToTarget.transformBy(targetToLL);
 
         /* Field to Target to LL to Shooter */
-        Transform2d LLToShooter = new Transform2d(Constants.Vision.shooterToLLOffset, LLangle);
+        Transform2d LLToShooter = new Transform2d(Constants.Vision.shooterToLLOffset, LLTX);
         Pose2d fieldToShooter = fieldToLL.transformBy(LLToShooter.inverse());
 
         /* Field to Target to LL to Shooter to Robot */
         Transform2d shooterToRobot = new Transform2d(Constants.Vision.robotToShooterOffset, Constants.Vision.shooterAngle);
         Pose2d fieldToRobot = fieldToShooter.transformBy(shooterToRobot.inverse());
-        visionPose = fieldToRobot;      
+
         return fieldToRobot;
     }
 
@@ -91,39 +84,26 @@ public class PoseEstimator extends SubsystemBase{
         return getShooterToTargetPose().getTranslation().getNorm();
     }
 
-    /** @return Angle from shooter to alliance target */
-    public Rotation2d getShooterAngleToTarget(){
-        Pose2d diffPose = getShooterToTargetPose();
-        return new Rotation2d(Math.atan2(diffPose.getY(), diffPose.getX()));
-    }
-
     /** @return Pose2d of the Target Pose relative to the Shooter Pose */
     private Pose2d getShooterToTargetPose(){
-        /* Robot to Turret Center */
-        Transform2d turretToRobot = new Transform2d(Constants.Vision.robotToShooterOffset, new Rotation2d());
-        Pose2d turretPose = sEstimator.getEstimatedPosition().transformBy(turretToRobot);
-        return Constants.Vision.goalPose.relativeTo(turretPose);
+        /* Robot to Shooter Center */
+        Transform2d shooterToRobot = new Transform2d(Constants.Vision.robotToShooterOffset, new Rotation2d());
+        Pose2d shooterPose = sEstimator.getEstimatedPosition().transformBy(shooterToRobot);
+        return Constants.Vision.goalPose.relativeTo(shooterPose);
     }
 
-    
-
-    /* */
-    /**@return Median filtered distance to Target in meters */
-    public Translation2d getDistance(Rotation2d ty){
-        double heightDifference = Constants.Vision.goalHeight - Constants.Vision.limelightHeight;
-        Rotation2d combinedAngle = Constants.Vision.limelightAngle.plus(ty);
-        return new Translation2d((heightDifference / combinedAngle.getTan()), 0);
-    }
+    /** @return Angle Robot needs to rotate to, to face shooter (back of robot) to target */
+    public Rotation2d getRobotTargetYaw(){
+        Pose2d diffPose = Constants.Vision.goalPose.relativeTo(sEstimator.getEstimatedPosition());
+        Rotation2d targetAngle = new Rotation2d(Math.atan2(diffPose.getY(), diffPose.getX()));
+        targetAngle = targetAngle.plus(Constants.Vision.shooterAngle);
+        return sEstimator.getEstimatedPosition().getRotation().plus(targetAngle);
+    } 
     
     @Override
     public void periodic(){
-        Translation2d distance = getDistance(Rotation2d.fromDegrees(SmartDashboard.getNumber("LLTY", 0.0)));
-        Pose2d test = getFieldToRobotPose(
-            distance, 
-            Rotation2d.fromDegrees(SmartDashboard.getNumber("LLAngle", 0.0)), 
-            Rotation2d.fromDegrees(SmartDashboard.getNumber("gyroYaw", 0.0))
-        );
-        System.out.println(test);
-
+        SmartDashboard.putNumber("robotX", sEstimator.getEstimatedPosition().getX());
+        SmartDashboard.putNumber("robotY", sEstimator.getEstimatedPosition().getY());
+        SmartDashboard.putNumber("robotHeading", sEstimator.getEstimatedPosition().getRotation().getRadians());
     }
 }

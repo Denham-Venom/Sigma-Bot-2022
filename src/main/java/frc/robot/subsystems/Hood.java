@@ -18,8 +18,8 @@ import frc.robot.Constants;
 import frc.robot.States;
 
 public class Hood extends SubsystemBase {
+    private PoseEstimator m_poseEstimator;
     private LazyTalonSRX hoodMotor;
-    private Limelight limelight;
     
     private InterpolatingTreeMap<Double, Double> hoodMap = new InterpolatingTreeMap<>();
     private PIDController hoodController;    
@@ -42,9 +42,9 @@ public class Hood extends SubsystemBase {
     private ShuffleboardTab drivers = Shuffleboard.getTab("Drivers");
     private NetworkTableEntry hoodReady = drivers.add("Hood Ready", false).getEntry();    
 
-    public Hood(Vision m_Vision) {
+    public Hood(PoseEstimator m_poseEstimator) {
+        this.m_poseEstimator = m_poseEstimator;
         hoodMotor = new LazyTalonSRX(Constants.Hood.hoodConstants);
-        limelight = m_Vision.getLimelight();
 
         hoodController = new PIDController(
             Constants.Hood.hoodKP, 
@@ -84,7 +84,7 @@ public class Hood extends SubsystemBase {
     }
 
     public double getTargetAngle(){
-        return hoodMap.get(limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm());
+        return hoodMap.get(m_poseEstimator.getShooterDistanceToTarget());
     }
 
     public void setHoodAngle(double targetAngle){

@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -11,14 +10,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
 import frc.lib.newWpilibUtils.InterpolatingTreeMap;
-import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
 
 public class Shooter extends SubsystemBase {
     private LazyTalonFX shooterMotorParent;
     private LazyTalonFX shooterMotorChild;
-    private Limelight limelight;
+    private PoseEstimator m_poseEstimator;
 
     private InterpolatingTreeMap<Double, Double> shooterMap = new InterpolatingTreeMap<>();
 
@@ -38,11 +36,12 @@ public class Shooter extends SubsystemBase {
     private double tuningShooterKI;
     private double tuningShooterKD;
 
-    public Shooter(Vision m_Vision) {
+    public Shooter(PoseEstimator m_poseEstimator) {
+        this.m_poseEstimator = m_poseEstimator;
+
         shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
         shooterMotorChild = new LazyTalonFX(Constants.Shooter.childShooterConstants);
         shooterMotorChild.follow(shooterMotorParent);
-        limelight = m_Vision.getLimelight();
 
         tuningShooterKP = Constants.Shooter.shootKP;
         tuningShooterKI = Constants.Shooter.shootKI;
@@ -66,7 +65,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getTargetRPM(){
-        return shooterMap.get(limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm());
+        return shooterMap.get(m_poseEstimator.getShooterDistanceToTarget());
     }
 
     public void setShooterRPM(double shooterRPM){

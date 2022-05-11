@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -24,20 +23,19 @@ import frc.robot.States;
 import frc.robot.SwerveModule;
 
 public class Swerve extends SubsystemBase {
-
-    // Device Refs
-    public SwerveModule[] mSwerveMods;
-    public Pigeon2 gyro;
+    private PoseEstimator m_poseEstimator;
+    public SwerveDriveOdometry autoOdometry;
     private Limelight limelight;
 
+    public SwerveModule[] mSwerveMods;
+    public Pigeon2 gyro;
+
     // State Variables
-    public SwerveDriveOdometry autoOdometry;
     private int currentNeutral = 0;
     private boolean isLowGear = true;
     private boolean fieldRelative = true;
     
     // Network Table Variables
-    public NetworkTable table;
     private static ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
     private NetworkTableEntry turnP = tuning.add("Turn P", 0).getEntry();
     private NetworkTableEntry turnI = tuning.add("Turn I", 0).getEntry();
@@ -46,21 +44,21 @@ public class Swerve extends SubsystemBase {
     private NetworkTableEntry tuneSwerve = tuning.add("Tune Swerve", false).getEntry();
     public static NetworkTableEntry transRateLimiting = tuning.add("Trans Rate Limiting", 0).getEntry();
     public static NetworkTableEntry turnRateLimiting = tuning.add("Turn Rate Limiting", 0).getEntry();
-    private double turnTolVal = Constants.Swerve.thetaTolerance;
+
     private ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
     private NetworkTableEntry swerveReady = Drivers.add("Swerve Ready" , false).getEntry();
     private NetworkTableEntry fieldRelEntry = Drivers.add("Field Rel" , true).getEntry();
 
     private PIDController thetaController;
+    private double turnTolVal = Constants.Swerve.thetaTolerance;
     private Translation2d inputTranslation = new Translation2d();
-    
-
 
     /**
      * Create a new swerve subsystem.
      * @param m_Vision The limelight to use for target acquisition.
      */
-    public Swerve(Vision m_Vision) {
+    public Swerve(PoseEstimator m_poseEstimator, Vision m_Vision) {
+        this.m_poseEstimator = m_poseEstimator;
         limelight = m_Vision.getLimelight();
 
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -220,7 +218,8 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        autoOdometry.update(getYaw(), getStates());  
+        m_poseEstimator.updateSwerve(getYaw(), getStates());
+        autoOdometry.update(getYaw(), getStates());
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
@@ -239,10 +238,14 @@ public class Swerve extends SubsystemBase {
 
         switch(States.shooterState){
             case preShoot:
-                swerveReady.setBoolean(Math.abs(limelight.getTx().getRadians()) < turnTolVal);
+                double targetYawAngle = limelight.hasTarget() ? 
+                    getYaw().getRadians() + limelight.getTx().getRadians() + Constants.Vision.shooterAngle.getRadians() : 
+                    m_poseEstimator.getRobotTargetYaw().getRadians();
+
+                swerveReady.setBoolean(Math.abs(targetYawAngle - getYaw().getRadians()) < turnTolVal);
                 drive(
                     inputTranslation, 
-                    thetaController.calculate(limelight.getTx().getRadians(), 0), 
+                    thetaController.calculate(getYaw().getRadians(), targetYawAngle), 
                     false
                 );
                 break;

@@ -1,9 +1,7 @@
 package frc.lib.Controllers;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder.Type;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.CANSparkMax;
 

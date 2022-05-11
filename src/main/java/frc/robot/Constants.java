@@ -135,9 +135,9 @@ public final class Constants {
         }
 
         /* Rotational PID for aiming while shooting */        
-        public static final double thetaKP = -5.0;
+        public static final double thetaKP = 5.0;
         public static final double thetaKI = 0.0;
-        public static final double thetaKD = -0.1;
+        public static final double thetaKD = 0.1;
         public static double thetaTolerance = 0.07;
     }
 
@@ -302,7 +302,7 @@ public final class Constants {
     /* Container for vision subsystem constants */
     public static final class Vision {        
         public static final Translation2d robotToShooterOffset = new Translation2d(Units.inchesToMeters(-3.12), 0);
-        public static final Translation2d shooterToLLOffset = new Translation2d(Units.inchesToMeters(-8.45), 0);
+        public static final Translation2d shooterToLLOffset = new Translation2d(Units.inchesToMeters(8.45), 0);
         public static final Rotation2d shooterAngle = Rotation2d.fromDegrees(180);
 
         public static final double practiceFieldHeight = Units.inchesToMeters(103);

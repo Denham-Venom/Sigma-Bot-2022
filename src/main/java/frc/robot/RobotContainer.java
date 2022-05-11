@@ -59,13 +59,12 @@ public class RobotContainer {
 
     /* Subsystems */
     private final PoseEstimator m_PoseEstimator = new PoseEstimator();
-    private final Vision m_Vision = new Vision();
-    private final Shooter m_Shooter = new Shooter(m_Vision);
-    private final Hood m_Hood = new Hood(m_Vision);
+    private final Vision m_Vision = new Vision(m_PoseEstimator);
+    private final Swerve s_Swerve = new Swerve(m_PoseEstimator, m_Vision);
+    private final Shooter m_Shooter = new Shooter(m_PoseEstimator);
+    private final Hood m_Hood = new Hood(m_PoseEstimator);
     private final Intaker m_Intaker = new Intaker(m_Shooter);
-    private final Swerve s_Swerve = new Swerve(m_Vision);
     private final Climber m_Climber = new Climber();
-
   
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
