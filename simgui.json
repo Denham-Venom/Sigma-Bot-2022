@@ -55,6 +55,7 @@
       "/LiveWindow/Vision": "Subsystem",
       "/Shuffleboard/Drivers/Auto # Balls": "String Chooser",
       "/Shuffleboard/Drivers/Auto Choose Tarmac": "String Chooser",
+      "/Shuffleboard/Drivers/Auto Chooser": "String Chooser",
       "/Shuffleboard/Testing/Climber Extend Motor": "Command",
       "/Shuffleboard/Testing/Climber Extend Piston": "Command",
       "/Shuffleboard/Testing/Climber Retract Motor": "Command",

@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -9,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -68,8 +68,6 @@ public class RobotContainer {
   
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        AutoCommands.setSwerve(s_Swerve);
-        
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
@@ -84,19 +82,7 @@ public class RobotContainer {
         configureButtonBindings();
     }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    //Sendable Chooser for Autos
-    // SendableChooser<Command> m_chooser = new SendableChooser<>();
-    SendableChooser<AutoCommands.NumberOfBalls> m_chooseBall = new SendableChooser<>();
-    SendableChooser<AutoCommands.StartingTarmac> m_chooseTarmac = new SendableChooser<>();
-
     private void configureButtonBindings() {
-
         /* Driver Controller Buttons */
         // Driving
         zeroGyro.whenPressed(new InstantCommand(
@@ -195,6 +181,9 @@ public class RobotContainer {
 
     };
 
+    /* Sendable Chooser for Autos */
+    SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+
     private void configureShuffleboard() {
         SmartDashboard.putBoolean("Climb Soft Limits", true);
 
@@ -204,24 +193,15 @@ public class RobotContainer {
         ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
 
         //Auto command chooser
-        m_chooseBall.setDefaultOption("0 Balls", AutoCommands.NumberOfBalls.zero);
-        m_chooseBall.addOption("2 Balls", AutoCommands.NumberOfBalls.two);
-        m_chooseBall.addOption("3 Balls", AutoCommands.NumberOfBalls.three);
-        m_chooseBall.addOption("5 Balls", AutoCommands.NumberOfBalls.five);
+        m_autoChooser.setDefaultOption("Do Nothing", new SequentialCommandGroup());
+        m_autoChooser.addOption("Right 5 Ball", new FiveBallAuto(s_Swerve));
+        m_autoChooser.addOption("Left 2 Ball", new Left2BallAuto(s_Swerve));
 
-        m_chooseTarmac.setDefaultOption("Right Tarmac", AutoCommands.StartingTarmac.right);
-        m_chooseTarmac.addOption("Left Tarmac", AutoCommands.StartingTarmac.left);
         // Puts the chooser on the dashboard
-        Drivers.add("Auto # Balls", m_chooseBall);
-        Drivers.add("Auto Choose Tarmac", m_chooseTarmac);
+        Drivers.add("Auto Chooser", m_autoChooser);
     }
 
     public Command getAutonomousCommand() {
-        AutoCommands.StartingTarmac tarmac = m_chooseTarmac.getSelected();
-        AutoCommands.setTarmac(tarmac);
-        AutoCommands.NumberOfBalls balls = m_chooseBall.getSelected();
-        AutoCommands.setBalls(balls);
-
-        return AutoCommands.getSelectedAuto();
+        return m_autoChooser.getSelected();
     }
 }

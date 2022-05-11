@@ -31,7 +31,7 @@ public class Swerve extends SubsystemBase {
     private Limelight limelight;
 
     // State Variables
-    public SwerveDriveOdometry swerveOdometry;
+    public SwerveDriveOdometry autoOdometry;
     private int currentNeutral = 0;
     private boolean isLowGear = true;
     private boolean fieldRelative = true;
@@ -67,7 +67,7 @@ public class Swerve extends SubsystemBase {
         gyro.configFactoryDefault();
         zeroGyro();
         
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw());
+        autoOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw());
         thetaController = new PIDController(Constants.Swerve.thetaKP, Constants.Swerve.thetaKI, Constants.Swerve.thetaKD);
 
         mSwerveMods = new SwerveModule[] {
@@ -144,19 +144,19 @@ public class Swerve extends SubsystemBase {
     }    
 
     /**
-     * Gets pose of drivetrain
+     * Gets pose of drivetrain using auto only odometry.
      * @return Pose2d pose with x and y in meters
      */
-    public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+    public Pose2d getAutoPose() {
+        return autoOdometry.getPoseMeters();
     }
 
     /**
-     * Resets odometry of the drivetrain to a specified pose
+     * Resets auto odometry of the drivetrain to a specified pose
      * @param pose The target pose to set robot odom to with x and y in meters
      */
-    public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(pose, getYaw());
+    public void resetAutoOdometry(Pose2d pose) {
+        autoOdometry.resetPosition(pose, pose.getRotation());
     }
 
     /**
@@ -189,6 +189,10 @@ public class Swerve extends SubsystemBase {
         gyro.setYaw(0);
     }
 
+    public void setGyro(double input){
+        gyro.setYaw(input);
+    }
+
     /**
      * Get yaw of robot, which is the direction the robot is facing.
      * @return Rotation2d representation of yaw.
@@ -216,7 +220,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        swerveOdometry.update(getYaw(), getStates());  
+        autoOdometry.update(getYaw(), getStates());  
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());

@@ -14,7 +14,6 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.Controllers.SparkConstants;
 import frc.lib.Controllers.TalonFxConstants;
 import frc.lib.Controllers.TalonSRXConstants;
-import frc.lib.tempDenhamAutoStuff.SwerveTrajectoryWaypoint;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants {
@@ -328,49 +327,5 @@ public final class Constants {
 
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-        /* Autonomous waypoints */
-        public static final SwerveTrajectoryWaypoint[] rightPoints = 
-        {
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end - ball1 
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.912), //part2 start - ball1
-            new SwerveTrajectoryWaypoint(5.452, 1.534, 2.989, 2.989), //part2 interior - ball2
-            new SwerveTrajectoryWaypoint(1.483, 1.557, -2.452, 2.286), //part2 interior - ball3
-            new SwerveTrajectoryWaypoint(3.496, 2.619, 0.318 + Math.PI, 0.318), //part2 end - shoot pos
-            new SwerveTrajectoryWaypoint(3.496, 2.619, 0.314, 0), //part3 start - shoot pos
-            new SwerveTrajectoryWaypoint(4.636, 5.682, 0.983, 0), //part3 interior - ball4
-            new SwerveTrajectoryWaypoint(5.626, 6.013, -0.628, 0) //part3 end - final shoot pos
-        };
-
-        public static final SwerveTrajectoryWaypoint[] leftPoints = 
-        {
-            new SwerveTrajectoryWaypoint(6.023, 5.095, -0.794, -0.794),
-            new SwerveTrajectoryWaypoint(6.023, 5.095, -0.794, -0.794),
-            new SwerveTrajectoryWaypoint(4.724, 3.681, 0.929, 0.929),
-            new SwerveTrajectoryWaypoint(5.615, 6.921, 0.731, 0.731),
-            new SwerveTrajectoryWaypoint(3.71, 6.875, -3.132, -3.132)
-        };
-
-        public static final SwerveTrajectoryWaypoint[] optimizedRightPoints =
-        {
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end got ball 1
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.597),  //part2 start go to ball 2            
-            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, 2.379),  //part2 end got ball 2
-            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, -2.975), //part3 start go ball 3 and 4
-            new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, -3.005),      //part3 mid get ball 3 and 4
-            new SwerveTrajectoryWaypoint(1.467, 1.512, -2.744, 0.724),      //part4 start get ball 3 and 4
-            new SwerveTrajectoryWaypoint(3.955, 3.08, -2.938, 0.533)     //part4 end go to shoot
-        };
-
-        public static final SwerveTrajectoryWaypoint[] optimizedRightPointsBlue =
-        {
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, -1.571), //part1 end got ball 1
-            new SwerveTrajectoryWaypoint(7.608, 0.929, -1.571, 2.597),  //part2 start go to ball 2            
-            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, 2.379),  //part2 end got ball 2
-            new SwerveTrajectoryWaypoint(5.355, 2.026, -2.975, -2.975), //part3 start go ball 3 and 4
-            new SwerveTrajectoryWaypoint(1.358, 1.426, -2.744, -3.005),      //part3 mid get ball 3 and 4
-            new SwerveTrajectoryWaypoint(1.358, 1.426, -2.744, 0.724),      //part4 start get ball 3 and 4
-            new SwerveTrajectoryWaypoint(3.955, 3.08, -2.938, 0.533)     //part4 end go to shoot
-        };
     }    
 }
