@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Controllers.LazyTalonSRX;
-import frc.lib.util.Interpolatable;
-import frc.lib.util.InterpolatableTreeMap;
+import frc.lib.newWpilibUtils.InterpolatingTreeMap;
 import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
@@ -22,7 +21,7 @@ public class Hood extends SubsystemBase {
     private LazyTalonSRX hoodMotor;
     private Limelight limelight;
     
-    private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
+    private InterpolatingTreeMap<Double, Double> hoodMap = new InterpolatingTreeMap<>();
     private PIDController hoodController;    
     private DigitalInput hoodLimit;
     private Encoder hoodEncoder;
@@ -69,11 +68,11 @@ public class Hood extends SubsystemBase {
 
         testing.add("STOP Hood Motor", new InstantCommand(
             () -> hoodMotor.set (ControlMode.PercentOutput, 0)
-        ));
+        ));   
 
-        for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
-            hoodMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
-        }        
+        for (double[] map : Constants.Shooter.shooterMap) {
+            hoodMap.put(map[0], map[2]);
+        }
     }
 
     public void resetHood() {

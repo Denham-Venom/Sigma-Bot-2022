@@ -10,8 +10,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.Controllers.LazyTalonFX;
 import frc.lib.math.Conversions;
-import frc.lib.util.Interpolatable;
-import frc.lib.util.InterpolatableTreeMap;
+import frc.lib.newWpilibUtils.InterpolatingTreeMap;
 import frc.lib.util.Limelight;
 import frc.robot.Constants;
 import frc.robot.States;
@@ -21,7 +20,7 @@ public class Shooter extends SubsystemBase {
     private LazyTalonFX shooterMotorChild;
     private Limelight limelight;
 
-    private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
+    private InterpolatingTreeMap<Double, Double> shooterMap = new InterpolatingTreeMap<>();
 
     private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
     private NetworkTableEntry shootP = tuning.add("Shoot P", 0).getEntry();
@@ -57,8 +56,8 @@ public class Shooter extends SubsystemBase {
             () -> setPower(0)
         ));
 
-        for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
-            shooterMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][1]));
+        for (double[] map : Constants.Shooter.shooterMap) {
+            shooterMap.put(map[0], map[1]);
         }
     }
 
