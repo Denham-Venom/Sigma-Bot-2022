@@ -58,6 +58,7 @@ public class RobotContainer {
     // private final POVButton opRetractClimberPiston = new POVButton(operator, 90); //right
 
     /* Subsystems */
+    private final PoseEstimator m_PoseEstimator = new PoseEstimator();
     private final Vision m_Vision = new Vision();
     private final Shooter m_Shooter = new Shooter(m_Vision);
     private final Hood m_Hood = new Hood(m_Vision);

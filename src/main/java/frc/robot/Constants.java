@@ -6,10 +6,15 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.lib.Controllers.SparkConstants;
 import frc.lib.Controllers.TalonFxConstants;
@@ -33,11 +38,11 @@ public final class Constants {
 
         /* Drivetrain Mechanism Properties */
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
-        public static final double trackWidth = Units.inchesToMeters(17.5);
-        public static final double wheelBase = Units.inchesToMeters(17.5);
+        public static final double trackWidth = Units.inchesToMeters(19.5);
+        public static final double wheelBase = Units.inchesToMeters(19.5);
         public static final double wheelDiameter = Units.inchesToMeters(3.90); //changed from 3.9 for new neoprene tread
         public static final double wheelCircumference = wheelDiameter * Math.PI; //0.3110484 m
-        public static final double driveGearRatio = (6.86 / 1.0); //TODO: THIS AINT RIGHT
+        public static final double driveGearRatio = (6.75 / 1.0); //6.75:1
         public static final double angleGearRatio = (12.8 / 1.0); //12.8:1
         public static final SwerveDriveKinematics swerveKinematics = 
             new SwerveDriveKinematics(
@@ -232,17 +237,6 @@ public final class Constants {
         public static final double hoodControllerToleranceDegrees = 0.3;
     }
 
-    /* Container for vision subsystem constants */
-    public static final class Vision {
-        public static final double practiceFieldHeight = Units.inchesToMeters(103);
-        public static final double compFieldHeight = Units.inchesToMeters(104);
-        public static final double goalHeight = compFieldHeight;//Units.inchesToMeters(101.375);
-        public static final double goalDiameter = Units.feetToMeters(4);
-
-        public static final double limelightHeight = Units.inchesToMeters(21.0);
-        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(47);
-    }
-
     /* Container for climber subsystem constants */
     public static final class Climber {
         /* Motor and device IDs */
@@ -303,6 +297,29 @@ public final class Constants {
         public static final double intakeSpeed = 0.5;
         public static final double indexSpeed = 0.6;
         public static final double spinupSpeed = 0.5;
+    }    
+
+    /* Container for vision subsystem constants */
+    public static final class Vision {        
+        public static final Translation2d robotToShooterOffset = new Translation2d(Units.inchesToMeters(-3.12), 0);
+        public static final Translation2d shooterToLLOffset = new Translation2d(Units.inchesToMeters(-8.45), 0);
+        public static final Rotation2d shooterAngle = Rotation2d.fromDegrees(180);
+
+        public static final double practiceFieldHeight = Units.inchesToMeters(103);
+        public static final double compFieldHeight = Units.inchesToMeters(104);
+
+        public static final double goalDiameter = Units.inchesToMeters(53.375);
+        public static final double goalHeight = compFieldHeight;
+        public static final Pose2d goalPose = new Pose2d(Units.inchesToMeters(324.0), Units.inchesToMeters(162.0), new Rotation2d());
+
+        public static final double limelightHeight = Units.inchesToMeters(21.0);//TODO: Check
+        public static final Rotation2d limelightAngle = Rotation2d.fromDegrees(47);//TODO: Check
+    }
+
+    public static final class PoseEstimator {
+        public static final Matrix<N3,N1> stateStdDevs = VecBuilder.fill(0.3, 0.3, Units.degreesToRadians(0.01)); 
+        public static final Matrix<N1,N1> gyroStdDevs = VecBuilder.fill(Units.degreesToRadians(0.01));
+        public static final Matrix<N3,N1> visionStdDevs = VecBuilder.fill(0.045, 0.045, Units.degreesToRadians(0.01));
     }
 
     /* Current limiting configurations */
