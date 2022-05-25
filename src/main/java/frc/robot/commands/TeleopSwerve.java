@@ -46,7 +46,7 @@ public class TeleopSwerve extends CommandBase {
     }
 
     public Translation2d getTranslation2d() {
-
+        // Gets the x and y movements from the joystick
         double yAxis = -controller.getRawAxis(translationAxis);
         double yAxisAbs = Math.abs(yAxis);
         double xAxis = -controller.getRawAxis(strafeAxis);

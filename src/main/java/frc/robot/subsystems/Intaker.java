@@ -92,6 +92,9 @@ public class Intaker extends SubsystemBase {
     useIntakeSensors.setBoolean(useSensors);
   }
 
+  /**
+   * Toggles the use of checking if the shooter is ready for shooting
+   */
   public void toggleCheckShooter() {
     useShooterTarget = !useShooterTarget;
     useShooterTargetEntry.setBoolean(useShooterTarget);
