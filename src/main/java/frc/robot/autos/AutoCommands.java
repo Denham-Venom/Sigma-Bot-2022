@@ -18,7 +18,7 @@ import frc.robot.subsystems.Swerve;
 public class AutoCommands {
 
     private static Swerve swerve;
-    private static OptimizedRightPaths optimizedRightPaths;
+    private static RightTarmacPaths rightTarmacPaths;
     private static OptimizedRightPathsBlue optimizedRightPathsBlue;
 
 
@@ -55,6 +55,7 @@ public class AutoCommands {
         return startPositions.get(start);
     }
 
+    //Chooses which tarmac to use for auto (left or right)
     public static void setTarmac(StartingTarmac tarmac) {
         switch (tarmac) {
             case left:
@@ -69,6 +70,7 @@ public class AutoCommands {
         }
     }
 
+    //Sets the number of balls for auto (2,3,5,0)
     public static void setBalls(NumberOfBalls balls) {
         switch (balls) {
             case two:
@@ -91,10 +93,11 @@ public class AutoCommands {
 
     public static void setSwerve(Swerve swerve) {
         AutoCommands.swerve = swerve;
-        optimizedRightPaths = new OptimizedRightPaths(swerve);
+        rightTarmacPaths = new RightTarmacPaths(swerve);
         optimizedRightPathsBlue = new OptimizedRightPathsBlue(swerve);
     }
 
+    //Returns the selected auto
     public static Command getSelectedAuto() {
         if(swerve == null) return null;
         if (leftTarmac) {
@@ -113,11 +116,11 @@ public class AutoCommands {
                 var alliance = DriverStation.getAlliance();
                 switch(alliance) {
                     case Red:
-                        return optimizedRightPaths;
+                        return rightTarmacPaths;
                     case Blue:
                         return optimizedRightPathsBlue;
                     default:
-                        return new RightTarmacPaths(swerve, start, 0);
+                        return rightTarmacPaths;
                 }
             }
             if (numBalls == 0){
@@ -127,7 +130,7 @@ public class AutoCommands {
                     }
                 );
             }
-            return new RightTarmacPaths(swerve, start, numBalls);
+            //return new RightTarmacPaths(swerve);
         }
     }
 }

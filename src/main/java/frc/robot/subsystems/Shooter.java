@@ -50,9 +50,11 @@ public class Shooter extends SubsystemBase {
   private Encoder hoodEncoder = new Encoder(1, 2, false, Encoder.EncodingType.k4X);
   private InterpolatableTreeMap<Double> shooterMap = new InterpolatableTreeMap<>();
   private InterpolatableTreeMap<Double> hoodMap = new InterpolatableTreeMap<>();
+  //Shuffleboard
   private ShuffleboardTab testing = Shuffleboard.getTab("Testing");
   private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
   private ShuffleboardTab drivers = Shuffleboard.getTab("Drivers");
+  //Adds shooter and hood PID to the Network Table
   private NetworkTableEntry shootP = tuning.add("Shoot P", 0).getEntry();
   private NetworkTableEntry shootI = tuning.add("Shoot I", 0).getEntry();
   private NetworkTableEntry shootD = tuning.add("Shoot D", 0).getEntry();
