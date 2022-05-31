@@ -41,15 +41,19 @@ public class Intaker extends SubsystemBase {
   private DoubleSolenoid intakeExtend;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
+  private DigitalInput intakeColorSensor;
   private boolean useSensors = true;
+  private boolean useColorSensor = true;
   private boolean useShooterTarget = true;
   private IntakeStates state = States.intakeState;
   private IntakeExtendStates pistonState = States.intakeExtendState;
 
   ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
   NetworkTableEntry useIntakeSensors = Drivers.add("Use Sensors", false).getEntry();
+  NetworkTableEntry useIntakeColorSensor = Drivers.add("Use Color Sensor", false).getEntry();
   NetworkTableEntry intakeSensorValue = Drivers.add("intakeSensor", false).getEntry();
   NetworkTableEntry shooterSensorValue = Drivers.add("shooterSensor", false).getEntry();
+  NetworkTableEntry intakeColorSensorValue = Drivers.add("intakeColorSensor", false).getEntry();
   NetworkTableEntry useShooterTargetEntry = Drivers.add("Checking Shooter RPM", true).getEntry();
   
   public Intaker(Shooter m_shooter){
@@ -64,6 +68,7 @@ public class Intaker extends SubsystemBase {
     intakeExtend = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
     intakeSensor = new DigitalInput(6);
     shooterSensor = new DigitalInput(5);
+    intakeColorSensor = new DigitalInput(-1); //CHANGE
 
     //Configure shuffleboard
     testing = Shuffleboard.getTab("Testing");
@@ -91,6 +96,11 @@ public class Intaker extends SubsystemBase {
     useIntakeSensors.setBoolean(useSensors);
   }
 
+  public void toggleUseColorSensors() {
+    useColorSensor = !useColorSensor;
+    useIntakeColorSensor.setBoolean(useColorSensor);
+  }
+
   public void toggleCheckShooter() {
     useShooterTarget = !useShooterTarget;
     useShooterTargetEntry.setBoolean(useShooterTarget);
@@ -102,6 +112,7 @@ public class Intaker extends SubsystemBase {
 
     intakeSensorValue.setBoolean(!intakeSensor.get());
     shooterSensorValue.setBoolean(!shooterSensor.get());
+    intakeColorSensorValue.setBoolean(!intakeColorSensor.get());
 
     
     
@@ -139,12 +150,34 @@ public class Intaker extends SubsystemBase {
             indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
             intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
           }
+          //This might be the wrong place to put it but idk where else to put it
+          //Also I dont know how to put the color that is read from the ball
+          if(useColorSensor) {
+            if(Constants.alliance = Red) {
+              if(intakeColorSensor = Red) {
+                intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
+              }
+              else if (intakeColorSensor = Blue) {
+                intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.indexSpeed);
+              }
+            }
+            if(Constants.alliance = Blue) {
+              if(intakeColorSensor = Blue) {
+                intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
+              }
+              else if (intakeColorSensor = Red) {
+                intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.indexSpeed);
+              }
+            }
+          }
           break;
+
         case outtaking:
         // reverses the intake motor
           intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.intakeSpeed);
           States.deployIntake();
           break;
+
         case feeding: 
         // Runs all intake/indexer motors
           //TODO only spin if drivetrain and hood are ready
@@ -163,17 +196,20 @@ public class Intaker extends SubsystemBase {
           }
           //intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
           break;
+
         case reverseFeeding:
           indexerMotor.set(ControlMode.PercentOutput, -Constants.Intake.indexSpeed);
           spinUpMotor.set(ControlType.kDutyCycle, -Constants.Intake.spinupSpeed);
           intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.intakeSpeed);
           break;
+
         case disabled:
         // Stops all intake/indexer motors
           indexerMotor.set(ControlMode.PercentOutput, 0);
           spinUpMotor.set(ControlType.kDutyCycle, 0);
           intakeMotor.set(ControlMode.PercentOutput, 0);
           break;
+
         case intakeAndFeed: //TODO maybe add auto intake deploy here
           States.deployIntake();
           spinUpMotor.set(ControlType.kDutyCycle, Constants.Intake.spinupSpeed);
