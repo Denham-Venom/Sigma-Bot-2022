@@ -140,7 +140,7 @@ public class Shooter extends SubsystemBase {
     if(limelight.hasTarget()){
       return limelight.getDistance().plus(new Translation2d(Constants.Vision.goalDiameter/2, 0)).getNorm();
     } else {
-      return swerve.getTarget().getNorm();
+      return swerve.sDrive.getTarget().getNorm();
     }
   }
 

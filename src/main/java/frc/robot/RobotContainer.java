@@ -120,13 +120,13 @@ public class RobotContainer {
     /* Driver Controller Buttons */
     // Driving
     zeroGyro.whenPressed(new InstantCommand(
-      () -> s_Swerve.zeroGyro()
+      () -> s_Swerve.sDrive.zeroGyro()
     ));
     switchGear.whenPressed(new InstantCommand(
       () -> s_Swerve.switchLowHighGear()
     ));
     toggleFieldRelative.whenPressed(new InstantCommand(
-      () -> s_Swerve.toggleFieldRelative()
+      () -> s_Swerve.sDrive.toggleFieldRelative()
     ));
 
     
