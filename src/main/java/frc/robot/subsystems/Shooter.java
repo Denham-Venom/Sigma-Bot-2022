@@ -296,8 +296,13 @@ public class Shooter extends SubsystemBase {
           } else{
               // setShooterRPM(shooterMap.get(limelight.getDistance().getNorm()));
               // setHoodAngle(hoodMap.get(limelight.getDistance().getNorm()));
-              setShooterRPM(shooterMap.get(getDistanceToCenterGoal()));
-              setHoodAngle(hoodMap.get(getDistanceToCenterGoal()));
+              while(true) { // DOUBLE CHECK TO MAKE SURE THIS IS OKAY
+                setShooterRPM(shooterMap.get(getDistanceToCenterGoal()));
+                setHoodAngle(hoodMap.get(getDistanceToCenterGoal()));
+                if(States.activeShooterMode == ShooterStates.preShoot) {
+                  break;
+                }
+              }
           }
           break;
       //}

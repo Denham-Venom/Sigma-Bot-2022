@@ -42,7 +42,7 @@ public class States {
     public static IntakeExtendStates intakeExtendState = IntakeExtendStates.disabled;
     public static ClimberStates climberState = ClimberStates.disabled;
     public static boolean climbAllowed = false;
-    private static ShooterStates activeShooterMode = ShooterStates.preShoot;
+    public static ShooterStates activeShooterMode = ShooterStates.preShoot;
     
     public static void reset() {
         shooterState = ShooterStates.disabled;
