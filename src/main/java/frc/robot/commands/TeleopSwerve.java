@@ -116,7 +116,7 @@ public class TeleopSwerve extends CommandBase {
 
         translation = getTranslation2d();//new Translation2d(yAxisFilter.calculate(yAxis) * s_Swerve.gethighLowGear(), xAxisFilter.calculate(xAxis) * s_Swerve.gethighLowGear()).times(Constants.Swerve.maxSpeed);
         rotation = /*rAxisFilter.calculate(rAxis)*/rAxis * Constants.Swerve.maxAngularVelocity * s_Swerve.gethighLowGear();
-        s_Swerve.sDrive.drive(translation, rotation, openLoop);
+        s_Swerve.drive(translation, rotation, openLoop);
         }
     }
 
