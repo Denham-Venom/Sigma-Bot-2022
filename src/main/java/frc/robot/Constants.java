@@ -30,6 +30,9 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
     public static final String driverTab = "Drivers";
     public static final int ballCamFPS = 12;
+    /*Intake Color Sensors*/
+    public static final int blueBallBlue = -1;
+    public static final int redBallRed = -1;
 
 
     /* Container for swerve subsystem constants */
@@ -373,7 +376,6 @@ public final class Constants {
         public static final double intakeSpeed = 0.5;
         public static final double indexSpeed = 0.6;
         public static final double spinupSpeed = 0.5;
-
     }
     
 

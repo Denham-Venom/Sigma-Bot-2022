@@ -7,12 +7,15 @@ package frc.robot.subsystems;
 import java.awt.Color;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -44,7 +47,7 @@ public class Intaker extends SubsystemBase {
   private DoubleSolenoid intakeExtend;
   private DigitalInput intakeSensor;
   private DigitalInput shooterSensor;
-  private DigitalInput intakeColorSensor;
+  private ColorSensorV3 colorSensor;
   private boolean useSensors = true;
   private boolean useColorSensor = true;
   private boolean useShooterTarget = true;
@@ -53,7 +56,7 @@ public class Intaker extends SubsystemBase {
 
   ShuffleboardTab Drivers = Shuffleboard.getTab("Drivers");
   NetworkTableEntry useIntakeSensors = Drivers.add("Use Sensors", false).getEntry();
-  NetworkTableEntry useIntakeColorSensor = Drivers.add("Use Color Sensor", false).getEntry();
+  NetworkTableEntry useintakeColorSensor = Drivers.add("Use Color Sensor", false).getEntry();
   NetworkTableEntry intakeSensorValue = Drivers.add("intakeSensor", false).getEntry();
   NetworkTableEntry shooterSensorValue = Drivers.add("shooterSensor", false).getEntry();
   NetworkTableEntry intakeColorSensorValue = Drivers.add("intakeColorSensor", false).getEntry();
@@ -71,7 +74,7 @@ public class Intaker extends SubsystemBase {
     intakeExtend = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
     intakeSensor = new DigitalInput(6);
     shooterSensor = new DigitalInput(5);
-    intakeColorSensor = new DigitalInput(-1); //CHANGE
+    colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
     //Configure shuffleboard
     testing = Shuffleboard.getTab("Testing");
@@ -101,7 +104,7 @@ public class Intaker extends SubsystemBase {
 
   public void toggleUseColorSensors() {
     useColorSensor = !useColorSensor;
-    useIntakeColorSensor.setBoolean(useColorSensor);
+    useintakeColorSensor.setBoolean(useColorSensor);
   }
 
   public void toggleCheckShooter() {
@@ -115,9 +118,6 @@ public class Intaker extends SubsystemBase {
 
     intakeSensorValue.setBoolean(!intakeSensor.get());
     shooterSensorValue.setBoolean(!shooterSensor.get());
-    intakeColorSensorValue.setBoolean(!intakeColorSensor.get());
-
-    
     
     // Retract intake when full
     if(useSensors && !intakeSensor.get() && !shooterSensor.get() && States.intakeState != States.IntakeStates.outtaking && States.intakeState != States.IntakeStates.intakeAndFeed){
@@ -153,28 +153,29 @@ public class Intaker extends SubsystemBase {
             indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
             intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
           }
-          //I dont know how to put the color that is read from the ball, im using true as blue and false as red
-          //I probably need to make it to where it checks when a sensor sees a ball there but i want to check and make sure that this is the correct basic things
+
           if(useColorSensor) {
-            if(Constants.alliance = false) {
-              if(intakeColorSensor = false) {
+
+
+            if(Constants.alliance == Alliance.Blue) {
+              if(colorSensor.getBlue() >= Constants.blueBallBlue) {
                 new ParallelDeadlineGroup(
                   new WaitCommand(0.8),
                   new InstantCommand(() -> States.intake()));
               }
-              else if (intakeColorSensor = true) {
+              else if (colorSensor.getRed() > Constants.redBallRed) {
                 new ParallelDeadlineGroup(
                   new WaitCommand(0.8),
                   new InstantCommand(() -> States.outtake()));
               }
             }
-            if(Constants.alliance = true) {
-              if(intakeColorSensor = true) {
+            if(Constants.alliance == Alliance.Red) {
+              if(colorSensor.getRed() == Constants.redBallRed) {
                 new ParallelDeadlineGroup(
                   new WaitCommand(0.8),
                   new InstantCommand(() -> States.intake()));
               }
-              else if (intakeColorSensor = false) {
+              else if (colorSensor.getBlue() == Constants.blueBallBlue) {
                 new ParallelDeadlineGroup(
                   new WaitCommand(0.8),
                   new InstantCommand(() -> States.outtake()));

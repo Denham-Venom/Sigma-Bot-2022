@@ -130,7 +130,7 @@ public class AutoCommands {
                     }
                 );
             }
-            //return new RightTarmacPaths(swerve);
+            return new RightTarmacPaths(swerve);
         }
     }
 }
