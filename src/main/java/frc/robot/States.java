@@ -78,6 +78,10 @@ public class States {
         States.intakeState = IntakeStates.feeding;
     }
 
+    public static void reverseFeed() {
+        States.intakeState = IntakeStates.reverseFeeding;
+    }
+    
     public static void intakeAndFeed() {
         States.intakeState = States.IntakeStates.intakeAndFeed;
     }

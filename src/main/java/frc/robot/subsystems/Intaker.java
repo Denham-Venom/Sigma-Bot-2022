@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.awt.Color;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax.ControlType;
 
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -150,23 +153,31 @@ public class Intaker extends SubsystemBase {
             indexerMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
             intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.intakeSpeed);
           }
-          //This might be the wrong place to put it but idk where else to put it
-          //Also I dont know how to put the color that is read from the ball
+          //I dont know how to put the color that is read from the ball, im using true as blue and false as red
+          //I probably need to make it to where it checks when a sensor sees a ball there but i want to check and make sure that this is the correct basic things
           if(useColorSensor) {
-            if(Constants.alliance = Red) {
-              if(intakeColorSensor = Red) {
-                intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
+            if(Constants.alliance = false) {
+              if(intakeColorSensor = false) {
+                new ParallelDeadlineGroup(
+                  new WaitCommand(0.8),
+                  new InstantCommand(() -> States.intake()));
               }
-              else if (intakeColorSensor = Blue) {
-                intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.indexSpeed);
+              else if (intakeColorSensor = true) {
+                new ParallelDeadlineGroup(
+                  new WaitCommand(0.8),
+                  new InstantCommand(() -> States.outtake()));
               }
             }
-            if(Constants.alliance = Blue) {
-              if(intakeColorSensor = Blue) {
-                intakeMotor.set(ControlMode.PercentOutput, Constants.Intake.indexSpeed);
+            if(Constants.alliance = true) {
+              if(intakeColorSensor = true) {
+                new ParallelDeadlineGroup(
+                  new WaitCommand(0.8),
+                  new InstantCommand(() -> States.intake()));
               }
-              else if (intakeColorSensor = Red) {
-                intakeMotor.set(ControlMode.PercentOutput, -Constants.Intake.indexSpeed);
+              else if (intakeColorSensor = false) {
+                new ParallelDeadlineGroup(
+                  new WaitCommand(0.8),
+                  new InstantCommand(() -> States.outtake()));
               }
             }
           }
