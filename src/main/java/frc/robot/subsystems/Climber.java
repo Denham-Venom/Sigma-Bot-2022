@@ -32,7 +32,6 @@ public class Climber extends SubsystemBase {
   public Climber() {
     // Devices
     climberMotor = new LazySparkMAX(Constants.Climber.climberMotorConstants);
-    // climberMotor.setStatusFrames(255);
     climbEncoder = climberMotor.getEncoder();
     //climbEncoder.setPosition(0);
     encoderOffset = climbEncoder.getPosition();

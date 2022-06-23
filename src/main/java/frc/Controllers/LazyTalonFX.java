@@ -16,7 +16,7 @@ public class LazyTalonFX extends TalonFX {
      * @param talonConstants
      */
     public LazyTalonFX(TalonConstants talonConstants) {
-        super(talonConstants.deviceNumber);
+        super(talonConstants.deviceNumber, "canivore");
         super.configFactoryDefault();
         super.configSupplyCurrentLimit(talonConstants.currentLimit);
         super.setNeutralMode(talonConstants.neutralMode);
@@ -39,15 +39,6 @@ public class LazyTalonFX extends TalonFX {
         super.configNominalOutputReverse(0);
         super.configPeakOutputForward(pidGains.kMaxForward);
         super.configPeakOutputReverse(pidGains.kMaxReverse);
-    }
-
-    public void setStatusFrames(int period){
-        period = period > 255 ? 255 : period;
-        for(int i = 0; i < 16; i++){
-            super.setStatusFramePeriod(i, period);
-
-        }
-
     }
     
 }
