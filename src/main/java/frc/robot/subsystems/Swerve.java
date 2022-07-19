@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -31,7 +32,7 @@ public class Swerve extends SubsystemBase {
 
     // Device Refs
     public SwerveModule[] mSwerveMods;
-    public PigeonIMU gyro;
+    public Pigeon2 gyro;
     private Limelight limelight;
 
     // State Variables
@@ -88,7 +89,7 @@ public class Swerve extends SubsystemBase {
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
         thetaController.setTolerance(turnTolVal);        
         thetaController.setSetpoint(0);
-        gyro = new PigeonIMU(Constants.Swerve.pigeonID);
+        gyro = new Pigeon2(Constants.Swerve.pigeonID, "canivore");
         gyro.configFactoryDefault();
         zeroGyro();
         limelight = m_Vision.getLimelight();

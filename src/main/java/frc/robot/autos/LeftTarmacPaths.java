@@ -100,21 +100,16 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
 
         //Stops shooting
         new InstantCommand(() -> States.stopIntake()),
-        new InstantCommand(() -> States.deactivateShooter()),
+        new InstantCommand(() -> States.deactivateShooter())//,
 
-        //GETS 2 RED BALLLS AND PUTS THEM IN THE BLUE HANGAR
+        // new InstantCommand(() -> States.intake()),
 
-        //Does the second trajectory while intaking and picks up the two balls (opposing color)
-        new InstantCommand(() -> States.intake()),
+        // swerveControllerCommand2,
 
-        swerveControllerCommand2,
+        // new InstantCommand(() -> States.outtake()),
+        // new WaitCommand(.3),
 
-        //Outakes the opposing balls into the hangar
-        new InstantCommand(() -> States.outtake()),
-        new WaitCommand(.3),
-
-        //Stops the intake
-        new InstantCommand(() -> States.stopIntake())
+        // new InstantCommand(() -> States.stopIntake())
   
       );
       }

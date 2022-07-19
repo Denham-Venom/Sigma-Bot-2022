@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.Controllers.LazySparkMAX;
 import frc.Controllers.LazyTalonFX;
+import frc.Controllers.LazyTalonSRX;
 import frc.robot.Constants;
 import frc.robot.States;
 import frc.robot.States.IntakeExtendStates;
@@ -31,7 +32,7 @@ public class Intaker extends SubsystemBase {
   private Shooter m_Shooter;
  
   // indexer 1 by intake
-  private LazyTalonFX indexerMotor;
+  private LazyTalonSRX indexerMotor;
   // indexer 2 by shooter
   private LazySparkMAX spinUpMotor;
   // intaker
@@ -56,12 +57,10 @@ public class Intaker extends SubsystemBase {
   public Intaker(Shooter m_shooter){
     //Instantiate devices
     m_Shooter = m_shooter;
-    indexerMotor = new LazyTalonFX(Constants.Intake.indexMotorConstants);
-    indexerMotor.setStatusFrames(255);
+    indexerMotor = new LazyTalonSRX(Constants.Intake.indexMotorConstants);
     spinUpMotor = new LazySparkMAX(Constants.Intake.spinUpMotorConstants);
     spinUpMotor.setStatusFrames(1000);
     intakeMotor = new LazyTalonFX(Constants.Intake.intakeMotorConstants);
-    intakeMotor.setStatusFrames(255);
     intakeExtend = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.IntakeSolenoidForwardChannel, Constants.Intake.IntakeSolenoidReverseChannel);
     intakeSensor = new DigitalInput(6);
     shooterSensor = new DigitalInput(5);
