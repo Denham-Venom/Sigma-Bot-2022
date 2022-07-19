@@ -98,16 +98,16 @@ public class LeftTarmacPaths extends SequentialCommandGroup {
           new InstantCommand(() -> States.feed())),
 
         new InstantCommand(() -> States.stopIntake()),
-        new InstantCommand(() -> States.deactivateShooter()),
+        new InstantCommand(() -> States.deactivateShooter())//,
 
-        new InstantCommand(() -> States.intake()),
+        // new InstantCommand(() -> States.intake()),
 
-        swerveControllerCommand2,
+        // swerveControllerCommand2,
 
-        new InstantCommand(() -> States.outtake()),
-        new WaitCommand(.3),
+        // new InstantCommand(() -> States.outtake()),
+        // new WaitCommand(.3),
 
-        new InstantCommand(() -> States.stopIntake())
+        // new InstantCommand(() -> States.stopIntake())
   
       );
       }
