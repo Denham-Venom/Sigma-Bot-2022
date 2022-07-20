@@ -56,15 +56,19 @@
       "/Shuffleboard/Testing/Climber Extend Piston": "Command",
       "/Shuffleboard/Testing/Climber Retract Motor": "Command",
       "/Shuffleboard/Testing/Climber Retract Piston": "Command",
+      "/Shuffleboard/Testing/DOWN Hood Motor": "Command",
       "/Shuffleboard/Testing/Extend Intaker": "Command",
       "/Shuffleboard/Testing/Retract Intaker": "Command",
+      "/Shuffleboard/Testing/STOP Hood Motor": "Command",
       "/Shuffleboard/Testing/Start Intake Motors": "Command",
       "/Shuffleboard/Testing/Start Shooter Motors": "Command",
       "/Shuffleboard/Testing/Stop Intake Motors": "Command",
       "/Shuffleboard/Testing/Stop Shooter Motors": "Command",
+      "/Shuffleboard/Testing/UP Hood Motor": "Command",
       "/SmartDashboard/Auto # Balls": "String Chooser",
       "/SmartDashboard/Auto Choose Position": "String Chooser",
-      "/SmartDashboard/Auto Choose Tarmac": "String Chooser"
+      "/SmartDashboard/Auto Choose Tarmac": "String Chooser",
+      "/SmartDashboard/Set Climb Encoder Offset": "Command"
     }
   },
   "NetworkTables": {

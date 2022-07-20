@@ -14,7 +14,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -54,6 +56,7 @@ public class Shooter extends SubsystemBase {
   private ShuffleboardTab testing = Shuffleboard.getTab("Testing");
   private ShuffleboardTab tuning = Shuffleboard.getTab("Tuning");
   private ShuffleboardTab drivers = Shuffleboard.getTab("Drivers");
+  private ShuffleboardTab shootMap = Shuffleboard.getTab("Shooter Map");
   private NetworkTableEntry shootP = tuning.add("Shoot P", 0).getEntry();
   private NetworkTableEntry shootI = tuning.add("Shoot I", 0).getEntry();
   private NetworkTableEntry shootD = tuning.add("Shoot D", 0).getEntry();
@@ -75,7 +78,7 @@ public class Shooter extends SubsystemBase {
   private PIDController hoodController;
   private ShooterStates state;
   private Swerve swerve;
-  
+  private double[][] newShootMap = Constants.Shooter.shooterMap;
 
   public Shooter(Vision m_Vision, Swerve m_Swerve) {
     shooterMotorParent = new LazyTalonFX(Constants.Shooter.parentShooterConstants);
@@ -87,6 +90,34 @@ public class Shooter extends SubsystemBase {
     //hoodMotor.configPID(Constants.Shooter.hoodPID);
     //turretMotor.configPID(Constants.Shooter.turretPID);
     limelight = m_Vision.getLimelight();
+
+
+    // Objective: Become able to easily make shooter map from Shuffleboard
+    // Issues: can't delete widgets programatically, 
+    // You can replace a widget with a different one maybe?
+    // Solution?: Make 6-10 widgets that have the distance/power/angle to fill in. When filled it automatically puts it in the map
+
+    for(int i = 0; i < newShootMap.length; i++) {
+      ShuffleboardLayout entries = Shuffleboard.getTab("Shooter Map")
+        .getLayout("Entry " + i + 1, BuiltInLayouts.kList);
+      // NetworkTableEntry dist = shootMap.add("Distance "+i, 0).getEntry();
+      // NetworkTableEntry power = shootMap.add("Power "+i, 0).getEntry();
+      // NetworkTableEntry angle = shootMap.add("Angle "+i, 0).getEntry();
+      entries.add("Distance "+i, 0).getEntry();
+      entries.add("Power "+i, 0).getEntry();
+      entries.add("Angle "+i, 0).getEntry();
+      
+      // for(int j = 0; j < newShootMap[0].length; j++) {
+
+      // }
+    }
+
+    // double[][] arr;
+    // for(int i = 0; i < newShootMap.length; i++) {
+    //   newShootMap[i][0] = 
+    //   newShootMap[i][1] = 
+    //   newShootMap[i][2] = 
+    // }
 
     this.swerve = m_Swerve;
 
