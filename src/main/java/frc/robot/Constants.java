@@ -268,20 +268,20 @@ public final class Constants {
 
         public static final double[][] shooterMap = 
         {
-            {1.27 + Units.feetToMeters(4)/2, 2000, 15},
-            {1.75 + Units.feetToMeters(4)/2, 2000, 17},
-            {2.17 + Units.feetToMeters(4)/2, 2050, 20},
-            {2.67 + Units.feetToMeters(4)/2, 2100, 21},
-            {2.85 + Units.feetToMeters(4)/2, 2175, 23.3},
-            {2.93 + Units.feetToMeters(4)/2, 2175, 22},
-            {3.19 + Units.feetToMeters(4)/2, 2250, 23},
-            {3.39 + Units.feetToMeters(4)/2, 2300, 23.9},
-            {3.67 + Units.feetToMeters(4)/2, 2400, 23},
-            {3.91 + Units.feetToMeters(4)/2, 2300, 24.5},
-            {4.08 + Units.feetToMeters(4)/2, 2350, 25.7},
-            {4.18 + Units.feetToMeters(4)/2, 2425, 25},
-            {4.74 + Units.feetToMeters(4)/2, 2550, 27}, 
-            {5.66 + Units.feetToMeters(4)/2, 2650, 29}
+            {1.27 + Units.feetToMeters(4)/2, 2000 + 100, 15},
+            {1.75 + Units.feetToMeters(4)/2, 2000 + 100, 17},
+            {2.17 + Units.feetToMeters(4)/2, 2050 + 100, 20},
+            {2.67 + Units.feetToMeters(4)/2, 2100 + 100, 21},
+            {2.85 + Units.feetToMeters(4)/2, 2175 + 100, 23.3},
+            {2.93 + Units.feetToMeters(4)/2, 2175 + 100, 22},
+            {3.19 + Units.feetToMeters(4)/2, 2250 + 100, 23},
+            {3.39 + Units.feetToMeters(4)/2, 2300 + 100, 23.9},
+            {3.67 + Units.feetToMeters(4)/2, 2400 + 100, 23},
+            {3.91 + Units.feetToMeters(4)/2, 2300 + 100, 24.5},
+            {4.08 + Units.feetToMeters(4)/2, 2350 + 100, 25.7},
+            {4.18 + Units.feetToMeters(4)/2, 2425 + 100, 25},
+            {4.74 + Units.feetToMeters(4)/2, 2550 + 100, 27}, 
+            {5.66 + Units.feetToMeters(4)/2, 2650 + 100, 29}
         };
 
         public static final double[] shooterLowMap = 
