@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -97,26 +98,29 @@ public class Shooter extends SubsystemBase {
     // You can replace a widget with a different one maybe?
     // Solution?: Make 6-10 widgets that have the distance/power/angle to fill in. When filled it automatically puts it in the map
 
-    for(int i = 0; i < newShootMap.length; i++) {
+    for(int i = 1; i < newShootMap.length + 1; i++) {
       ShuffleboardLayout entries = Shuffleboard.getTab("Shooter Map")
-        .getLayout("Entry " + i + 1, BuiltInLayouts.kList);
-      // NetworkTableEntry dist = shootMap.add("Distance "+i, 0).getEntry();
-      // NetworkTableEntry power = shootMap.add("Power "+i, 0).getEntry();
-      // NetworkTableEntry angle = shootMap.add("Angle "+i, 0).getEntry();
-      entries.add("Distance "+i, 0).getEntry();
-      entries.add("Power "+i, 0).getEntry();
-      entries.add("Angle "+i, 0).getEntry();
-      
-      // for(int j = 0; j < newShootMap[0].length; j++) {
-
-      // }
+        .getLayout("Entry " + i, BuiltInLayouts.kList);
+      NetworkTableEntry dist = entries.add("Distance "+ i, 0).getEntry();
+      NetworkTableEntry power = entries.add("Power "+ i, 0).getEntry();
+      NetworkTableEntry angle = entries.add("Angle "+ i, 0).getEntry();
+      if(i == 14) {
+        i--;
+        newShootMap[i][0] = dist.getDouble(0) + Units.feetToMeters(4)/2;
+        newShootMap[i][1] = power.getDouble(0) + 100;
+        newShootMap[i][2] = angle.getDouble(0);
+        break;
+      }
+      newShootMap[i][0] = dist.getDouble(0) + Units.feetToMeters(4)/2;
+      newShootMap[i][1] = power.getDouble(0) + 100;
+      newShootMap[i][2] = angle.getDouble(0);
     }
 
     // double[][] arr;
     // for(int i = 0; i < newShootMap.length; i++) {
-    //   newShootMap[i][0] = 
-    //   newShootMap[i][1] = 
-    //   newShootMap[i][2] = 
+    //   newShootMap[i][0] = dist + Units.feetToMeters(4)/2;
+    //   newShootMap[i][1] = power + 100;
+    //   newShootMap[i][2] = angle;
     // }
 
     this.swerve = m_Swerve;
@@ -157,9 +161,9 @@ public class Shooter extends SubsystemBase {
       //tuning.add("Shooter Angle Calib", 0);
     }
 
-    for (int i = 0; i < Constants.Shooter.shooterMap.length; ++i) {
-      shooterMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][1]));
-      hoodMap.set(Constants.Shooter.shooterMap[i][0], Interpolatable.interDouble(Constants.Shooter.shooterMap[i][2]));
+    for (int i = 0; i < newShootMap.length; ++i) {
+      shooterMap.set(newShootMap[i][0], Interpolatable.interDouble(newShootMap[i][1]));
+      hoodMap.set(newShootMap[i][0], Interpolatable.interDouble(newShootMap[i][2]));
     }
 
     
